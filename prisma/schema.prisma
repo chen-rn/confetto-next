@@ -8,10 +8,8 @@ datasource db {
 }
 
 model User {
-    id    Int    @id @default(autoincrement())
-    name  String
-    email String @unique
-
+    id               Int               @id @default(autoincrement())
+    email            String            @unique
     practiceSessions PracticeSession[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
@@ -36,27 +34,19 @@ model PracticeSession {
     endTime      DateTime?
     recordingUrl String?
     transcript   String?
-    score        Score?
     feedback     Feedback?
     createdAt    DateTime  @default(now())
     updatedAt    DateTime  @updatedAt
 }
 
-model Score {
-    id                Int             @id @default(autoincrement())
-    practiceSession   PracticeSession @relation(fields: [practiceSessionId], references: [id])
-    practiceSessionId Int             @unique
-    totalScore        Float
-    categoryScores    Json
-    createdAt         DateTime        @default(now())
-    updatedAt         DateTime        @updatedAt
-}
-
 model Feedback {
-    id                Int             @id @default(autoincrement())
+    id             Int    @id @default(autoincrement())
+    content        String
+    totalScore     Int //out of 100
+    categoryScores Json
+
     practiceSession   PracticeSession @relation(fields: [practiceSessionId], references: [id])
     practiceSessionId Int             @unique
-    content           String
     createdAt         DateTime        @default(now())
     updatedAt         DateTime        @updatedAt
 }

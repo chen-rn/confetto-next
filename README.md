@@ -72,6 +72,7 @@ The AI-Powered MMI Interview Prep App is designed to assist medical school appli
    - Visual representation of performance over time.
 
 6. **User Authentication and Profile Management:**
+
    - Secure sign-up and login via Clerk.js.
    - Personalized dashboard and settings.
 
@@ -86,15 +87,181 @@ The AI-Powered MMI Interview Prep App is designed to assist medical school appli
 
 #### 5.1 Architecture
 
-- **Frontend:** Next.js with the app directory and server actions.
+- **Frontend:** Next.js with the App Router and server components.
+- **UI Framework:** React with Shadcn UI, Radix UI, and Tailwind CSS for styling.
 - **Authentication:** Clerk.js for user authentication and session management.
 - **Backend:** Prisma ORM connected to a PostgreSQL database.
 - **AI Services:**
-  - Speech-to-Text: For transcribing user recordings.
-  - Natural Language Processing (NLP): For analyzing transcripts, scoring, and generating feedback.
+  - **Speech-to-Text:** Transcribe user recordings using a service like Google Cloud Speech-to-Text API.
+  - **Natural Language Processing (NLP):** Analyze transcripts, score responses, and generate feedback using OpenAI's GPT-4 API.
 - **Storage:**
-  - Cloud storage (e.g., AWS S3) for storing audio recordings.
+  - **Cloud Storage:** Firebase Storage for storing audio recordings.
+- **State Management:**
+  - Utilize React's built-in state and context APIs, minimize use of client-side state where possible.
+- **Performance Optimization:**
+  - Implement server-side rendering (SSR) and static site generation (SSG) where appropriate.
+  - Optimize images and assets for web performance.
 
 #### 5.2 Database Schema
 
-The database schema is defined using Prisma ORM. Here's a detailed breakdown of the models:
+The database schema is defined using Prisma ORM and includes the following models:
+
+- **User**
+
+  ```prisma
+  model User {
+    id               Int               @id @default(autoincrement())
+    name             String
+    email            String            @unique
+    practiceSessions PracticeSession[]
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+  }
+  ```
+
+- **Question**
+
+  ```prisma
+  model Question {
+    id               Int               @id @default(autoincrement())
+    content          String
+    category         String
+    practiceSessions PracticeSession[]
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+  }
+  ```
+
+- **PracticeSession**
+
+  ```prisma
+  model PracticeSession {
+    id                Int             @id @default(autoincrement())
+    user              User            @relation(fields: [userId], references: [id])
+    userId            Int
+    question          Question        @relation(fields: [questionId], references: [id])
+    questionId        Int
+    startTime         DateTime
+    endTime           DateTime?
+    recordingUrl      String?
+    transcript        String?
+    score             Score?
+    feedback          Feedback?
+    createdAt         DateTime        @default(now())
+    updatedAt         DateTime        @updatedAt
+  }
+  ```
+
+- **Score**
+
+  ```prisma
+  model Score {
+    id                Int             @id @default(autoincrement())
+    practiceSession   PracticeSession @relation(fields: [practiceSessionId], references: [id])
+    practiceSessionId Int             @unique
+    totalScore        Float
+    categoryScores    Json
+    createdAt         DateTime        @default(now())
+    updatedAt         DateTime        @updatedAt
+  }
+  ```
+
+- **Feedback**
+
+  ```prisma
+  model Feedback {
+    id                Int             @id @default(autoincrement())
+    practiceSession   PracticeSession @relation(fields: [practiceSessionId], references: [id])
+    practiceSessionId Int             @unique
+    content           String
+    createdAt         DateTime        @default(now())
+    updatedAt         DateTime        @updatedAt
+  }
+  ```
+
+#### 5.3 Data Flow
+
+1. **User Authentication:**
+
+   - User signs up or logs in via Clerk.js.
+   - Authentication tokens are securely managed.
+
+2. **Session Initiation:**
+
+   - User navigates to start a new practice session.
+   - A random question is fetched from the PostgreSQL database using Prisma.
+
+3. **Recording Response:**
+
+   - User records their response using the Web Audio API.
+   - Audio file is uploaded to Firebase Storage.
+
+4. **Transcription:**
+
+   - The audio URL is sent to the Speech-to-Text service.
+   - Transcribed text is saved to the database.
+
+5. **NLP Analysis:**
+
+   - Transcribed text is sent to the NLP service (e.g., GPT-4).
+   - Service returns a scoring object and feedback.
+   - Score and feedback are saved in the database associated with the practice session.
+
+6. **Displaying Results:**
+
+   - User is redirected to the results page.
+   - Scores and feedback are fetched from the database and displayed.
+
+7. **Progress Tracking:**
+   - User's practice sessions are aggregated to show progress over time.
+   - Data visualization components display the user's improvement.
+
+### 6. Pages and User Interface
+
+#### 6.1 Page Descriptions
+
+1. **Home Page:**
+
+   - **URL:** `/`
+   - **Description:** Introduces the app with a compelling hero section, feature highlights, and testimonials. Contains call-to-action buttons for sign-up and login.
+
+2. **Sign-Up / Login Page:**
+
+   - **URL:** `/sign-in`
+   - **Description:** Utilizes Clerk.js components for user authentication. Provides options for email/password and social logins.
+
+3. **Dashboard:**
+
+   - **URL:** `/dashboard`
+   - **Description:** Displays user statistics, recent practice sessions, and a button to start a new session. Shows progress charts using dynamic data.
+
+4. **Practice Session Page:**
+
+   - **URL:** `/session`
+   - **Description:** Presents the MMI question and a recorder interface. Includes a timer and guidelines. Users can start, pause, and stop recording.
+
+5. **Results Page:**
+
+   - **URL:** `/session/results`
+   - **Description:** Shows the user's score with a breakdown by category. Displays detailed AI-generated feedback and the transcribed response.
+
+6. **Profile Settings Page:**
+
+   - **URL:** `/profile`
+   - **Description:** Allows users to update personal information, change passwords, and set preferences.
+
+7. **History Page:**
+
+   - **URL:** `/history`
+   - **Description:** Lists all past practice sessions with dates and scores. Users can click on a session to view detailed results.
+
+8. **Error Page:**
+
+   - **URL:** `/error`
+   - **Description:** Generic error handling page that informs the user of any issues and provides navigation options.
+
+#### 6.2 Wireframes (Optional)
+
+While wireframes are optional at this stage, they can be created using tools like Figma or Sketch to provide visual guidance for the UI/UX design.
+
+**Note:** Ensure that all pages are responsive and adhere to accessibility standards. Use Tailwind CSS for consistent styling and Radix UI components for interactive elements like modals and dropdowns.
