@@ -1,0 +1,62 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql" // or your preferred database
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id               Int               @id @default(autoincrement())
+    name             String
+    email            String            @unique
+    password         String
+    practiceSessions PracticeSession[]
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+}
+
+model Question {
+    id               Int               @id @default(autoincrement())
+    content          String
+    category         String
+    practiceSessions PracticeSession[]
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+}
+
+model PracticeSession {
+    id           Int       @id @default(autoincrement())
+    user         User      @relation(fields: [userId], references: [id])
+    userId       Int
+    question     Question  @relation(fields: [questionId], references: [id])
+    questionId   Int
+    startTime    DateTime
+    endTime      DateTime?
+    recordingUrl String?
+    transcript   String?
+    score        Score?
+    feedback     Feedback?
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+}
+
+model Score {
+    id                Int             @id @default(autoincrement())
+    practiceSession   PracticeSession @relation(fields: [practiceSessionId], references: [id])
+    practiceSessionId Int             @unique
+    totalScore        Float
+    categoryScores    Json
+    createdAt         DateTime        @default(now())
+    updatedAt         DateTime        @updatedAt
+}
+
+model Feedback {
+    id                Int             @id @default(autoincrement())
+    practiceSession   PracticeSession @relation(fields: [practiceSessionId], references: [id])
+    practiceSessionId Int             @unique
+    content           String
+    createdAt         DateTime        @default(now())
+    updatedAt         DateTime        @updatedAt
+}
