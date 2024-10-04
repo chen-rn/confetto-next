@@ -7,12 +7,10 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+//we'll store everything else about the user in ClerkJS's metadata
 model User {
     id               Int               @id @default(autoincrement())
-    email            String            @unique
     practiceSessions PracticeSession[]
-    createdAt        DateTime          @default(now())
-    updatedAt        DateTime          @updatedAt
 }
 
 model Question {

@@ -6,6 +6,8 @@
     "d": "next dev",
     "build": "next build",
     "dp": "npx prisma db push",
+    "g": "npx prisma generate",
+    "sd": "npx prisma studio",
     "start": "next start",
     "format": "biome format .",
     "lint": "biome check ."
