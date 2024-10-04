@@ -1,206 +1,100 @@
-Product Requirements Document (PRD)
-AI-Powered MMI Interview Prep App
-Table of Contents
-Introduction
-Objectives and Goals
-Target Audience
-Product Overview
-4.1 Features
-4.2 User Stories
-Technical Requirements
-5.1 Architecture
-5.2 Database Schema
-5.3 Data Flow
-Pages and User Interface
-6.1 Page Descriptions
-6.2 Wireframes (Optional)
-Non-Functional Requirements
-Assumptions and Dependencies
-Risks and Mitigations
-Success Metrics
-Appendix
+# Confetto - AI-Powered MMI Interview Prep
 
-1. Introduction
-   The AI-Powered MMI Interview Prep App is designed to assist medical school applicants in preparing for Multiple Mini Interviews (MMIs) by simulating realistic interview scenarios using artificial intelligence. The app provides an interactive platform where users can practice responding to MMI questions, receive comprehensive scoring, and obtain detailed feedback to improve their performance.
+## Product Requirements Document (PRD)
 
-2. Objectives and Goals
-   Primary Objective: To create an accessible and effective tool that enhances the MMI preparation process for medical school applicants.
-   Goals:
-   Simulate realistic MMI interview scenarios using AI.
-   Provide personalized scoring and feedback based on user responses.
-   Track user progress over time to highlight improvements.
-   Ensure a user-friendly interface that is intuitive and engaging.
-3. Target Audience
-   Primary Users: Individuals preparing for medical school admissions who will undergo MMI interviews.
-   Secondary Users: Pre-med advisors, educational institutions offering preparatory courses, and coaching professionals.
-4. Product Overview
-   4.1 Features
-   AI-Simulated MMI Questions:
+### Table of Contents
 
-Randomized selection from a vast question bank.
-Covers various categories like ethical dilemmas, situational judgments, and policy discussions.
-Recording and Interactive Response:
+1. [Introduction](#1-introduction)
+2. [Objectives and Goals](#2-objectives-and-goals)
+3. [Target Audience](#3-target-audience)
+4. [Product Overview](#4-product-overview)
+   4.1 [Features](#41-features)
+   4.2 [User Stories](#42-user-stories)
+5. [Technical Requirements](#5-technical-requirements)
+   5.1 [Architecture](#51-architecture)
+   5.2 [Database Schema](#52-database-schema)
+   5.3 [Data Flow](#53-data-flow)
+6. [Pages and User Interface](#6-pages-and-user-interface)
+   6.1 [Page Descriptions](#61-page-descriptions)
+   6.2 [Wireframes (Optional)](#62-wireframes-optional)
 
-Users record their responses (up to 5 minutes).
-Optional AI-driven back-and-forth interaction simulating an interviewer.
-Scoring System:
+### 1. Introduction
 
-Comprehensive scoring out of 100.
-Breakdown into key categories:
-Communication Skills
-Critical Thinking
-Ethical Reasoning
-Professionalism
-Detailed Feedback:
+The AI-Powered MMI Interview Prep App is designed to assist medical school applicants in preparing for Multiple Mini Interviews (MMIs) by simulating realistic interview scenarios using artificial intelligence. The app provides an interactive platform where users can practice responding to MMI questions, receive comprehensive scoring, and obtain detailed feedback to improve their performance.
 
-Highlights strengths and areas for improvement.
-Provides actionable advice for enhancement.
-Progress Tracking:
+### 2. Objectives and Goals
 
-History of past sessions.
-Visual representation of performance over time.
-User Authentication and Profile Management:
+**Primary Objective:** To create an accessible and effective tool that enhances the MMI preparation process for medical school applicants.
 
-Secure sign-up and login via Clerk.js.
-Personalized dashboard and settings.
-4.2 User Stories
-As a user, I want to practice MMI questions so that I can prepare for my medical school interviews.
-As a user, I want to receive detailed feedback on my responses so that I know where to improve.
-As a user, I want to track my progress over time so that I can see how I am improving.
-As a user, I want a user-friendly interface so that I can focus on my preparation without technical difficulties. 5. Technical Requirements
-5.1 Architecture
-Frontend: Next.js with the app directory and server actions.
-Authentication: Clerk.js for user authentication and session management.
-Backend: Prisma ORM connected to a PostgreSQL database.
-AI Services:
-Speech-to-Text: For transcribing user recordings.
-Natural Language Processing (NLP): For analyzing transcripts, scoring, and generating feedback.
-Storage:
-Cloud storage (e.g., AWS S3) for storing audio recordings.
-5.2 Database Schema
-Refer to the Prisma schema detailed below:
+**Goals:**
 
-prisma
-Copy code
-generator client {
-provider = "prisma-client-js"
-}
+- Simulate realistic MMI interview scenarios using AI.
+- Provide personalized scoring and feedback based on user responses.
+- Track user progress over time to highlight improvements.
+- Ensure a user-friendly interface that is intuitive and engaging.
 
-datasource db {
-provider = "postgresql"
-url = env("DATABASE_URL")
-}
+### 3. Target Audience
 
-model User {
-id String @id // Clerk user ID
-practiceSessions PracticeSession[]
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-}
+- **Primary Users:** Individuals preparing for medical school admissions who will undergo MMI interviews.
+- **Secondary Users:** Pre-med advisors, educational institutions offering preparatory courses, and coaching professionals.
 
-model Question {
-id Int @id @default(autoincrement())
-content String
-category String
-practiceSessions PracticeSession[]
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-}
+### 4. Product Overview
 
-model PracticeSession {
-id Int @id @default(autoincrement())
-user User @relation(fields: [userId], references: [id])
-userId String // Clerk user ID
-question Question @relation(fields: [questionId], references: [id])
-questionId Int
-startTime DateTime
-endTime DateTime?
-recordingUrl String?
-transcript String?
-score Score?
-feedback Feedback?
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-}
+#### 4.1 Features
 
-model Score {
-id Int @id @default(autoincrement())
-practiceSession PracticeSession @relation(fields: [practiceSessionId], references: [id])
-practiceSessionId Int @unique
-totalScore Float
-categoryScores Json
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-}
+1. **AI-Simulated MMI Questions:**
 
-model Feedback {
-id Int @id @default(autoincrement())
-practiceSession PracticeSession @relation(fields: [practiceSessionId], references: [id])
-practiceSessionId Int @unique
-content String
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-}
-5.3 Data Flow
-User Authentication and Authorization:
+   - Randomized selection from a vast question bank.
+   - Covers various categories like ethical dilemmas, situational judgments, and policy discussions.
 
-Users sign up or log in using Clerk.js components.
-Clerk.js manages user sessions and provides user IDs for database operations.
-Practice Session Workflow:
+2. **Recording and Interactive Response:**
 
-Starting a Session:
+   - Users record their responses (up to 5 minutes).
+   - Optional AI-driven back-and-forth interaction simulating an interviewer.
 
-User selects or is assigned a question.
-A PracticeSession record is created with the user's Clerk ID and question ID.
-Recording Response:
+3. **Scoring System:**
 
-User records their response via a client-side component.
-Audio file is uploaded to cloud storage.
-recordingUrl is updated in the PracticeSession record.
-AI Processing:
+   - Comprehensive scoring out of 100.
+   - Breakdown into key categories:
+     - Communication Skills
+     - Critical Thinking
+     - Ethical Reasoning
+     - Professionalism
 
-Audio is transcribed using speech-to-text services.
-Transcript is analyzed using NLP services for scoring and feedback.
-Score and Feedback records are created and linked to the PracticeSession.
-Reviewing Results:
+4. **Detailed Feedback:**
 
-User accesses the feedback page to view scores and detailed feedback.
-Users can replay their recording.
-Progress Tracking:
+   - Highlights strengths and areas for improvement.
+   - Provides actionable advice for enhancement.
 
-Users can view their history of PracticeSession records.
-Visual charts display performance trends over time. 6. Pages and User Interface
-6.1 Page Descriptions
-Authentication Pages:
+5. **Progress Tracking:**
 
-Sign-Up (/sign-up):
-Users create an account using Clerk.js components.
-Sign-In (/sign-in):
-Users log in to their account.
-Dashboard (/dashboard):
+   - History of past sessions.
+   - Visual representation of performance over time.
 
-Displays user's overall progress.
-Recent practice sessions and quick stats.
-Button to start a new practice session.
-Practice Session Pages:
+6. **User Authentication and Profile Management:**
+   - Secure sign-up and login via Clerk.js.
+   - Personalized dashboard and settings.
 
-Question Selection (/practice):
-Users select a specific question or choose a random one.
-Instructions (/practice/[sessionId]/instructions):
-Displays the selected question and any relevant instructions.
-Recording (/practice/[sessionId]/record):
-Users record their response.
-Recording interface with time limit display.
-Review and Feedback (/practice/[sessionId]/review):
-Displays scores and detailed feedback.
-Audio playback of user's response.
-Progress Tracking (/progress):
+#### 4.2 User Stories
 
-History of all past practice sessions.
-Visual charts showing performance over time.
-Settings/Profile (/settings):
+1. As a user, I want to practice MMI questions so that I can prepare for my medical school interviews.
+2. As a user, I want to receive detailed feedback on my responses so that I know where to improve.
+3. As a user, I want to track my progress over time so that I can see how I am improving.
+4. As a user, I want a user-friendly interface so that I can focus on my preparation without technical difficulties.
 
-Update personal information.
-Manage preferences.
-6.2 Wireframes (Optional)
-(Note: Wireframes can be added to provide visual guidance on the UI layout for each page.)
+### 5. Technical Requirements
+
+#### 5.1 Architecture
+
+- **Frontend:** Next.js with the app directory and server actions.
+- **Authentication:** Clerk.js for user authentication and session management.
+- **Backend:** Prisma ORM connected to a PostgreSQL database.
+- **AI Services:**
+  - Speech-to-Text: For transcribing user recordings.
+  - Natural Language Processing (NLP): For analyzing transcripts, scoring, and generating feedback.
+- **Storage:**
+  - Cloud storage (e.g., AWS S3) for storing audio recordings.
+
+#### 5.2 Database Schema
+
+The database schema is defined using Prisma ORM. Here's a detailed breakdown of the models:
