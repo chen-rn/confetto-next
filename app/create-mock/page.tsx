@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 export default async function CreateMockPage() {
   const userId = auth().userId;
 
+  console.log("test");
   if (!userId) {
     redirect("/sign-in");
   }
