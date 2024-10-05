@@ -6,9 +6,14 @@ export default function Home() {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <Link href="/create-mock">
-          <Button>Start Mock</Button>
-        </Link>
+        <div className="space-x-4">
+          <Link href="/create-mock">
+            <Button>Start Mock</Button>
+          </Link>
+          <Link href="/mock-history">
+            <Button variant="outline">Mock History</Button>
+          </Link>
+        </div>
         <UserButton />
       </div>
     </div>

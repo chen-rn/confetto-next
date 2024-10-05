@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/apis/prisma";
 import MicButton from "@/components/MicButton";
 
@@ -22,6 +22,10 @@ export default async function MockPage({ params }: MockPageProps) {
 
   if (!mockInterview || !mockInterview.question) {
     notFound();
+  }
+
+  if (mockInterview.recordingUrl) {
+    redirect(`/mock/${mockId}/result`);
   }
 
   const { question } = mockInterview;
