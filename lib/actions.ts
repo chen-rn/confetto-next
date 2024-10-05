@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "./prisma";
 import { redirect } from "next/navigation";
 import Replicate from "replicate";
+import openai from "./openai";
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -21,7 +22,6 @@ export async function createMockSession(formData: FormData) {
     data: {
       userId: userId,
       questionId: questionId,
-      startTime: new Date(),
     },
   });
 
@@ -51,8 +51,37 @@ export async function saveAudioUrl(url: string, sessionId: string) {
       data: { recordingTranscription: transcription },
     });
 
+    //let's get the quesiton
+    const question = await prisma.question.findUnique({
+      where: { id: updatedSession.questionId },
+    });
+
+    if (!question) {
+      throw new Error("Failed to find question");
+    }
+    // Get feedback using the question and transcription
+    const feedback = await getFeedbackFromLLM({
+      question: question.content,
+      answer: transcription,
+    });
+
+    // Create feedback based on the LLM response
+    const createdFeedback = await prisma.feedback.create({
+      data: {
+        content: feedback || "null",
+        practiceSessionId: sessionId,
+      },
+    });
+
+    if (!createdFeedback) {
+      throw new Error("Failed to create feedback");
+    }
+
     revalidatePath(`/session/${sessionId}`);
-    return { success: true, message: "Audio URL saved and transcribed successfully" };
+    return {
+      success: true,
+      message: "Audio URL saved, transcribed, and feedback generated successfully",
+    };
   } catch (error) {
     console.error("Error saving audio URL or transcribing:", error);
     return { success: false, message: "Failed to save audio URL or transcribe" };
@@ -80,4 +109,37 @@ async function transcribeAudio(audioUrl: string): Promise<string> {
     console.error("Error transcribing audio:", error);
     throw new Error("Failed to transcribe audio");
   }
+}
+
+async function getFeedbackFromLLM({ question, answer }: { question: string; answer: string }) {
+  const prompt = `The following is a medical school interview practice session.
+
+Please grade the answer out of 100 where the grading is broken down into 5 categories with the following weights:
+
+1. Understanding of ethical principles (weight of 25)
+2. Communication skills (weight of 20)
+3. Professionalism and empathy (weight of 20)
+4. Legal and medical legislation within the jurisdiction of Canada (weight of 15)
+5. Organization and structure (weight of 20)
+
+Additionally, please provide feedback, along with actionable insights.
+
+The question is the following:
+
+${question}
+
+The answer is the following:
+
+${answer}`;
+
+  console.log("logging prompt", prompt);
+
+  // TODO: Implement the actual call to the LLM API here
+  // This function should return the LLM's response
+  const response = await openai.chat.completions.create({
+    model: "o1-preview",
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  return response.choices[0].message.content;
 }

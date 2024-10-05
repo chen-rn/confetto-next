@@ -27,22 +27,17 @@ model PracticeSession {
     userId                 String
     question               Question  @relation(fields: [questionId], references: [id])
     questionId             String
-    startTime              DateTime
-    endTime                DateTime?
     recordingUrl           String?
     recordingTranscription String?
-    transcript             String?
     feedback               Feedback?
-    createdAt              DateTime  @default(now())
-    updatedAt              DateTime  @updatedAt
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Feedback {
-    id             String @id @default(uuid())
-    content        String
-    totalScore     Int //out of 100
-    categoryScores Json
-
+    id                String          @id @default(uuid())
+    content           String
     practiceSession   PracticeSession @relation(fields: [practiceSessionId], references: [id])
     practiceSessionId String          @unique
     createdAt         DateTime        @default(now())
