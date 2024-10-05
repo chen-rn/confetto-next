@@ -10,7 +10,8 @@
     "sd": "npx prisma studio",
     "start": "next start",
     "format": "biome format .",
-    "lint": "biome check ."
+    "lint": "biome check .",
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.1",
