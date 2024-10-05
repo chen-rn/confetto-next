@@ -3,6 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
+import { CSPostHogProvider } from "../components/CSPostHogProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Confetto - AI-Powered MMI Interview Prep",
@@ -28,7 +30,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body>
-        <ClerkProvider>{children}</ClerkProvider>
+        <CSPostHogProvider>
+          <ClerkProvider>
+            {children}
+            <Toaster />
+          </ClerkProvider>
+        </CSPostHogProvider>
       </body>
     </html>
   );

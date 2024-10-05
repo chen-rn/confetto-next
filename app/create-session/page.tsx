@@ -1,32 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
-
-async function createMockSession(formData: FormData) {
-  "use server";
-
-  const questionId = formData.get("questionId");
-  const userId = formData.get("userId");
-
-  if (!questionId || typeof questionId !== "string" || !userId || typeof userId !== "string") {
-    throw new Error("Invalid question ID or user ID");
-  }
-
-  const createdSession = await prisma.practiceSession.create({
-    data: {
-      userId: userId,
-      questionId: questionId,
-      startTime: new Date(),
-    },
-  });
-
-  const practiceSessionId = createdSession.id;
-
-  revalidatePath("/create-session");
-  redirect(`/session/${practiceSessionId}`); // Redirect to the specific session page after creation
-}
+import { createMockSession } from "@/lib/actions";
 
 export default async function CreateSessionPage() {
   const questions = await prisma.question.findMany();
