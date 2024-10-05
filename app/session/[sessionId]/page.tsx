@@ -1,10 +1,17 @@
-import MicButton from "@/components/MicButton";
+// app/session/[sessionId]/page.tsx
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import MicButton from "@/components/MicButton";
 import AudioPlayer from "@/components/AudioPlayer";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
-export default async function SessionPage({ params }: { params: { sessionId: string } }) {
+interface SessionPageProps {
+  params: {
+    sessionId: string;
+  };
+}
+
+export default async function SessionPage({ params }: SessionPageProps) {
   const { sessionId } = params;
 
   if (!sessionId) {
@@ -20,15 +27,17 @@ export default async function SessionPage({ params }: { params: { sessionId: str
     notFound();
   }
 
-  const question = practiceSession.question.content;
-  const feedback = practiceSession.feedback?.content;
-  const transcription = practiceSession.recordingTranscription;
-  const recordingUrl = practiceSession.recordingUrl;
+  const {
+    question,
+    feedback,
+    recordingTranscription: transcription,
+    recordingUrl,
+  } = practiceSession;
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Session Question:</h1>
-      <p className="text-lg mb-6">{question}</p>
+      <p className="text-lg mb-6">{question.content}</p>
       <div className="mt-8">
         <MicButton sessionId={sessionId} />
       </div>
@@ -47,7 +56,7 @@ export default async function SessionPage({ params }: { params: { sessionId: str
       {feedback && (
         <div className="mt-8">
           <h2 className="text-xl font-bold mb-2">Feedback:</h2>
-          <MarkdownRenderer content={feedback} />
+          <MarkdownRenderer content={feedback.content} />
         </div>
       )}
     </div>

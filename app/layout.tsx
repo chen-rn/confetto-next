@@ -1,9 +1,10 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
-import { CSPostHogProvider } from "../components/CSPostHogProvider";
+import { CSPostHogProvider } from "@/components/CSPostHogProvider";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
@@ -13,17 +14,13 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const userId = auth().userId;
+  const { userId } = auth();
 
   if (userId) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
+    const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      await prisma.user.create({
-        data: { id: userId },
-      });
+      await prisma.user.create({ data: { id: userId } });
     }
   }
 

@@ -1,3 +1,4 @@
+// components/MicButton.tsx
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
@@ -47,7 +48,7 @@ export default function MicButton({ sessionId }: MicButtonProps) {
       setIsRecording(true);
       setTimer(0);
       timerIntervalRef.current = setInterval(() => {
-        setTimer((prevTimer) => prevTimer + 1);
+        setTimer((prev) => prev + 1);
       }, 1000);
     } catch (error) {
       console.error("Error starting recording:", error);
@@ -58,23 +59,22 @@ export default function MicButton({ sessionId }: MicButtonProps) {
   const stopRecording = useCallback(async () => {
     if (mediaRecorderRef.current && isRecording) {
       return new Promise<void>((resolve) => {
-        if (mediaRecorderRef.current) {
-          mediaRecorderRef.current.onstop = async () => {
-            if (chunksRef.current.length > 0) {
-              const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
-              try {
-                const url = await uploadAudioToFirebase(audioBlob, sessionId);
-                console.log("Audio uploaded successfully:", url);
-                await saveAudioUrl(url, sessionId);
-              } catch (error) {
-                console.error("Error uploading audio:", error);
-              }
-            } else {
-              console.log("No audio data recorded");
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
+        mediaRecorderRef.current!.onstop = async () => {
+          if (chunksRef.current.length > 0) {
+            const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
+            try {
+              const url = await uploadAudioToFirebase(audioBlob, sessionId);
+              console.log("Audio uploaded successfully:", url);
+              await saveAudioUrl(url, sessionId);
+            } catch (error) {
+              console.error("Error uploading audio:", error);
             }
-            resolve();
-          };
-        }
+          } else {
+            console.log("No audio data recorded");
+          }
+          resolve();
+        };
 
         mediaRecorderRef.current?.stop();
         setIsRecording(false);
@@ -88,18 +88,20 @@ export default function MicButton({ sessionId }: MicButtonProps) {
     }
   }, [isRecording, sessionId]);
 
-  const toggleRecording = async () => {
+  const toggleRecording = useCallback(async () => {
     if (isRecording) {
       await stopRecording();
     } else {
       await startRecording();
     }
-  };
+  }, [isRecording, stopRecording, startRecording]);
 
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+    const mins = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const secs = (seconds % 60).toString().padStart(2, "0");
+    return `${mins}:${secs}`;
   };
 
   return (

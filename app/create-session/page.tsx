@@ -1,3 +1,4 @@
+// app/create-session/page.tsx
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
@@ -5,12 +6,13 @@ import { auth } from "@clerk/nextjs/server";
 import { createMockSession } from "@/lib/actions";
 
 export default async function CreateSessionPage() {
-  const questions = await prisma.question.findMany();
   const userId = auth().userId;
 
   if (!userId) {
     redirect("/sign-in");
   }
+
+  const questions = await prisma.question.findMany();
 
   return (
     <div className="container mx-auto p-4">
