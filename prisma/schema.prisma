@@ -9,19 +9,19 @@ datasource db {
 
 //this is basically just to link between ClerkUserID and Prisma DB
 model User {
-    id               String            @id @default(uuid())
-    practiceSessions PracticeSession[]
+    id             String          @id @default(uuid())
+    mockInterviews MockInterview[]
 }
 
 model Question {
-    id               String            @id @default(uuid())
-    content          String
-    practiceSessions PracticeSession[]
-    createdAt        DateTime          @default(now())
-    updatedAt        DateTime          @updatedAt
+    id             String          @id @default(uuid())
+    content        String
+    mockInterviews MockInterview[]
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
 }
 
-model PracticeSession {
+model MockInterview {
     id                     String    @id @default(uuid())
     user                   User      @relation(fields: [userId], references: [id])
     userId                 String
@@ -36,10 +36,10 @@ model PracticeSession {
 }
 
 model Feedback {
-    id                String          @id @default(uuid())
-    content           String
-    practiceSession   PracticeSession @relation(fields: [practiceSessionId], references: [id])
-    practiceSessionId String          @unique
-    createdAt         DateTime        @default(now())
-    updatedAt         DateTime        @updatedAt
+    id              String        @id @default(uuid())
+    content         String
+    mockInterview   MockInterview @relation(fields: [mockInterviewId], references: [id])
+    mockInterviewId String        @unique
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
 }

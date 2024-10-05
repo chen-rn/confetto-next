@@ -17,6 +17,9 @@
       "recommended": true,
       "complexity": {
         "noForEach": "off"
+      },
+      "a11y": {
+        "useMediaCaption": "off"
       }
     }
   },

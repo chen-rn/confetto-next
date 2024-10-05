@@ -4,20 +4,22 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic, Square } from "lucide-react";
-import { uploadAudioToFirebase } from "@/lib/firebase";
-import { saveAudioUrl } from "@/lib/actions";
+import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
+import { uploadAudioToFirebase } from "@/lib/apis/firebase";
+import { useRouter } from "next/navigation";
 
 interface MicButtonProps {
-  sessionId: string;
+  mockId: string;
 }
 
-export default function MicButton({ sessionId }: MicButtonProps) {
+export default function MicButton({ mockId }: MicButtonProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [timer, setTimer] = useState(0);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     return () => {
@@ -62,11 +64,12 @@ export default function MicButton({ sessionId }: MicButtonProps) {
         // biome-ignore lint/style/noNonNullAssertion: <explanation>
         mediaRecorderRef.current!.onstop = async () => {
           if (chunksRef.current.length > 0) {
-            const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
+            const audioBlob = new Blob(chunksRef.current, { type: "audio/mp3" });
             try {
-              const url = await uploadAudioToFirebase(audioBlob, sessionId);
+              const url = await uploadAudioToFirebase(audioBlob, mockId);
               console.log("Audio uploaded successfully:", url);
-              await saveAudioUrl(url, sessionId);
+              processAudioSubmission(url, mockId);
+              router.push(`/mock/${mockId}/result`);
             } catch (error) {
               console.error("Error uploading audio:", error);
             }
@@ -86,7 +89,7 @@ export default function MicButton({ sessionId }: MicButtonProps) {
         }
       });
     }
-  }, [isRecording, sessionId]);
+  }, [isRecording, mockId, router.push]);
 
   const toggleRecording = useCallback(async () => {
     if (isRecording) {
