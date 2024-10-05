@@ -34,13 +34,20 @@ export default async function MockHistoryPage() {
       ) : (
         <ul className="space-y-4">
           {mockInterviews.map((interview) => (
-            <li key={interview.id} className="bg-gray-100 p-4 rounded-lg">
-              <h2 className="text-xl font-semibold mb-2">{interview.question.content}</h2>
+            <li key={interview.id} className="bg-gray-100 p-4 rounded-lg relative">
+              {!interview.recordingUrl && (
+                <span className="text-sm text-gray-500 mr-2">Incomplete</span>
+              )}
+              <div className="flex justify-between items-start mb-2">
+                <span className="font-semibold">Question: {interview.question.content}</span>
+              </div>
               <p className="text-sm text-gray-600 mb-2">
                 Date: {new Date(interview.createdAt).toLocaleString()}
               </p>
-              {interview.recordingUrl && (
+              {interview.recordingUrl ? (
                 <audio src={interview.recordingUrl} controls className="mb-2" />
+              ) : (
+                <p className="text-sm text-yellow-600 mb-2">No recorded audio available</p>
               )}
               {interview.feedback && (
                 <div className="mt-2">
