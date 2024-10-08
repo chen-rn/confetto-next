@@ -9,7 +9,7 @@ export default function Home() {
       <div className="flex justify-between items-center">
         <div className="space-x-4">
           <Link href={ROUTES.CREATE_MOCK}>
-            <Button>Start Mock</Button>
+            <Button>View Questions</Button>
           </Link>
           <Link href={ROUTES.MOCK_HISTORY}>
             <Button variant="outline">Mock History</Button>

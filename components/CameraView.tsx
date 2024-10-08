@@ -7,6 +7,7 @@ import { saveVideoAndAudioReference } from "@/app/actions/mockInterview";
 import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
+import { useToast } from "@/hooks/use-toast";
 
 interface CameraViewProps {
   mockId: string;
@@ -32,16 +33,29 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
   const [isRecording, setIsRecording] = useState(false);
   const [remainingTime, setRemainingTime] = useState(maxRecordingTime);
   const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     async function setupMedia() {
       try {
+        // Check if we're in a secure context
+        if (!window.isSecureContext) {
+          throw new Error("Media devices can only be accessed in a secure context (HTTPS)");
+        }
+
+        // Check if getUserMedia is supported
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error("getUserMedia is not supported in this browser");
+        }
+
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
-          audio: true, // Ensure audio permission is requested
+          audio: true,
         });
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
@@ -49,6 +63,12 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
       } catch (error) {
         console.error("Error accessing media devices:", error);
         setHasPermission(false);
+        setError((error as Error).message || "Failed to access camera and microphone");
+        toast({
+          title: "Error",
+          description: "Failed to access camera and microphone. Please check your permissions.",
+          variant: "destructive",
+        });
       }
     }
 
@@ -61,7 +81,7 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
       }
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, []);
+  }, [toast]);
 
   function startRecording() {
     if (!videoRef.current?.srcObject) return;
@@ -208,6 +228,17 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs.toString().padStart(2, "0")}`;
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-full text-center p-4">
+        <p className="text-red-500">{error}</p>
+        <p>
+          Please ensure you're using a supported browser and have granted the necessary permissions.
+        </p>
+      </div>
+    );
   }
 
   if (hasPermission === null) {
