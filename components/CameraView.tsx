@@ -40,9 +40,12 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
 
   useEffect(() => {
     async function setupMedia() {
+      console.log("Starting setupMedia function");
       try {
+        console.log("Checking if window is in secure context");
         if (!window.isSecureContext) {
           const errorMessage = "Media devices can only be accessed in a secure context (HTTPS)";
+          console.error(errorMessage);
           toast({
             title: "Security Error",
             description: errorMessage,
@@ -51,8 +54,10 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
           throw new Error(errorMessage);
         }
 
+        console.log("Checking if getUserMedia is supported");
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           const errorMessage = "getUserMedia is not supported in this browser";
+          console.error(errorMessage);
           toast({
             title: "Browser Support Error",
             description: errorMessage,
@@ -61,22 +66,29 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
           throw new Error(errorMessage);
         }
 
+        console.log("Requesting media stream");
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
         });
-        console.log("hihhi");
+        console.log("Media stream obtained:", stream);
 
         if (videoRef.current) {
+          console.log("Setting video source object");
           videoRef.current.srcObject = stream;
-
-          console.log("hihihi2");
+          console.log("Video source object set:", videoRef.current.srcObject);
+        } else {
+          console.warn("videoRef.current is null");
         }
+
+        console.log("Setting hasPermission to true");
         setHasPermission(true);
       } catch (error) {
-        console.error("Error accessing media devices:", error);
+        console.error("Error in setupMedia:", error);
         setHasPermission(false);
-        setError((error as Error).message || "Failed to access camera and microphone");
+        const errorMessage = (error as Error).message || "Failed to access camera and microphone";
+        console.error("Setting error:", errorMessage);
+        setError(errorMessage);
         toast({
           title: "Error",
           description: "Failed to access camera and microphone. Please check your permissions.",
@@ -85,14 +97,23 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
       }
     }
 
+    console.log("Calling setupMedia");
     setupMedia();
 
     return () => {
+      console.log("Cleanup function called");
       if (videoRef.current?.srcObject) {
+        console.log("Stopping media tracks");
         const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-        tracks.forEach((track) => track.stop());
+        tracks.forEach((track) => {
+          console.log("Stopping track:", track);
+          track.stop();
+        });
       }
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) {
+        console.log("Clearing interval timer");
+        clearInterval(timerRef.current);
+      }
     };
   }, [toast]);
 
