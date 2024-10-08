@@ -37,77 +37,89 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
   const { toast } = useToast();
+  const isSetupRef = useRef(false); // Track if setupMedia has been called
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    let isMounted = true;
+    if (isSetupRef.current) return; // Prevent multiple executions
+    isSetupRef.current = true;
 
     async function setupMedia() {
+      console.log("Starting setupMedia function");
       try {
+        console.log("Checking if window is in secure context");
         if (!window.isSecureContext) {
           const errorMessage = "Media devices can only be accessed in a secure context (HTTPS)";
-          if (isMounted) {
-            toast({
-              title: "Security Error",
-              description: errorMessage,
-              variant: "destructive",
-            });
-            setError(errorMessage);
-            setHasPermission(false);
-          }
-          return;
+          console.error(errorMessage);
+          toast({
+            title: "Security Error",
+            description: errorMessage,
+            variant: "destructive",
+          });
+          throw new Error(errorMessage);
         }
 
+        console.log("Checking if getUserMedia is supported");
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           const errorMessage = "getUserMedia is not supported in this browser";
-          if (isMounted) {
-            toast({
-              title: "Browser Support Error",
-              description: errorMessage,
-              variant: "destructive",
-            });
-            setError(errorMessage);
-            setHasPermission(false);
-          }
-          return;
+          console.error(errorMessage);
+          toast({
+            title: "Browser Support Error",
+            description: errorMessage,
+            variant: "destructive",
+          });
+          throw new Error(errorMessage);
         }
 
+        console.log("Requesting media stream");
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
         });
+        console.log("Media stream obtained:", stream);
 
-        if (isMounted && videoRef.current) {
+        if (videoRef.current) {
+          console.log("Setting video source object");
           videoRef.current.srcObject = stream;
-          setHasPermission(true);
+          console.log("Video source object set:", videoRef.current.srcObject);
+        } else {
+          console.warn("videoRef.current is null");
         }
+
+        console.log("Setting hasPermission to true");
+        setHasPermission(true);
       } catch (error) {
-        if (isMounted) {
-          const errorMessage = (error as Error).message || "Failed to access camera and microphone";
-          setError(errorMessage);
-          setHasPermission(false);
-          toast({
-            title: "Error",
-            description: "Failed to access camera and microphone. Please check your permissions.",
-            variant: "destructive",
-          });
-        }
+        console.error("Error in setupMedia:", error);
+        setHasPermission(false);
+        const errorMessage = (error as Error).message || "Failed to access camera and microphone";
+        console.error("Setting error:", errorMessage);
+        setError(errorMessage);
+        toast({
+          title: "Error",
+          description: "Failed to access camera and microphone. Please check your permissions.",
+          variant: "destructive",
+        });
       }
     }
 
+    console.log("Calling setupMedia");
     setupMedia();
 
     return () => {
-      isMounted = false;
+      console.log("Cleanup function called");
       if (videoRef.current?.srcObject) {
+        console.log("Stopping media tracks");
         const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-        tracks.forEach((track) => track.stop());
+        tracks.forEach((track) => {
+          console.log("Stopping track:", track);
+          track.stop();
+        });
       }
       if (timerRef.current) {
+        console.log("Clearing interval timer");
         clearInterval(timerRef.current);
       }
     };
-  }, []);
+  }, []); // Removed 'toast' from dependencies
 
   function startRecording() {
     if (!videoRef.current?.srcObject) return;
@@ -249,33 +261,6 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
     return `${minutes}:${secs.toString().padStart(2, "0")}`;
   }
 
-  if (error) {
-    return (
-      <div className="flex items-center justify-center h-full text-center p-4 bg-gray-100">
-        <p className="text-red-500">{error}</p>
-        <p>
-          Please ensure you're using a supported browser and have granted the necessary permissions.
-        </p>
-      </div>
-    );
-  }
-
-  if (hasPermission === null) {
-    return (
-      <div className="flex items-center justify-center h-full bg-gray-100">
-        Requesting camera and microphone permission...
-      </div>
-    );
-  }
-
-  if (hasPermission === false) {
-    return (
-      <div className="flex items-center justify-center h-full bg-gray-100">
-        Access denied. Please enable camera and microphone permissions.
-      </div>
-    );
-  }
-
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100">
       <video
@@ -285,6 +270,25 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
         muted
         className="w-full h-full object-cover rounded-lg transform scale-x-[-1]"
       />
+      {error ? (
+        <div className="absolute inset-0 flex items-center justify-center text-center p-4 bg-gray-100">
+          <p className="text-red-500">{error}</p>
+          <p>
+            Please ensure you're using a supported browser and have granted the necessary
+            permissions.
+          </p>
+        </div>
+      ) : hasPermission === null ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          Requesting camera and microphone permission...
+        </div>
+      ) : (
+        hasPermission === false && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+            Access denied. Please enable camera and microphone permissions.
+          </div>
+        )
+      )}
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
         <Button
           variant={isRecording ? "destructive" : "default"}
