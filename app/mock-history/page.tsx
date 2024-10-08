@@ -4,6 +4,16 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+interface MockInterview {
+  id: string;
+  question: {
+    content: string;
+  };
+  recordingUrl?: string;
+  createdAt: Date;
+}
 
 export default async function MockHistoryPage() {
   const userId = auth().userId;
@@ -14,7 +24,12 @@ export default async function MockHistoryPage() {
 
   const mockInterviews = await prisma.mockInterview.findMany({
     where: { userId },
-    include: { question: true, feedback: true },
+    select: {
+      id: true,
+      question: { select: { content: true } },
+      recordingUrl: true,
+      createdAt: true,
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -23,45 +38,37 @@ export default async function MockHistoryPage() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <Link href={ROUTES.HOME}>
-        <Button variant="outline" className="mb-4">
-          Home
-        </Button>
-      </Link>
-      <h1 className="text-2xl font-bold mb-4">Mock Interview History</h1>
+    <div className="container mx-auto p-6">
+      <div className="flex items-center justify-between mb-6">
+        <Link href={ROUTES.HOME}>
+          <Button variant="outline">Home</Button>
+        </Link>
+        <h1 className="text-3xl font-bold">Mock Interview History</h1>
+        <div className="w-24" />
+      </div>
       {mockInterviews.length === 0 ? (
-        <p>You haven't completed any mock interviews yet.</p>
+        <p className="text-center text-gray-600">You haven't completed any mock interviews yet.</p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="grid grid-cols-1 gap-6">
           {mockInterviews.map((interview) => (
-            <li key={interview.id} className="bg-gray-100 p-4 rounded-lg relative">
-              {!interview.recordingUrl && (
-                <span className="text-sm text-gray-500 mr-2">Incomplete</span>
-              )}
-              <div className="flex justify-between items-start mb-2">
-                <span className="font-semibold">Question: {interview.question.content}</span>
-              </div>
-              <p className="text-sm text-gray-600 mb-2">
-                Date: {new Date(interview.createdAt).toLocaleString()}
-              </p>
-              {interview.recordingUrl ? (
-                <audio src={interview.recordingUrl} controls className="mb-2" />
-              ) : (
-                <p className="text-sm text-yellow-600 mb-2">No recorded audio available</p>
-              )}
-              {interview.feedback && (
-                <div className="mt-2">
-                  <h3 className="font-semibold">Feedback:</h3>
-                  <p>{interview.feedback.content}</p>
+            <Card key={interview.id} className="flex items-center justify-between p-4 gap-4">
+              <div className="flex flex-col gap-2">
+                <div className="text-gray-700">"{interview.question.content}"</div>
+                <div className="text-sm text-gray-500">
+                  Date: {new Date(interview.createdAt).toLocaleDateString()}
                 </div>
-              )}
+                <div
+                  className={`text-sm font-medium ${
+                    interview.recordingUrl ? "text-green-600" : "text-yellow-600"
+                  }`}
+                >
+                  {interview.recordingUrl ? "Completed" : "Incomplete"}
+                </div>
+              </div>
               <Link href={ROUTES.MOCK_RESULT(interview.id)}>
-                <Button variant="outline" className="mt-2">
-                  View Details
-                </Button>
+                <Button variant="default">View Details</Button>
               </Link>
-            </li>
+            </Card>
           ))}
         </ul>
       )}
