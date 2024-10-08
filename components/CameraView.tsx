@@ -43,12 +43,24 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
       try {
         // Check if we're in a secure context
         if (!window.isSecureContext) {
-          throw new Error("Media devices can only be accessed in a secure context (HTTPS)");
+          const errorMessage = "Media devices can only be accessed in a secure context (HTTPS)";
+          toast({
+            title: "Security Error",
+            description: errorMessage,
+            variant: "destructive",
+          });
+          throw new Error(errorMessage);
         }
 
         // Check if getUserMedia is supported
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          throw new Error("getUserMedia is not supported in this browser");
+          const errorMessage = "getUserMedia is not supported in this browser";
+          toast({
+            title: "Browser Support Error",
+            description: errorMessage,
+            variant: "destructive",
+          });
+          throw new Error(errorMessage);
         }
 
         const stream = await navigator.mediaDevices.getUserMedia({
