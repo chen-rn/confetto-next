@@ -65,9 +65,11 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
           video: true,
           audio: true,
         });
+        console.log("we got the media stream", stream);
 
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          console.log("we set the stream");
         }
         setHasPermission(true);
       } catch (error) {
