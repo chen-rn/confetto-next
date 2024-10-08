@@ -35,7 +35,7 @@ export default async function MockPage({ params }: MockPageProps) {
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      <header className=" p-4">
+      <header className="p-4">
         <div className="container mx-auto flex justify-between items-center">
           <Link href={ROUTES.HOME}>
             <Button variant="outline">Home</Button>
