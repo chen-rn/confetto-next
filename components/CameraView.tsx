@@ -65,12 +65,26 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
           video: true,
           audio: true,
         });
-        console.log("we got the media stream", stream);
+        console.log("Media stream obtained:", stream.id);
 
         if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          console.log("we set the stream");
+          try {
+            videoRef.current.srcObject = stream;
+            console.log("Stream set to video element:", videoRef.current.id);
+
+            // Add an event listener to confirm the stream is loaded
+            videoRef.current.onloadedmetadata = () => {
+              console.log("Video element metadata loaded");
+            };
+          } catch (streamError) {
+            console.error("Error setting stream to video element:", streamError);
+            throw streamError;
+          }
+        } else {
+          console.error("Video element reference is null");
+          throw new Error("Video element not found");
         }
+
         setHasPermission(true);
       } catch (error) {
         console.error("Error accessing media devices:", error);
@@ -83,7 +97,6 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
         });
       }
     }
-
     setupMedia();
 
     return () => {
