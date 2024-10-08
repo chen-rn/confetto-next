@@ -1,4 +1,22 @@
+// next.config.js
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  // ...other configurations
+  async headers() {
+    return [
+      {
+        // Apply these headers to all routes in your application.
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Permissions-Policy",
+            value: "camera=(self), microphone=(self)", // Allow camera and microphone
+          },
+        ],
+      },
+    ];
+  },
+};
 
 export default nextConfig;
