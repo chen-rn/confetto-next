@@ -60,7 +60,7 @@ export async function getFeedbackFromLLM({ question, answer }: GetFeedbackParams
 
   try {
     const response = await openai.chat.completions.create({
-      model: "o1-mini",
+      model: "o1-preview",
       messages: [{ role: "user", content: prompt }],
     });
 

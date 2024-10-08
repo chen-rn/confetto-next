@@ -5,6 +5,7 @@ import { StartMockInterviewButton } from "@/components/buttons/StartMockIntervie
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
+import { AddQuestionForm } from "@/components/AddQuestionForm";
 
 export default async function CreateMockPage() {
   const userId = auth().userId;
@@ -23,7 +24,7 @@ export default async function CreateMockPage() {
         </Button>
       </Link>
       <h1 className="text-xl font-bold mb-6">Pick a question:</h1>
-      <ul className="space-y-4">
+      <ul className="space-y-4 mb-8">
         {questions.map((question) => (
           <li
             key={question.id}
@@ -34,6 +35,10 @@ export default async function CreateMockPage() {
           </li>
         ))}
       </ul>
+      <div className="mt-8">
+        <h2 className="text-lg font-semibold mb-4">Add a new question:</h2>
+        <AddQuestionForm />
+      </div>
     </div>
   );
 }
