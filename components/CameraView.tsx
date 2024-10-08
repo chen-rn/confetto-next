@@ -38,84 +38,76 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
   const router = useRouter();
   const { toast } = useToast();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    let isMounted = true;
+
     async function setupMedia() {
-      console.log("Starting setupMedia function");
       try {
-        console.log("Checking if window is in secure context");
         if (!window.isSecureContext) {
           const errorMessage = "Media devices can only be accessed in a secure context (HTTPS)";
-          console.error(errorMessage);
-          toast({
-            title: "Security Error",
-            description: errorMessage,
-            variant: "destructive",
-          });
-          throw new Error(errorMessage);
+          if (isMounted) {
+            toast({
+              title: "Security Error",
+              description: errorMessage,
+              variant: "destructive",
+            });
+            setError(errorMessage);
+            setHasPermission(false);
+          }
+          return;
         }
 
-        console.log("Checking if getUserMedia is supported");
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           const errorMessage = "getUserMedia is not supported in this browser";
-          console.error(errorMessage);
-          toast({
-            title: "Browser Support Error",
-            description: errorMessage,
-            variant: "destructive",
-          });
-          throw new Error(errorMessage);
+          if (isMounted) {
+            toast({
+              title: "Browser Support Error",
+              description: errorMessage,
+              variant: "destructive",
+            });
+            setError(errorMessage);
+            setHasPermission(false);
+          }
+          return;
         }
 
-        console.log("Requesting media stream");
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
         });
-        console.log("Media stream obtained:", stream);
 
-        if (videoRef.current) {
-          console.log("Setting video source object");
+        if (isMounted && videoRef.current) {
           videoRef.current.srcObject = stream;
-          console.log("Video source object set:", videoRef.current.srcObject);
-        } else {
-          console.warn("videoRef.current is null");
+          setHasPermission(true);
         }
-
-        console.log("Setting hasPermission to true");
-        setHasPermission(true);
       } catch (error) {
-        console.error("Error in setupMedia:", error);
-        setHasPermission(false);
-        const errorMessage = (error as Error).message || "Failed to access camera and microphone";
-        console.error("Setting error:", errorMessage);
-        setError(errorMessage);
-        toast({
-          title: "Error",
-          description: "Failed to access camera and microphone. Please check your permissions.",
-          variant: "destructive",
-        });
+        if (isMounted) {
+          const errorMessage = (error as Error).message || "Failed to access camera and microphone";
+          setError(errorMessage);
+          setHasPermission(false);
+          toast({
+            title: "Error",
+            description: "Failed to access camera and microphone. Please check your permissions.",
+            variant: "destructive",
+          });
+        }
       }
     }
 
-    console.log("Calling setupMedia");
     setupMedia();
 
     return () => {
-      console.log("Cleanup function called");
+      isMounted = false;
       if (videoRef.current?.srcObject) {
-        console.log("Stopping media tracks");
         const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-        tracks.forEach((track) => {
-          console.log("Stopping track:", track);
-          track.stop();
-        });
+        tracks.forEach((track) => track.stop());
       }
       if (timerRef.current) {
-        console.log("Clearing interval timer");
         clearInterval(timerRef.current);
       }
     };
-  }, [toast]);
+  }, []);
 
   function startRecording() {
     if (!videoRef.current?.srcObject) return;
