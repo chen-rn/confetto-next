@@ -12,8 +12,12 @@ export const app = initializeApp({
 
 const storage = getStorage(app);
 
-export async function uploadAudioToFirebase(audioBlob: Blob, mockId: string): Promise<string> {
-  const fileName = `audio_${mockId}_${Date.now()}.mp3`;
+export async function uploadAudioToFirebase(
+  audioBlob: Blob,
+  mockId: string,
+  extension: string
+): Promise<string> {
+  const fileName = `audio_${mockId}_${Date.now()}.${extension}`;
   const storageRef = ref(storage, `recordings/${fileName}`);
 
   try {
@@ -21,7 +25,13 @@ export async function uploadAudioToFirebase(audioBlob: Blob, mockId: string): Pr
     const downloadURL = await getDownloadURL(snapshot.ref);
     return downloadURL;
   } catch (error) {
-    console.error("Error uploading to Firebase:", error);
+    console.error("Error uploading audio to Firebase:", error);
     throw error;
   }
+}
+
+export async function uploadVideo(file: File): Promise<string> {
+  const storageRef = ref(storage, `mock-interviews/${file.name}`);
+  await uploadBytes(storageRef, file);
+  return getDownloadURL(storageRef);
 }

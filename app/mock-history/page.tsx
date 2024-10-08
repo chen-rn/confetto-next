@@ -3,12 +3,13 @@ import { prisma } from "@/lib/apis/prisma";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/lib/routes";
 
 export default async function MockHistoryPage() {
   const userId = auth().userId;
 
   if (!userId) {
-    redirect("/sign-in");
+    redirect(ROUTES.SIGN_IN);
   }
 
   const mockInterviews = await prisma.mockInterview.findMany({
@@ -23,7 +24,7 @@ export default async function MockHistoryPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <Link href="/">
+      <Link href={ROUTES.HOME}>
         <Button variant="outline" className="mb-4">
           Home
         </Button>
@@ -55,7 +56,7 @@ export default async function MockHistoryPage() {
                   <p>{interview.feedback.content}</p>
                 </div>
               )}
-              <Link href={`/mock/${interview.id}/result`}>
+              <Link href={ROUTES.MOCK_RESULT(interview.id)}>
                 <Button variant="outline" className="mt-2">
                   View Details
                 </Button>

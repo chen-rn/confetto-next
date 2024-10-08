@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/apis/prisma";
-import AudioPlayer from "@/components/AudioPlayer";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/lib/routes";
 
 interface ResultPageProps {
   params: {
@@ -23,15 +23,15 @@ export default async function ResultPage({ params }: ResultPageProps) {
     include: { feedback: true, question: true },
   });
 
-  if (!mockInterview || !mockInterview.feedback || !mockInterview.question) {
+  if (!mockInterview || !mockInterview.question) {
     notFound();
   }
 
-  const { feedback, recordingUrl, recordingTranscription: transcription, question } = mockInterview;
+  const { feedback, videoUrl, recordingTranscription: transcription, question } = mockInterview;
 
   return (
     <div className="container mx-auto p-4">
-      <Link href="/">
+      <Link href={ROUTES.HOME}>
         <Button variant="outline">Home</Button>
       </Link>
       <h1 className="text-2xl font-bold">Mock Results:</h1>
@@ -39,10 +39,12 @@ export default async function ResultPage({ params }: ResultPageProps) {
         <h2 className="text-xl font-bold mb-2">Question:</h2>
         <p className="text-lg">{question.content}</p>
       </div>
-      {recordingUrl && (
+      {videoUrl && (
         <div className="mt-4">
-          <h2 className="text-xl font-bold mb-2">Recording:</h2>
-          <AudioPlayer src={recordingUrl} />
+          <h2 className="text-xl font-bold mb-2">Video Recording:</h2>
+          <video src={videoUrl} controls className="w-full max-w-2xl">
+            Your browser does not support the video tag.
+          </video>
         </div>
       )}
       {transcription && (

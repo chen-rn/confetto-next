@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { createMockInterview } from "@/lib/actions";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 
 interface StartMockInterviewButtonProps {
   questionId: string;
@@ -18,7 +19,7 @@ export function StartMockInterviewButton({ questionId, userId }: StartMockInterv
     setIsLoading(true);
     try {
       const mockId = await createMockInterview(questionId, userId);
-      router.push(`/mock/${mockId}`);
+      router.push(ROUTES.MOCK(mockId));
     } catch (error) {
       console.error("Failed to start mock interview:", error);
       setIsLoading(false);
@@ -27,7 +28,7 @@ export function StartMockInterviewButton({ questionId, userId }: StartMockInterv
 
   return (
     <Button onClick={handleStartMockInterview} disabled={isLoading}>
-      {isLoading ? "Starting..." : "Start Mock Interview"}
+      {isLoading ? "Starting..." : "Start"}
     </Button>
   );
 }
