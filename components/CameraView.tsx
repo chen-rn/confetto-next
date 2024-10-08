@@ -41,7 +41,6 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
   useEffect(() => {
     async function setupMedia() {
       try {
-        // Check if we're in a secure context
         if (!window.isSecureContext) {
           const errorMessage = "Media devices can only be accessed in a secure context (HTTPS)";
           toast({
@@ -52,7 +51,6 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
           throw new Error(errorMessage);
         }
 
-        // Check if getUserMedia is supported
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           const errorMessage = "getUserMedia is not supported in this browser";
           toast({
@@ -181,11 +179,9 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
       mediaRecorderRef.current!.onstop = async () => {
         audioRecorderRef.current!.onstop = async () => {
           try {
-            // Check if chunks have data
             console.log("Video chunks:", chunksRef.current.length);
             console.log("Audio chunks:", audioChunksRef.current.length);
 
-            // Create blobs
             const videoBlob = new Blob(chunksRef.current, {
               type: mediaRecorderRef.current!.mimeType,
             });
@@ -193,16 +189,13 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
               type: audioRecorderRef.current!.mimeType,
             });
 
-            // Check blob sizes
             console.log("Video blob size:", videoBlob.size);
             console.log("Audio blob size:", audioBlob.size);
 
-            // Verify blobs are not empty
             if (videoBlob.size === 0 || audioBlob.size === 0) {
               throw new Error("Recorded media is empty.");
             }
 
-            // Create files
             const videoFile = new File([videoBlob], `mock_video_${mockId}_${Date.now()}.webm`, {
               type: mediaRecorderRef.current!.mimeType,
             });
@@ -210,11 +203,9 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
               type: audioRecorderRef.current!.mimeType,
             });
 
-            // Upload files
             const videoUrl = await uploadVideo(videoFile);
             const audioUrl = await uploadAudioToFirebase(audioFile, mockId, "webm");
 
-            // Save references and process audio
             await saveVideoAndAudioReference(mockId, videoUrl, audioUrl);
             await processAudioSubmission(audioUrl, mockId);
 
@@ -244,7 +235,7 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full text-center p-4">
+      <div className="flex items-center justify-center h-full text-center p-4 bg-gray-100">
         <p className="text-red-500">{error}</p>
         <p>
           Please ensure you're using a supported browser and have granted the necessary permissions.
@@ -255,7 +246,7 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
 
   if (hasPermission === null) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full bg-gray-100">
         Requesting camera and microphone permission...
       </div>
     );
@@ -263,14 +254,14 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
 
   if (hasPermission === false) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full bg-gray-100">
         Access denied. Please enable camera and microphone permissions.
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100">
       <video
         ref={videoRef}
         autoPlay
