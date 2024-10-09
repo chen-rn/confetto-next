@@ -39,6 +39,7 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
   const { toast } = useToast();
   const isSetupRef = useRef(false); // Track if setupMedia has been called
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (isSetupRef.current) return; // Prevent multiple executions
     isSetupRef.current = true;
@@ -72,7 +73,7 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
 
         console.log("Requesting media stream");
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: { width: { max: 640 }, height: { max: 480 } }, // Set lower resolution for smaller video size
           audio: true,
         });
         console.log("Media stream obtained:", stream);
@@ -135,7 +136,7 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
     const audioStream = new MediaStream(audioTracks);
 
     const videoMimeType = getSupportedMimeType(
-      "video/webm;codecs=vp9",
+      "video/webm;codecs=vp9", // VP9 offers better compression
       "video/webm;codecs=vp8",
       "video/webm",
       "video/mp4"
