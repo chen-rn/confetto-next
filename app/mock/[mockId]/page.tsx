@@ -32,25 +32,26 @@ export default async function MockPage({ params }: MockPageProps) {
   }
 
   const { question } = mockInterview;
-
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      <header className="p-4">
+      <header className="p-2 sm:p-4">
         <div className="container mx-auto flex justify-between items-center">
           <Link href={ROUTES.HOME}>
-            <Button variant="outline">Home</Button>
+            <Button variant="outline" size="sm">
+              Home
+            </Button>
           </Link>
-          <h1 className="text-2xl font-bold">Interview</h1>
-          <div className="w-[88px]" /> {/* Placeholder for balance */}
+          <h1 className="text-xl sm:text-2xl font-bold">Interview</h1>
+          <div className="w-[60px] sm:w-[88px]" /> {/* Placeholder for balance */}
         </div>
       </header>
 
-      <main className="flex-grow container mx-auto p-4 flex flex-col gap-4">
-        <div className="w-full bg-white p-4 rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold mb-2">Question:</h2>
-          <p className="text-lg">{question.content}</p>
+      <main className="flex-grow container mx-auto p-2 sm:p-4 flex flex-col gap-2 sm:gap-4 overflow-hidden">
+        <div className="w-full bg-white p-2 sm:p-4 rounded-lg shadow-sm overflow-auto max-h-[30vh]">
+          <h2 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">Question:</h2>
+          <p className="text-base sm:text-lg">{question.content}</p>
         </div>
-        <div className="w-full bg-black rounded-lg overflow-hidden shadow-sm">
+        <div className="w-full bg-black rounded-lg overflow-hidden shadow-sm flex-grow">
           <CameraView mockId={mockId} />
         </div>
       </main>
