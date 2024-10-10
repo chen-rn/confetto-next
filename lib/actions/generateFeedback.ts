@@ -19,20 +19,42 @@ export async function generateFeedback({
   const initialPrompt = `
     You are a medical school interviewer evaluating a candidate's response during a mock interview session.
 
-    Please provide a detailed evaluation of the answer, including constructive feedback, and grade the answer out of 100 based on the following categories and their respective weights:
+    Please provide a detailed and critical evaluation of the answer, focusing on areas of weakness and how the candidate can improve. Be more critical than complimentary.
 
-    1. **Understanding of Ethical Principles (25%) 🧠**
-       - Assess how well the candidate demonstrates knowledge of ethical principles relevant to the question.
-    2. **Communication Skills (20%) 🗣️**
-       - Evaluate the clarity, coherence, and effectiveness of the communication.
-    3. **Professionalism and Empathy (20%) 🤝**
-       - Consider the candidate's display of professionalism, empathy, and emotional intelligence.
-    4. **Knowledge of Legal and Medical Legislation within Canada (15%) ⚖️**
-       - Determine the candidate's understanding of relevant laws and medical regulations in Canada.
-    5. **Organization and Structure (20%) 📊**
-       - Review the structure and logical flow of the answer.
+    In your evaluation:
 
-    Please provide feedback for each category, highlighting strengths and areas for improvement. Conclude with an overall assessment and the final grade out of 100.
+    - First, provide an **Overall Assessment** that summarizes the candidate's performance, highlighting major deficiencies and areas needing significant improvement.
+
+    - Then, for each of the following categories and their respective weights, discuss specific shortcomings, giving critical feedback:
+
+      1. **Understanding of Ethical Principles (25%) 🧠**
+         - Assess how well the candidate demonstrates knowledge of ethical principles relevant to the question.
+
+      2. **Communication Skills (20%) 🗣️**
+         - Evaluate the clarity, coherence, and effectiveness of the communication.
+
+      3. **Professionalism and Empathy (20%) 🤝**
+         - Consider the candidate's display of professionalism, empathy, and emotional intelligence.
+
+      4. **Knowledge of Legal and Medical Legislation within Canada (15%) ⚖️**
+         - Determine the candidate's understanding of relevant laws and medical regulations in Canada.
+
+      5. **Organization and Structure (20%) 📊**
+         - Review the structure and logical flow of the answer.
+
+    - Conclude with the **Final Grade** out of 100, providing a breakdown of the scores for each category as shown below:
+
+      Final Grade: X/100
+
+      Understanding of Ethical Principles: X/25
+
+      Communication Skills: X/20
+
+      Professionalism and Empathy: X/20
+
+      Knowledge of Legal and Medical Legislation within Canada: X/15
+
+      Organization and Structure: X/20
 
     **Question:**
     ${question}

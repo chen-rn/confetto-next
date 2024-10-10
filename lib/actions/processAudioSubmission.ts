@@ -57,7 +57,7 @@ export async function processAudioSubmission(mockId: string) {
     });
 
     // Revalidate the mock interview page to display the latest data
-    revalidatePath(ROUTES.MOCK(mockId));
+    revalidatePath(ROUTES.MOCK_RESULT(mockId));
     console.log("🔄 Mock interview page revalidated");
 
     console.log("🎉 Audio processing completed successfully");

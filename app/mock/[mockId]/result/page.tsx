@@ -101,10 +101,10 @@ export default async function ResultPage({ params }: ResultPageProps) {
               <CardTitle>Overall Feedback</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <h3 className="text-lg font-semibold">Score: {feedback.overallScore}/100</h3>
                 <p className="text-base">{feedback.overallFeedback}</p>
-              </div>
+              </div> */}
               <MarkdownRenderer content={feedback.rawContent} />
             </CardContent>
           </Card>
