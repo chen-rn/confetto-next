@@ -36,14 +36,20 @@ export default async function ResultPage({ params }: ResultPageProps) {
   async function handleReprocess() {
     "use server";
 
+    // Fetch the latest data
+    const latestMockInterview = await prisma.mockInterview.findUnique({
+      where: { id: mockId },
+      include: { feedback: true },
+    });
+
     // Delete existing feedback if it exists
-    if (mockInterview?.feedback) {
+    if (latestMockInterview?.feedback?.id) {
       await prisma.feedback.delete({
-        where: { id: mockInterview.feedback.id },
+        where: { id: latestMockInterview.feedback.id },
       });
     }
 
-    await processAudioSubmission(mockInterview?.recordingUrl || "", mockId);
+    await processAudioSubmission(mockId);
     // Revalidate the current page
     revalidatePath(`/mock/${mockId}/result`);
   }
@@ -112,6 +118,12 @@ export default async function ResultPage({ params }: ResultPageProps) {
         <div className="flex flex-col items-center justify-center h-64">
           <Loader2 className="w-12 h-12 animate-spin text-primary" />
           <p className="mt-4 text-lg font-medium text-gray-600">Processing your submission...</p>
+
+          <form action={handleReprocess} className="flex justify-center">
+            <Button type="submit" variant="default">
+              Reprocess Submission
+            </Button>
+          </form>
         </div>
       )}
     </div>

@@ -47,12 +47,12 @@ export default async function MockPage({ params }: MockPageProps) {
       </header>
 
       <main className="flex-grow container mx-auto p-2 sm:p-4 flex flex-col gap-2 sm:gap-4 overflow-hidden">
-        <div className="w-full bg-white p-2 sm:p-4 rounded-lg shadow-sm overflow-auto max-h-[30vh]">
+        {/*    <div className="w-full bg-white p-2 sm:p-4 rounded-lg shadow-sm overflow-auto max-h-[30vh]">
           <h2 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">Question:</h2>
           <p className="text-base sm:text-lg">{question.content}</p>
-        </div>
+        </div> */}
         <div className="w-full bg-black rounded-lg overflow-hidden shadow-sm flex-grow">
-          <CameraView mockId={mockId} />
+          <CameraView mockId={mockId} question={question.content} />
         </div>
       </main>
     </div>

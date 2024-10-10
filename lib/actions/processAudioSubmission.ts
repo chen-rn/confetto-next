@@ -7,32 +7,31 @@ import { getFeedbackFromLLM } from "./getFeedbackFromLLM";
 import { ROUTES } from "@/lib/routes";
 
 /**
- * Processes the audio submission by saving the URL, transcribing the audio, and generating feedback.
+ * Processes the audio submission by transcribing the audio and generating feedback.
  *
- * @param url - URL of the uploaded audio recording.
  * @param mockId - ID of the mock interview.
  * @returns An object indicating success or failure.
  */
-export async function processAudioSubmission(url: string, mockId: string) {
+export async function processAudioSubmission(mockId: string) {
   try {
     console.log("🎙️ Starting audio submission processing...");
 
-    // Update the mock interview with the audio URL
-    const updatedMock = await prisma.mockInterview.update({
+    // Retrieve the mock interview
+    const mockInterview = await prisma.mockInterview.findUnique({
       where: { id: mockId },
-      data: { recordingUrl: url },
+      include: { question: true },
     });
 
-    if (!updatedMock) {
-      console.warn("⚠️ Failed to update mock interview with audio URL");
-      throw new Error("Failed to update mock interview with audio URL");
+    if (!mockInterview || !mockInterview.recordingUrl) {
+      console.warn("⚠️ Failed to find mock interview or recording URL");
+      throw new Error("Failed to find mock interview or recording URL");
     }
 
-    console.log("🔊 Audio URL updated successfully");
+    console.log("🔊 Found mock interview with audio URL");
 
     // Transcribe the audio
     console.log("📝 Starting audio transcription...");
-    const transcription = await transcribeAudio(url);
+    const transcription = await transcribeAudio(mockInterview.recordingUrl);
     console.log("✅ Transcription completed");
 
     // Update the mock interview with the transcription
@@ -42,12 +41,7 @@ export async function processAudioSubmission(url: string, mockId: string) {
     });
     console.log("💾 Transcription saved to database");
 
-    // Retrieve the associated question
-    const question = await prisma.question.findUnique({
-      where: { id: updatedMock.questionId },
-    });
-
-    if (!question) {
+    if (!mockInterview.question) {
       console.warn("⚠️ Failed to find associated question");
       throw new Error("Failed to find associated question");
     }
@@ -57,7 +51,7 @@ export async function processAudioSubmission(url: string, mockId: string) {
     // Generate feedback using LLM
     console.log("🤖 Generating feedback using LLM...");
     const feedback = await getFeedbackFromLLM({
-      question: question.content,
+      question: mockInterview.question.content,
       answer: transcription,
     });
     console.log("✅ Feedback generated");

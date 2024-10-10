@@ -56,6 +56,9 @@ importers:
       react-markdown:
         specifier: ^9.0.1
         version: 9.0.1(@types/react@18.3.11)(react@18.3.1)
+      recordrtc:
+        specifier: ^5.6.2
+        version: 5.6.2
       replicate:
         specifier: ^0.34.1
         version: 0.34.1
@@ -81,6 +84,9 @@ importers:
       '@types/react-dom':
         specifier: ^18
         version: 18.3.0
+      '@types/recordrtc':
+        specifier: ^5.6.14
+        version: 5.6.14
       biome:
         specifier: ^0.3.3
         version: 0.3.3
@@ -715,6 +721,9 @@ packages:
 
   '@types/react@18.3.11':
     resolution: {integrity: sha512-r6QZ069rFTjrEYgFdOck1gK7FLVsgJE7tTz0pQBczlBNUhBNk0MQH4UbnFSwjpQLMkLzgqvBBa+qGpLje16eTQ==}
+
+  '@types/recordrtc@5.6.14':
+    resolution: {integrity: sha512-Reiy1sl11xP0r6w8DW3iQjc1BgXFyNC7aDuutysIjpFoqyftbQps9xPA2FoBkfVXpJM61betgYPNt+v65zvMhA==}
 
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
@@ -1694,6 +1703,9 @@ packages:
 
   readline2@1.0.1:
     resolution: {integrity: sha512-8/td4MmwUB6PkZUbV25uKz7dfrmjYWxsW8DVfibWdlHRk/l/DfHKn4pU+dfcoGLFgWOdyGCzINRQD7jn+Bv+/g==}
+
+  recordrtc@5.6.2:
+    resolution: {integrity: sha512-1QNKKNtl7+KcwD1lyOgP3ZlbiJ1d0HtXnypUy7yq49xEERxk31PHvE9RCciDrulPCY7WJ+oz0R9hpNxgsIurGQ==}
 
   regenerator-runtime@0.9.6:
     resolution: {integrity: sha512-D0Y/JJ4VhusyMOd/o25a3jdUqN/bC85EFsaoL9Oqmy/O4efCh+xhp7yj2EEOsj974qvMkcW8AwUzJ1jB/MbxCw==}
@@ -2751,6 +2763,8 @@ snapshots:
     dependencies:
       '@types/prop-types': 15.7.13
       csstype: 3.1.3
+
+  '@types/recordrtc@5.6.14': {}
 
   '@types/unist@2.0.11': {}
 
@@ -3877,6 +3891,8 @@ snapshots:
       code-point-at: 1.1.0
       is-fullwidth-code-point: 1.0.0
       mute-stream: 0.0.5
+
+  recordrtc@5.6.2: {}
 
   regenerator-runtime@0.9.6: {}
 

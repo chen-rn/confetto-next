@@ -1,266 +1,71 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useMediaSetup } from "@/hooks/useMediaSetup";
+import { useRecording } from "@/hooks/useRecording";
 import { Button } from "@/components/ui/button";
-import { uploadVideo, uploadAudioToFirebase } from "@/lib/apis/firebase";
-import { saveVideoAndAudioReference } from "@/app/actions/mockInterview";
-import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
-import { useRouter } from "next/navigation";
-import { ROUTES } from "@/lib/routes";
+import { formatTime } from "@/utils/formatTime";
 import { useToast } from "@/hooks/use-toast";
+import { useAudioLevel } from "@/hooks/useAudioLevel";
 
 interface CameraViewProps {
   mockId: string;
-  maxRecordingTime?: number; // in seconds
+  maxRecordingTime?: number;
+  question: string;
 }
 
-function getSupportedMimeType(...mimeTypes: string[]) {
-  for (const mimeType of mimeTypes) {
-    if (MediaRecorder.isTypeSupported(mimeType)) {
-      return mimeType;
-    }
-  }
-  return "";
-}
-
-export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
-  const audioChunksRef = useRef<Blob[]>([]);
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(maxRecordingTime);
-  const [isUploading, setIsUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const router = useRouter();
+export function CameraView({ mockId, maxRecordingTime = 300, question }: CameraViewProps) {
+  const { hasPermission, error, videoRef } = useMediaSetup();
+  const {
+    isRecording,
+    remainingTime,
+    isProcessing,
+    startRecording,
+    stopRecording,
+    isCountingDown,
+    countdownTime,
+  } = useRecording(mockId, maxRecordingTime);
   const { toast } = useToast();
-  const isSetupRef = useRef(false); // Track if setupMedia has been called
+  // const audioLevel = useAudioLevel(videoRef.current?.srcObject as MediaStream | null);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (isSetupRef.current) return; // Prevent multiple executions
-    isSetupRef.current = true;
-
-    async function setupMedia() {
-      console.log("Starting setupMedia function");
-      try {
-        console.log("Checking if window is in secure context");
-        if (!window.isSecureContext) {
-          const errorMessage = "Media devices can only be accessed in a secure context (HTTPS)";
-          console.error(errorMessage);
-          toast({
-            title: "Security Error",
-            description: errorMessage,
-            variant: "destructive",
-          });
-          throw new Error(errorMessage);
-        }
-
-        console.log("Checking if getUserMedia is supported");
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          const errorMessage = "getUserMedia is not supported in this browser";
-          console.error(errorMessage);
-          toast({
-            title: "Browser Support Error",
-            description: errorMessage,
-            variant: "destructive",
-          });
-          throw new Error(errorMessage);
-        }
-
-        console.log("Requesting media stream");
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { max: 640 }, height: { max: 480 } }, // Set lower resolution for smaller video size
-          audio: true,
-        });
-        console.log("Media stream obtained:", stream);
-
-        if (videoRef.current) {
-          console.log("Setting video source object");
-          videoRef.current.srcObject = stream;
-          console.log("Video source object set:", videoRef.current.srcObject);
-        } else {
-          console.warn("videoRef.current is null");
-        }
-
-        console.log("Setting hasPermission to true");
-        setHasPermission(true);
-      } catch (error) {
-        console.error("Error in setupMedia:", error);
-        setHasPermission(false);
-        const errorMessage = (error as Error).message || "Failed to access camera and microphone";
-        console.error("Setting error:", errorMessage);
-        setError(errorMessage);
-        toast({
-          title: "Error",
-          description: "Failed to access camera and microphone. Please check your permissions.",
-          variant: "destructive",
-        });
-      }
-    }
-
-    console.log("Calling setupMedia");
-    setupMedia();
-
-    return () => {
-      console.log("Cleanup function called");
-      if (videoRef.current?.srcObject) {
-        console.log("Stopping media tracks");
-        const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-        tracks.forEach((track) => {
-          console.log("Stopping track:", track);
-          track.stop();
-        });
-      }
-      if (timerRef.current) {
-        console.log("Clearing interval timer");
-        clearInterval(timerRef.current);
-      }
-    };
-  }, []); // Removed 'toast' from dependencies
-
-  function startRecording() {
-    if (!videoRef.current?.srcObject) return;
-
-    const stream = videoRef.current.srcObject as MediaStream;
-    const audioTracks = stream.getAudioTracks();
-
-    if (audioTracks.length === 0) {
-      console.error("No audio tracks available in the stream.");
-      return;
-    }
-
-    const audioStream = new MediaStream(audioTracks);
-
-    const videoMimeType = getSupportedMimeType(
-      "video/webm;codecs=vp9", // VP9 offers better compression
-      "video/webm;codecs=vp8",
-      "video/webm",
-      "video/mp4"
-    );
-
-    const audioMimeType = getSupportedMimeType(
-      "audio/webm;codecs=opus",
-      "audio/ogg;codecs=opus",
-      "audio/mp4"
-    );
-
-    if (!videoMimeType || !audioMimeType) {
-      console.error("No supported MIME types for recording.");
-      return;
-    }
-
-    const videoOptions: MediaRecorderOptions = {
-      mimeType: videoMimeType,
-    };
-    const audioOptions: MediaRecorderOptions = {
-      mimeType: audioMimeType,
-    };
-
-    mediaRecorderRef.current = new MediaRecorder(stream, videoOptions);
-    audioRecorderRef.current = new MediaRecorder(audioStream, audioOptions);
-
-    mediaRecorderRef.current.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        console.log("Video data available:", event.data.size);
-        chunksRef.current.push(event.data);
+  const handleStartInterview = async () => {
+    try {
+      if (!isRecording && videoRef.current?.srcObject) {
+        console.log("Starting interview");
+        await startRecording(videoRef.current.srcObject as MediaStream);
       } else {
-        console.warn("No video data available");
+        throw new Error("Unable to start interview");
       }
-    };
-
-    audioRecorderRef.current.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        console.log("Audio data available:", event.data.size);
-        audioChunksRef.current.push(event.data);
-      } else {
-        console.warn("No audio data available");
-      }
-    };
-
-    mediaRecorderRef.current.start();
-    audioRecorderRef.current.start();
-    setIsRecording(true);
-    setRemainingTime(maxRecordingTime);
-
-    timerRef.current = setInterval(() => {
-      setRemainingTime((prevTime) => {
-        if (prevTime <= 1) {
-          stopRecording();
-          return 0;
-        }
-        return prevTime - 1;
+    } catch (error) {
+      console.error("Interview start error:", error);
+      toast({
+        title: "Interview start error",
+        description:
+          (error as Error).message ||
+          "There was an issue starting the interview. Please try again.",
+        variant: "destructive",
       });
-    }, 1000);
-  }
+    }
+  };
 
-  async function stopRecording() {
-    if (!mediaRecorderRef.current || !audioRecorderRef.current || !isRecording) return;
-
-    setIsRecording(false);
-    if (timerRef.current) clearInterval(timerRef.current);
-    setIsUploading(true);
-
-    return new Promise<void>((resolve) => {
-      mediaRecorderRef.current!.onstop = async () => {
-        audioRecorderRef.current!.onstop = async () => {
-          try {
-            console.log("Video chunks:", chunksRef.current.length);
-            console.log("Audio chunks:", audioChunksRef.current.length);
-
-            const videoBlob = new Blob(chunksRef.current, {
-              type: mediaRecorderRef.current!.mimeType,
-            });
-            const audioBlob = new Blob(audioChunksRef.current, {
-              type: audioRecorderRef.current!.mimeType,
-            });
-
-            console.log("Video blob size:", videoBlob.size);
-            console.log("Audio blob size:", audioBlob.size);
-
-            if (videoBlob.size === 0 || audioBlob.size === 0) {
-              throw new Error("Recorded media is empty.");
-            }
-
-            const videoFile = new File([videoBlob], `mock_video_${mockId}_${Date.now()}.webm`, {
-              type: mediaRecorderRef.current!.mimeType,
-            });
-            const audioFile = new File([audioBlob], `mock_audio_${mockId}_${Date.now()}.webm`, {
-              type: audioRecorderRef.current!.mimeType,
-            });
-
-            const videoUrl = await uploadVideo(videoFile);
-            const audioUrl = await uploadAudioToFirebase(audioFile, mockId, "webm");
-
-            await saveVideoAndAudioReference(mockId, videoUrl, audioUrl);
-            await processAudioSubmission(audioUrl, mockId);
-
-            router.push(ROUTES.MOCK_RESULT(mockId));
-          } catch (error) {
-            console.error("Error processing and uploading media:", error);
-          } finally {
-            chunksRef.current = [];
-            audioChunksRef.current = [];
-            setIsUploading(false);
-            resolve();
-          }
-        };
-
-        audioRecorderRef.current!.stop();
-      };
-
-      mediaRecorderRef.current!.stop();
-    });
-  }
-
-  function formatTime(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs.toString().padStart(2, "0")}`;
-  }
+  const handleSubmitAnswer = async () => {
+    try {
+      console.log("Submitting answer");
+      await stopRecording();
+      toast({
+        title: "Answer submitted",
+        description: "Your answer is being processed. Please wait.",
+      });
+    } catch (error) {
+      console.error("Answer submission error:", error);
+      toast({
+        title: "Submission error",
+        description:
+          (error as Error).message ||
+          "There was an issue submitting your answer. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100">
@@ -271,6 +76,18 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
         muted
         className="w-full h-full object-cover rounded-lg transform scale-x-[-1]"
       />
+
+      {/* Question Overlay - Only shown before recording starts */}
+      {!isRecording && !isProcessing && (
+        <div className="absolute inset-0 flex flex-col items-center justify-start p-4 bg-black bg-opacity-50 text-white overflow-y-auto">
+          <div className="max-w-2xl w-full bg-gray-800 bg-opacity-75 p-4 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-2">Question:</h2>
+            <p className="text-lg">{question}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Error and Permission States */}
       {error ? (
         <div className="absolute inset-0 flex items-center justify-center text-center p-4 bg-gray-100">
           <p className="text-red-500">{error}</p>
@@ -290,21 +107,56 @@ export function CameraView({ mockId, maxRecordingTime = 300 }: CameraViewProps) 
           </div>
         )
       )}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-        <Button
-          variant={isRecording ? "destructive" : "default"}
-          onClick={isRecording ? stopRecording : startRecording}
-          className="px-8 py-4 text-md mb-2"
-          disabled={isUploading}
-        >
-          {isUploading ? "Processing..." : isRecording ? "Stop Recording" : "Start Recording"}
-        </Button>
-        <div className="text-white text-lg font-semibold">{formatTime(remainingTime)}</div>
+
+      {/* Timer */}
+      <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-lg text-lg font-semibold">
+        {formatTime(remainingTime)}
       </div>
+
+      {/* Interview Controls */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+        {!isRecording && !isProcessing && (
+          <Button
+            variant="default"
+            onClick={handleStartInterview}
+            className="px-8 py-4 text-md mb-2"
+          >
+            Start Interview
+          </Button>
+        )}
+        {isRecording && (
+          <Button
+            variant="destructive"
+            onClick={handleSubmitAnswer}
+            className="px-8 py-4 text-md mb-2"
+          >
+            Submit Answer
+          </Button>
+        )}
+        {isProcessing && (
+          <div className="text-white text-lg font-semibold">Processing your answer...</div>
+        )}
+      </div>
+
+      {/* Countdown Overlay */}
+      {isCountingDown && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-9xl font-bold">
+          {countdownTime}
+        </div>
+      )}
+
+      {/* Recording Indicator */}
       {isRecording && (
         <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full flex items-center text-sm">
           <div className="w-2 h-2 bg-white rounded-full mr-2 animate-blink" />
-          Recording
+          Recording in Progress
+        </div>
+      )}
+
+      {/* Processing Overlay */}
+      {isProcessing && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 text-white text-2xl font-bold">
+          Processing your answer...
         </div>
       )}
     </div>

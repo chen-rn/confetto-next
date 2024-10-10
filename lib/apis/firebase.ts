@@ -12,12 +12,8 @@ export const app = initializeApp({
 
 const storage = getStorage(app);
 
-export async function uploadAudioToFirebase(
-  audioBlob: Blob,
-  mockId: string,
-  extension: string
-): Promise<string> {
-  const fileName = `audio_${mockId}_${Date.now()}.${extension}`;
+export async function uploadAudioToFirebase(audioBlob: Blob, extension: string): Promise<string> {
+  const fileName = `audio_${Date.now()}.${extension}`;
   const storageRef = ref(storage, `recordings/${fileName}`);
 
   try {

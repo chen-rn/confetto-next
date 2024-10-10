@@ -30,6 +30,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
+    "recordrtc": "^5.6.2",
     "replicate": "^0.34.1",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7"
@@ -40,6 +41,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/recordrtc": "^5.6.14",
     "biome": "^0.3.3",
     "postcss": "^8",
     "prisma": "^5.20.0",

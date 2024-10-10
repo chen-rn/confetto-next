@@ -11,17 +11,30 @@ import { replicate } from "../apis/replicate";
  */
 export async function transcribeAudio(audioUrl: string): Promise<string> {
   try {
-    // Attempt to transcribe using OpenAI's Whisper model
+    // Fetch the audio file
     const response = await fetch(audioUrl);
     const blob = await response.blob();
-    const file = new File([blob], "audio.webm", { type: "audio/webm" });
 
-    const transcription = await openai.audio.transcriptions.create({
-      file,
-      model: "whisper-1",
+    // Create a FormData object and append the blob as a file
+    const formData = new FormData();
+    formData.append("file", blob, "audio.webm");
+    formData.append("model", "whisper-1");
+
+    // Make the API call using fetch
+    const openaiResponse = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: formData,
     });
 
-    return transcription.text;
+    if (!openaiResponse.ok) {
+      throw new Error(`OpenAI API error: ${openaiResponse.status} ${openaiResponse.statusText}`);
+    }
+
+    const result = await openaiResponse.json();
+    return result.text;
   } catch (error) {
     console.error("OpenAI transcription error:", error);
     return fallbackToReplicate(audioUrl);

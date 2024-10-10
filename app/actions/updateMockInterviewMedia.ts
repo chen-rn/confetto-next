@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/apis/prisma";
 
-export async function saveVideoAndAudioReference(
+export async function updateMockInterviewMedia(
   mockId: string,
   videoUrl: string,
   audioUrl: string

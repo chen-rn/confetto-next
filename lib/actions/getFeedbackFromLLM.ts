@@ -15,47 +15,28 @@ interface GetFeedbackParams {
  */
 export async function getFeedbackFromLLM({ question, answer }: GetFeedbackParams): Promise<string> {
   const prompt = `
-    The following is a medical school interview practice session.
+    You are a medical school interviewer evaluating a candidate's response during a mock interview session.
 
-    Please grade the answer out of 100 based on the following categories and their respective weights:
+    Please provide a detailed evaluation of the answer, including constructive feedback, and grade the answer out of 100 based on the following categories and their respective weights:
 
-    1. Understanding of ethical principles (25%) 🧠
-    2. Communication skills (20%) 🗣️
-    3. Professionalism and empathy (20%) 🤝
-    4. Legal and medical legislation within Canada (15%) ⚖️
-    5. Organization and structure (20%) 📊
+    1. **Understanding of Ethical Principles (25%) 🧠**
+       - Assess how well the candidate demonstrates knowledge of ethical principles relevant to the question.
+    2. **Communication Skills (20%) 🗣️**
+       - Evaluate the clarity, coherence, and effectiveness of the communication.
+    3. **Professionalism and Empathy (20%) 🤝**
+       - Consider the candidate's display of professionalism, empathy, and emotional intelligence.
+    4. **Knowledge of Legal and Medical Legislation within Canada (15%) ⚖️**
+       - Determine the candidate's understanding of relevant laws and medical regulations in Canada.
+    5. **Organization and Structure (20%) 📊**
+       - Review the structure and logical flow of the answer.
 
-    Additionally, provide detailed feedback with actionable insights. 💡
-    When giving feedback, if it's about something specific, quote the user's mistake.
-    Please format your response in Markdown and use emojis for visual enhancement. 🎨
-    Start your response with the total score as an H1 heading.
-
-    ---
-    # XX/100
-
-    ## 📊 **Score Breakdown**
-    ---
-    
-    1. **Understanding of ethical principles** 🧠: **XX/25**
-    2. **Communication skills** 🗣️: **XX/20**
-    3. **Professionalism and empathy** 🤝: **XX/20**
-    4. **Legal and medical legislation within Canada** ⚖️: **XX/15**
-    5. **Organization and structure** 📊: **XX/20**
-    
-    
-    ## 💡 **Detailed Feedback**
-    ---
-    This is where you'll go into a bit more detail on each of those categories.
-    You can use emojis to highlight specific points or provide examples.
-    ...    
+    Please provide feedback for each category, highlighting strengths and areas for improvement. Conclude with an overall assessment and the final grade out of 100.
 
     **Question:**
     ${question}
 
     **Answer:**
     ${answer}
-
-    Please ensure that no other headings are larger than H2 in your response.
   `;
 
   try {
