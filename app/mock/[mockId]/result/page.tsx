@@ -14,7 +14,7 @@ interface ResultPageProps {
     mockId: string;
   };
 }
-/* console.log('ok redeploy'); */
+
 export default async function ResultPage({ params }: ResultPageProps) {
   const { mockId } = params;
 
@@ -36,13 +36,11 @@ export default async function ResultPage({ params }: ResultPageProps) {
   async function handleReprocess() {
     "use server";
 
-    // Fetch the latest data
     const latestMockInterview = await prisma.mockInterview.findUnique({
       where: { id: mockId },
       include: { feedback: true },
     });
 
-    // Delete existing feedback if it exists
     if (latestMockInterview?.feedback?.id) {
       await prisma.feedback.delete({
         where: { id: latestMockInterview.feedback.id },
@@ -50,7 +48,6 @@ export default async function ResultPage({ params }: ResultPageProps) {
     }
 
     await processAudioSubmission(mockId);
-    // Revalidate the current page
     revalidatePath(`/mock/${mockId}/result`);
   }
 
@@ -60,51 +57,88 @@ export default async function ResultPage({ params }: ResultPageProps) {
         <Link href={ROUTES.HOME}>
           <Button variant="outline">Home</Button>
         </Link>
-        <h1 className="text-2xl font-bold text-center flex-grow">Mock Results</h1>
+        <h1 className="text-2xl font-bold text-center flex-grow">Mock Interview Results</h1>
         <div className="w-24" />
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Question</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-base">{question.content}</p>
+        </CardContent>
+      </Card>
+
+      {videoUrl && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Video Recording</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <video src={videoUrl} controls className="w-full rounded-md">
+              Your browser does not support the video tag.
+            </video>
+          </CardContent>
+        </Card>
+      )}
+
+      {transcription && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Transcription</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-base whitespace-pre-wrap">{transcription}</p>
+          </CardContent>
+        </Card>
+      )}
 
       {feedback ? (
         <>
           <Card>
             <CardHeader>
-              <CardTitle>Question</CardTitle>
+              <CardTitle>Overall Feedback</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-base">{question.content}</p>
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold">Score: {feedback.overallScore}/100</h3>
+                <p className="text-base">{feedback.overallFeedback}</p>
+              </div>
+              <MarkdownRenderer content={feedback.rawContent} />
             </CardContent>
           </Card>
 
-          {videoUrl && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Video Recording</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <video src={videoUrl} controls className="w-full rounded-md mt-4">
-                  Your browser does not support the video tag.
-                </video>
-              </CardContent>
-            </Card>
-          )}
-
-          {transcription && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Transcription</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-base whitespace-pre-wrap">{transcription}</p>
-              </CardContent>
-            </Card>
-          )}
-
           <Card>
             <CardHeader>
-              <CardTitle>Feedback</CardTitle>
+              <CardTitle>Detailed Feedback</CardTitle>
             </CardHeader>
             <CardContent>
-              <MarkdownRenderer content={feedback.content} />
+              <FeedbackSection
+                title="Ethical Principles Understanding"
+                score={feedback.ethicalPrinciplesUnderstanding}
+                feedback={feedback.ethicalPrinciplesFeedback}
+              />
+              <FeedbackSection
+                title="Communication Skills"
+                score={feedback.communicationSkills}
+                feedback={feedback.communicationSkillsFeedback}
+              />
+              <FeedbackSection
+                title="Professionalism and Empathy"
+                score={feedback.professionalismAndEmpathy}
+                feedback={feedback.professionalismAndEmpathyFeedback}
+              />
+              <FeedbackSection
+                title="Legal and Medical Legislation"
+                score={feedback.legalAndMedicalLegislation}
+                feedback={feedback.legalAndMedicalLegislationFeedback}
+              />
+              <FeedbackSection
+                title="Organization and Structure"
+                score={feedback.organizationAndStructure}
+                feedback={feedback.organizationAndStructureFeedback}
+              />
             </CardContent>
           </Card>
 
@@ -118,14 +152,29 @@ export default async function ResultPage({ params }: ResultPageProps) {
         <div className="flex flex-col items-center justify-center h-64">
           <Loader2 className="w-12 h-12 animate-spin text-primary" />
           <p className="mt-4 text-lg font-medium text-gray-600">Processing your submission...</p>
-
-          <form action={handleReprocess} className="flex justify-center">
+          <form action={handleReprocess} className="mt-4">
             <Button type="submit" variant="default">
               Reprocess Submission
             </Button>
           </form>
         </div>
       )}
+    </div>
+  );
+}
+
+interface FeedbackSectionProps {
+  title: string;
+  score: number;
+  feedback: string;
+}
+
+function FeedbackSection({ title, score, feedback }: FeedbackSectionProps) {
+  return (
+    <div className="mb-4">
+      <h3 className="text-lg font-semibold">{title}</h3>
+      <p className="text-base">Score: {score}/20</p>
+      <p className="text-base">{feedback}</p>
     </div>
   );
 }

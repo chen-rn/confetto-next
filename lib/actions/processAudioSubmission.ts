@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "../apis/prisma";
 import { transcribeAudio } from "./transcribeAudio";
-import { getFeedbackFromLLM } from "./getFeedbackFromLLM";
+import { generateFeedback } from "./generateFeedback";
 import { ROUTES } from "@/lib/routes";
 
 /**
@@ -50,20 +50,11 @@ export async function processAudioSubmission(mockId: string) {
 
     // Generate feedback using LLM
     console.log("🤖 Generating feedback using LLM...");
-    const feedback = await getFeedbackFromLLM({
+    await generateFeedback({
+      mockInterviewId: mockId,
       question: mockInterview.question.content,
       answer: transcription,
     });
-    console.log("✅ Feedback generated");
-
-    // Create a feedback entry
-    await prisma.feedback.create({
-      data: {
-        content: feedback || "No feedback available.",
-        mockInterviewId: mockId,
-      },
-    });
-    console.log("💾 Feedback saved to database");
 
     // Revalidate the mock interview page to display the latest data
     revalidatePath(ROUTES.MOCK(mockId));
