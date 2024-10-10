@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import { Clock, Award, ThumbsUp, ChevronDown, FileText } from "lucide-react";
+import { Clock, Award, ThumbsUp, ChevronDown, FileText, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
+import { cn } from "@/lib/utils";
 
 // Move the interface to a separate types file if it's used in multiple components
 interface MockInterview {
@@ -30,6 +31,27 @@ interface PracticeHistoryProps {
 
 // Separate component for the interview header
 function InterviewHeader({ interview }: { interview: MockInterview }) {
+  // Format the date and time
+  const formattedDate = new Date(interview.createdAt).toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  function getScoreColor(score: number): string {
+    if (score >= 80) return "text-green-500";
+    if (score >= 60) return "text-yellow-500";
+    return "text-red-500";
+  }
+
+  function getScoreIcon(score: number) {
+    if (score >= 80) return <Award className="mr-1 h-4 w-4" />;
+    if (score >= 60) return <Star className="mr-1 h-4 w-4" />;
+    return <Award className="mr-1 h-4 w-4" />;
+  }
+
   return (
     <div className="flex items-center justify-between p-4 bg-white border rounded-xl shadow-sm">
       <div className="flex items-center space-x-4 flex-1 min-w-0">
@@ -42,14 +64,19 @@ function InterviewHeader({ interview }: { interview: MockInterview }) {
           <h3 className="text-sm font-medium line-clamp-2">{interview.question.content}</h3>
           <div className="flex items-center text-xs text-muted-foreground mt-1">
             <Clock className="mr-1 h-3 w-3" />
-            <span>{new Date(interview.createdAt).toLocaleDateString()}</span>
+            <span>{formattedDate}</span>
           </div>
         </div>
       </div>
       <div className="flex items-center space-x-4 flex-shrink-0">
         {interview.feedback && (
-          <div className="flex items-center p-2 shrink-0">
-            <Award className="mr-1 h-4 w-4 text-yellow-500" />
+          <div
+            className={cn(
+              "flex items-center p-2 shrink-0",
+              getScoreColor(interview.feedback.overallScore)
+            )}
+          >
+            {getScoreIcon(interview.feedback.overallScore)}
             <span className="font-bold">{interview.feedback.overallScore}</span>
           </div>
         )}

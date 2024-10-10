@@ -15,10 +15,6 @@ export function useRecording(mockId: string, maxRecordingTime: number) {
   const router = useRouter();
 
   const streamRef = useRef<MediaStream | null>(null);
-  const videoRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioRecorderRef = useRef<MediaRecorder | null>(null);
-  const videoChunksRef = useRef<Blob[]>([]);
-  const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -147,6 +143,8 @@ export function useRecording(mockId: string, maxRecordingTime: number) {
         ]);
         await updateMockInterviewMedia(mockId, videoUrl, audioUrl);
         processAudioSubmission(mockId);
+
+        await new Promise((resolve) => setTimeout(resolve, 200));
         router.push(ROUTES.MOCK_RESULT(mockId));
       } catch (error) {
         console.error("Error processing submission:", error);

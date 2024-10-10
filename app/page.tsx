@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
+import { QuickStartButton } from "@/components/QuickStartButton";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
           <Link href={ROUTES.CREATE_MOCK}>
             <Button>View Questions</Button>
           </Link>
+          <QuickStartButton />
           <Link href={ROUTES.MOCK_HISTORY}>
             <Button variant="outline">Mock History</Button>
           </Link>

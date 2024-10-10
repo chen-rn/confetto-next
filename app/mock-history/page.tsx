@@ -14,7 +14,10 @@ export default async function MockHistoryPage() {
   }
 
   const mockInterviews = await prisma.mockInterview.findMany({
-    where: { userId },
+    where: {
+      userId,
+      recordingUrl: { not: null },
+    },
     select: {
       id: true,
       question: { select: { content: true } },
