@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
-import { PracticeHistory } from "@/components/practice-history";
+import { PracticeHistory } from "@/components/PracticeHistory";
 
 export default async function MockHistoryPage() {
   const userId = auth().userId;
