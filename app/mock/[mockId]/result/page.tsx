@@ -14,7 +14,7 @@ interface ResultPageProps {
     mockId: string;
   };
 }
-
+/* console.log('ok redeploy'); */
 export default async function ResultPage({ params }: ResultPageProps) {
   const { mockId } = params;
 
