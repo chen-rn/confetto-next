@@ -8,6 +8,7 @@ import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { revalidatePath } from "next/cache";
 import { Loader2 } from "lucide-react";
+import { ProcessingMessage } from "@/components/ProcessingMessage";
 
 interface ResultPageProps {
   params: {
@@ -151,7 +152,7 @@ export default async function ResultPage({ params }: ResultPageProps) {
       ) : (
         <div className="flex flex-col items-center justify-center h-64">
           <Loader2 className="w-12 h-12 animate-spin text-primary" />
-          <p className="mt-4 text-lg font-medium text-gray-600">Processing your submission...</p>
+          <ProcessingMessage />
           <form action={handleReprocess} className="mt-4">
             <Button type="submit" variant="default">
               Reprocess Submission
