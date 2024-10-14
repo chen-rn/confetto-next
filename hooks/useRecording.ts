@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { getSupportedMimeType } from "@/utils/mediaUtils";
 import { uploadVideo, uploadAudioToFirebase } from "@/lib/apis/firebase";
-import { updateMockInterviewMedia } from "@/app/actions/updateMockInterviewMedia";
+import { updateMockInterviewMedia } from "@/lib/actions/updateMockInterviewMedia";
 import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
