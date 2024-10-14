@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Clock, Award, ThumbsUp, ChevronDown, FileText, Star } from "lucide-react";
+import { Clock, Award, ChevronDown, FileText, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -27,6 +27,22 @@ interface MockInterview {
 
 interface PracticeHistoryProps {
   mockInterviews: MockInterview[];
+}
+
+// Main component
+export function PracticeHistory({ mockInterviews }: PracticeHistoryProps) {
+  return (
+    <div className="container mx-auto p-4">
+      <div className="space-y-4">
+        {mockInterviews.map((interview) => (
+          <Collapsible key={interview.id}>
+            <InterviewHeader interview={interview} />
+            <CollapsibleInterviewContent interview={interview} />
+          </Collapsible>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 // Separate component for the interview header
@@ -134,21 +150,5 @@ function CollapsibleInterviewContent({ interview }: { interview: MockInterview }
         )}
       </div>
     </CollapsibleContent>
-  );
-}
-
-// Main component
-export function PracticeHistory({ mockInterviews }: PracticeHistoryProps) {
-  return (
-    <div className="container mx-auto p-4">
-      <div className="space-y-4">
-        {mockInterviews.map((interview) => (
-          <Collapsible key={interview.id}>
-            <InterviewHeader interview={interview} />
-            <CollapsibleInterviewContent interview={interview} />
-          </Collapsible>
-        ))}
-      </div>
-    </div>
   );
 }

@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Home, History, Sparkles, Share2, Calendar, BarChart2, BookOpen } from "lucide-react";
+import { Sparkles, Share2 } from "lucide-react";
 import {
   ResponsiveContainer,
   RadarChart,
@@ -36,8 +35,6 @@ const timelineData = [
 export default function AdvancedInterviewReport() {
   const [communicationProgress, setCommunicationProgress] = useState(0);
   const [ethicalProgress, setEthicalProgress] = useState(0);
-  const [activeNav, setActiveNav] = useState("Practice History");
-  const router = useRouter();
 
   useEffect(() => {
     const timer1 = setTimeout(() => setCommunicationProgress(85), 500);
@@ -48,53 +45,10 @@ export default function AdvancedInterviewReport() {
     };
   }, []);
 
-  const handleNavClick = (navItem: string) => {
-    setActiveNav(navItem);
-    if (navItem === "Dashboard") {
-      router.push("/");
-    } else if (navItem === "Calendar") {
-      router.push("/calendar");
-    }
-  };
-
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className="w-64 bg-white text-gray-800 p-4 shadow-lg">
-        <div className="flex items-center justify-center mb-8">
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202024-10-04%20at%2010.16.41%E2%80%AFPM-4hFlx0Az7EwTaqSDhnUPTjQmC0X8Cn.png"
-            alt="Confetto Logo"
-            className="h-16 w-auto"
-          />
-        </div>
-        <nav className="space-y-2">
-          {["Dashboard", "Calendar", "Analytics", "Question Bank", "Practice History"].map(
-            (item) => (
-              <Button
-                key={item}
-                variant={activeNav === item ? "secondary" : "ghost"}
-                className={`w-full justify-start ${
-                  activeNav === item
-                    ? "bg-[#6B50FC] text-white"
-                    : "text-gray-600 hover:bg-gray-100 hover:text-[#6B50FC]"
-                }`}
-                onClick={() => handleNavClick(item)}
-              >
-                {item === "Dashboard" && <Home className="mr-2 h-4 w-4" />}
-                {item === "Calendar" && <Calendar className="mr-2 h-4 w-4" />}
-                {item === "Analytics" && <BarChart2 className="mr-2 h-4 w-4" />}
-                {item === "Question Bank" && <BookOpen className="mr-2 h-4 w-4" />}
-                {item === "Practice History" && <History className="mr-2 h-4 w-4" />}
-                {item}
-              </Button>
-            )
-          )}
-        </nav>
-      </div>
-
+    <div className="bg-gray-50">
       {/* Main Content */}
-      <div className="flex-1 p-8 overflow-auto">
+      <div className="p-8 overflow-auto">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <div>

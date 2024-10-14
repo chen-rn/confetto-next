@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sun, Settings, Mic, Video, Subtitles, ChevronRight, Send, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { MiniCameraView } from "@/components/MiniCameraView";
 
 export default function MMIInterviewInterface() {
   const [isAutoScroll, setIsAutoScroll] = useState(true);
@@ -34,10 +35,10 @@ export default function MMIInterviewInterface() {
       <header className="bg-white border-b border-gray-200 p-4">
         <div className="flex justify-between items-center max-w-7xl mx-auto">
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" onClick={() => router.push("/")} className="mr-2">
+            {/* <Button variant="ghost" onClick={() => router.push("/")} className="mr-2">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
-            </Button>
+            </Button> */}
             <h1 className="text-xl font-semibold text-gray-900 tracking-tight">
               MMI Station: Ethics Scenario
             </h1>
@@ -47,12 +48,12 @@ export default function MMIInterviewInterface() {
             <div className="text-gray-500 font-medium">{formatTime(timer)}</div>
           </div>
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
+            {/*       <Button variant="ghost" size="icon">
               <Sun className="h-5 w-5 text-gray-500" />
             </Button>
             <Button variant="ghost" size="icon">
               <Settings className="h-5 w-5 text-gray-500" />
-            </Button>
+            </Button> */}
             <Button variant="ghost" size="icon">
               <Mic className="h-5 w-5 text-gray-500" />
             </Button>
@@ -63,10 +64,10 @@ export default function MMIInterviewInterface() {
             >
               <Video className="h-5 w-5" />
             </Button>
-            <div className="flex items-center space-x-2">
+            {/*    <div className="flex items-center space-x-2">
               <span className="text-sm text-gray-700 font-medium">Auto Scroll</span>
               <Switch checked={isAutoScroll} onCheckedChange={setIsAutoScroll} />
-            </div>
+            </div> */}
           </div>
         </div>
       </header>
@@ -83,13 +84,8 @@ export default function MMIInterviewInterface() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute bottom-8 right-8 w-48 h-36 bg-gray-800 rounded-lg overflow-hidden">
-              <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DSOkg1X87TNyk7wHygQGb_59a028134ee04a03942b8fb2e8693aba-2HHyhyWKJQNFXrfUGgo05BtD7tR8Kc.jpg"
-                alt="Me"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-2 left-2 text-white text-sm font-medium">Me</div>
+            <div className="absolute bottom-8 right-8">
+              <MiniCameraView mockId="mmi-interview" />
             </div>
           </div>
 
@@ -158,8 +154,8 @@ export default function MMIInterviewInterface() {
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 p-4">
-        <div className="flex justify-between items-center max-w-7xl mx-auto">
-          <Button
+        <div className="flex justify-end items-center max-w-7xl mx-auto">
+          {/* <Button
             variant={isSubtitlesOn ? "default" : "secondary"}
             size="sm"
             onClick={() => setIsSubtitlesOn(!isSubtitlesOn)}
@@ -167,9 +163,9 @@ export default function MMIInterviewInterface() {
           >
             <Subtitles className="h-4 w-4 mr-2" />
             Subtitles {isSubtitlesOn ? "On" : "Off"}
-          </Button>
+          </Button> */}
           <Button className="bg-[#635BFF] hover:bg-[#524ACC] text-white text-sm font-medium tracking-wide">
-            Next question
+            Submit
             <ChevronRight className="h-4 w-4 ml-2" />
           </Button>
         </div>

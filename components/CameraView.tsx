@@ -5,7 +5,6 @@ import { useRecording } from "@/hooks/useRecording";
 import { Button } from "@/components/ui/button";
 import { formatTime } from "@/utils/formatTime";
 import { useToast } from "@/hooks/use-toast";
-import { useAudioLevel } from "@/hooks/useAudioLevel";
 
 interface CameraViewProps {
   mockId: string;

@@ -6,8 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/apis/prisma";
 import { CSPostHogProvider } from "@/components/CSPostHogProvider";
 import { Toaster } from "@/components/ui/toaster";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { DynamicSidebar } from "@/components/DynamicSidebar";
 
 export const metadata: Metadata = {
   title: "Confetto - AI-Powered MMI Interview Prep",
@@ -34,7 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <CSPostHogProvider>
           <ClerkProvider>
-            {children}
+            <DynamicSidebar>{children}</DynamicSidebar>
             <Toaster />
           </ClerkProvider>
         </CSPostHogProvider>
