@@ -5,7 +5,8 @@ import { SidebarNav } from "@/components/dashboard/SidebarNav";
 
 export function DynamicSidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const showSidebar = !pathname.startsWith("/mmi-interview-interface");
+  const showSidebar =
+    !pathname.startsWith("/mmi-interview-interface") && !pathname.startsWith("/mock");
 
   return (
     <div className="flex h-screen">

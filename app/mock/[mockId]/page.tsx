@@ -1,17 +1,21 @@
+import React from "react";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/apis/prisma";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
-import { CameraView } from "@/components/CameraView";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mic, Video, ChevronRight, Send, ArrowLeft } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { MiniCameraView } from "@/components/MiniCameraView";
 
-interface MockPageProps {
+interface MMIInterviewInterfaceProps {
   params: {
     mockId: string;
   };
 }
 
-export default async function MockPage({ params }: MockPageProps) {
+export default async function MMIInterviewInterface({ params }: MMIInterviewInterfaceProps) {
   const { mockId } = params;
 
   if (!mockId) {
@@ -32,29 +36,101 @@ export default async function MockPage({ params }: MockPageProps) {
   }
 
   const { question } = mockInterview;
+
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      <header className="p-2 sm:p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link href={ROUTES.HOME}>
-            <Button variant="outline" size="sm">
-              Home
+    <div className="flex flex-col h-screen bg-gray-50 font-sans">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 p-4">
+        <div className="flex justify-between items-center max-w-7xl mx-auto">
+          <div className="flex items-center space-x-4">
+            <Link href={ROUTES.HOME}>
+              <Button variant="ghost" className="mr-2">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Dashboard
+              </Button>
+            </Link>
+            <h1 className="text-xl font-semibold text-gray-900 tracking-tight">
+              MMI Station: Ethics Scenario
+            </h1>
+            <span className="bg-[#635BFF] text-white px-2 py-1 rounded-full text-xs font-medium tracking-wide">
+              Premium
+            </span>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="icon">
+              <Mic className="h-5 w-5 text-gray-500" />
             </Button>
-          </Link>
-          <h1 className="text-xl sm:text-2xl font-bold">Interview</h1>
-          <div className="w-[60px] sm:w-[88px]" /> {/* Placeholder for balance */}
+            <Button variant="default" size="icon">
+              <Video className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </header>
 
-      <main className="flex-grow container mx-auto p-2 sm:p-4 flex flex-col gap-2 sm:gap-4 overflow-hidden">
-        {/*    <div className="w-full bg-white p-2 sm:p-4 rounded-lg shadow-sm overflow-auto max-h-[30vh]">
-          <h2 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">Question:</h2>
-          <p className="text-base sm:text-lg">{question.content}</p>
-        </div> */}
-        <div className="w-full bg-black rounded-lg overflow-hidden shadow-sm flex-grow">
-          <CameraView mockId={mockId} question={question.content} />
+      {/* Main Content */}
+      <main className="flex-1 overflow-hidden">
+        <div className="flex h-full max-w-7xl mx-auto">
+          {/* Video Feed */}
+          <div className="w-2/3 p-4 relative">
+            <div className="bg-[#635BFF] h-full rounded-lg flex items-center justify-center overflow-hidden">
+              {/* Replace CameraView with a static image */}
+              <img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/oCLJ5wR6Iog98Wx2nd8Dn_163153a0f52b450fa9f303b40a03f91c-SXiIEwmTkLQaYadWuc7zAHuiJEZhXa.jpg" // Update this path to your actual image
+                alt="Doctor"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+            <div className="absolute bottom-8 right-8">
+              <MiniCameraView mockId={mockId} />
+            </div>
+          </div>
+
+          {/* Transcript and Co-pilot */}
+          <div className="w-1/3 p-4 flex flex-col">
+            <Card className="flex-1 mb-4 overflow-auto">
+              <CardContent className="p-4">
+                <h2 className="font-semibold mb-2 text-lg tracking-tight">Question:</h2>
+                <p className="text-sm leading-relaxed">{question.content}</p>
+              </CardContent>
+            </Card>
+            <Card className="flex-1 overflow-hidden flex flex-col">
+              <CardHeader className="bg-white text-gray-900 py-2 flex justify-between items-center">
+                <CardTitle className="text-lg flex items-center font-semibold tracking-tight">
+                  Interview Co-pilot
+                  <span className="ml-2 flex items-center bg-white border border-green-500 rounded-full px-2 py-0.5">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                    <span className="text-xs text-green-500 font-medium tracking-wide">Ready</span>
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 flex-1 overflow-auto">
+                {/* Co-pilot content */}
+              </CardContent>
+              <div className="p-4 border-t">
+                <div className="flex space-x-2">
+                  <Input
+                    placeholder="Ask for advice or clarification..."
+                    className="flex-1 text-sm"
+                  />
+                  <Button size="icon">
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 p-4">
+        <div className="flex justify-end items-center max-w-7xl mx-auto">
+          <Button className="bg-[#635BFF] hover:bg-[#524ACC] text-white text-sm font-medium tracking-wide">
+            Submit
+            <ChevronRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
+      </footer>
     </div>
   );
 }
