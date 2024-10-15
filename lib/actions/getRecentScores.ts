@@ -10,10 +10,24 @@ export async function getRecentScores() {
   }
 
   const recentInterviews = await prisma.mockInterview.findMany({
-    where: { userId },
+    where: {
+      userId,
+      recordingUrl: { not: null },
+      videoUrl: { not: null },
+      feedback: {
+        overallScore: { not: 0 },
+      },
+    },
     orderBy: { createdAt: "desc" },
-    take: 5,
-    include: { feedback: true },
+    take: 30,
+    select: {
+      createdAt: true,
+      feedback: {
+        select: {
+          overallScore: true,
+        },
+      },
+    },
   });
 
   return recentInterviews

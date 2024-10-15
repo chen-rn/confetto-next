@@ -30,30 +30,36 @@ export function SidebarNav() {
       case "Practice History":
         router.push(ROUTES.MOCK_HISTORY);
         break;
+      case "TEST":
+        router.push(ROUTES.LIVEKIT_TEST);
+        break;
     }
   };
 
   return (
     <nav className="space-y-1">
-      {["Dashboard", /*  "Calendar", "Analytics",  */ "Question Bank", "Practice History"].map(
-        (item) => (
-          <Button
-            key={item}
-            variant={activeNav === item ? "secondary" : "ghost"}
-            className={`w-full justify-start ${
-              activeNav === item ? "bg-[#F0F4FF] text-[#635BFF]" : "text-gray-600"
-            } hover:bg-[#F0F4FF] hover:text-[#635BFF]`}
-            onClick={() => handleNavClick(item)}
-          >
-            {item === "Dashboard" && <Home className="mr-2 h-4 w-4" />}
-            {item === "Calendar" && <Calendar className="mr-2 h-4 w-4" />}
-            {item === "Analytics" && <BarChart2 className="mr-2 h-4 w-4" />}
-            {item === "Question Bank" && <BookOpen className="mr-2 h-4 w-4" />}
-            {item === "Practice History" && <History className="mr-2 h-4 w-4" />}
-            {item}
-          </Button>
-        )
-      )}
+      {[
+        "Dashboard",
+        /*  "Calendar", "Analytics",  */ "Question Bank",
+        "Practice History",
+        "TEST",
+      ].map((item) => (
+        <Button
+          key={item}
+          variant={activeNav === item ? "secondary" : "ghost"}
+          className={`w-full justify-start ${
+            activeNav === item ? "bg-[#F0F4FF] text-[#635BFF]" : "text-gray-600"
+          } hover:bg-[#F0F4FF] hover:text-[#635BFF]`}
+          onClick={() => handleNavClick(item)}
+        >
+          {item === "Dashboard" && <Home className="mr-2 h-4 w-4" />}
+          {item === "Calendar" && <Calendar className="mr-2 h-4 w-4" />}
+          {item === "Analytics" && <BarChart2 className="mr-2 h-4 w-4" />}
+          {item === "Question Bank" && <BookOpen className="mr-2 h-4 w-4" />}
+          {item === "Practice History" && <History className="mr-2 h-4 w-4" />}
+          {item}
+        </Button>
+      ))}
     </nav>
   );
 }
