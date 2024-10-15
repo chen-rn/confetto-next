@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mic, Video, ChevronRight, Send, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { MiniCameraView } from "@/components/MiniCameraView";
+import { InterviewActionButton } from "@/components/InterviewActionButton";
+import { VideoViewfinder } from "@/components/VideoViewfinder";
 
 interface MMIInterviewInterfaceProps {
   params: {
@@ -72,7 +74,7 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
         <div className="flex h-full max-w-7xl mx-auto">
           {/* Video Feed */}
           <div className="w-2/3 p-4 relative">
-            <div className="bg-[#635BFF] h-full rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="bg-gray-200 h-full rounded-lg flex items-center justify-center overflow-hidden">
               {/* Replace CameraView with a static image */}
               <img
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/oCLJ5wR6Iog98Wx2nd8Dn_163153a0f52b450fa9f303b40a03f91c-SXiIEwmTkLQaYadWuc7zAHuiJEZhXa.jpg" // Update this path to your actual image
@@ -81,7 +83,7 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
               />
             </div>
             <div className="absolute bottom-8 right-8">
-              <MiniCameraView mockId={mockId} />
+              <VideoViewfinder />
             </div>
           </div>
 
@@ -125,10 +127,7 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 p-4">
         <div className="flex justify-end items-center max-w-7xl mx-auto">
-          <Button className="bg-[#635BFF] hover:bg-[#524ACC] text-white text-sm font-medium tracking-wide">
-            Submit
-            <ChevronRight className="h-4 w-4 ml-2" />
-          </Button>
+          <InterviewActionButton mockId={mockId} />
         </div>
       </footer>
     </div>

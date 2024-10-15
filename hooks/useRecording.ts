@@ -1,40 +1,23 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useCallback, useRef } from "react";
+import { useSetAtom } from "jotai";
 import { getSupportedMimeType } from "@/utils/mediaUtils";
 import { uploadVideo, uploadAudioToFirebase } from "@/lib/apis/firebase";
 import { updateMockInterviewMedia } from "@/lib/actions/updateMockInterviewMedia";
 import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
+import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interviewAtoms";
+import { useToast } from "@/hooks/use-toast";
 
-export function useRecording(mockId: string, maxRecordingTime: number) {
-  const [isRecording, setIsRecording] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(maxRecordingTime);
-  const [isCountingDown, setIsCountingDown] = useState(false);
-  const [countdownTime, setCountdownTime] = useState(3);
+export function useRecording(mockId: string) {
+  const setIsRecording = useSetAtom(isRecordingAtom);
+  const setIsProcessing = useSetAtom(isProcessingAtom);
   const router = useRouter();
+  const { toast } = useToast();
 
   const streamRef = useRef<MediaStream | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-
-  const startCountdown = useCallback(() => {
-    console.log("Starting countdown");
-    setIsCountingDown(true);
-    setCountdownTime(3);
-    const countdownInterval = setInterval(() => {
-      setCountdownTime((prevTime) => {
-        if (prevTime <= 1) {
-          clearInterval(countdownInterval);
-          setIsCountingDown(false);
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-  }, []);
 
   const initializeRecording = useCallback((stream: MediaStream) => {
     console.log("Initializing recording");
@@ -76,102 +59,81 @@ export function useRecording(mockId: string, maxRecordingTime: number) {
   const startRecording = useCallback(
     (stream: MediaStream) => {
       console.log("startRecording called");
-      startCountdown();
       initializeRecording(stream);
 
-      setTimeout(() => {
-        console.log("Countdown finished, starting actual recording");
-        try {
-          if (!recorderRef.current) {
-            throw new Error("MediaRecorder not initialized");
-          }
-
-          recorderRef.current.start(1000);
-          console.log("MediaRecorder started");
-
-          setIsRecording(true);
-          setRemainingTime(maxRecordingTime);
-
-          timerRef.current = setInterval(() => {
-            setRemainingTime((prevTime) => {
-              if (prevTime <= 1) {
-                stopRecording();
-                return 0;
-              }
-              return prevTime - 1;
-            });
-          }, 1000);
-        } catch (error) {
-          console.error("Error starting recording:", error);
-          throw error;
+      try {
+        if (!recorderRef.current) {
+          throw new Error("MediaRecorder not initialized");
         }
-      }, 3000);
+
+        recorderRef.current.start(1000);
+        console.log("MediaRecorder started");
+
+        setIsRecording(true);
+        toast({
+          title: "Recording Started",
+          description: "Your interview is now being recorded.",
+        });
+      } catch (error) {
+        console.error("Error starting recording:", error);
+        toast({
+          title: "Recording Error",
+          description: "Failed to start recording. Please try again.",
+          variant: "destructive",
+        });
+        throw error;
+      }
     },
-    [maxRecordingTime, startCountdown, initializeRecording]
+    [initializeRecording, setIsRecording, toast]
   );
 
   const stopRecording = useCallback(async () => {
-    if (isRecording) {
-      setIsProcessing(true);
-      setIsRecording(false);
+    setIsRecording(false);
+    setIsProcessing(true);
+    toast({
+      title: "Processing",
+      description: "Your interview is being processed. Please wait...",
+    });
 
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-
-      if (recorderRef.current && recorderRef.current.state !== "inactive") {
-        recorderRef.current.stop();
-      }
-
-      await new Promise<void>((resolve) => {
-        if (recorderRef.current) {
-          recorderRef.current.onstop = () => resolve();
-        }
-      });
-
-      const blob = new Blob(chunksRef.current, { type: "video/webm" });
-      chunksRef.current = [];
-
-      try {
-        // Convert Blob to File for video upload
-        const file = new File([blob], `video_${mockId}_${Date.now()}.webm`, {
-          type: "video/webm",
-        });
-        const [videoUrl, audioUrl] = await Promise.all([
-          uploadVideo(file),
-          uploadAudioToFirebase(blob, `audio_${mockId}_${Date.now()}.webm`),
-        ]);
-        await updateMockInterviewMedia(mockId, videoUrl, audioUrl);
-        processAudioSubmission(mockId);
-
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        router.push(ROUTES.MOCK_RESULT(mockId));
-      } catch (error) {
-        console.error("Error processing submission:", error);
-        setIsProcessing(false);
-        // Handle error (e.g., show error message to user)
-      }
+    if (recorderRef.current && recorderRef.current.state !== "inactive") {
+      recorderRef.current.stop();
     }
-  }, [isRecording, mockId, router]);
 
-  useEffect(() => {
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
+    await new Promise<void>((resolve) => {
+      if (recorderRef.current) {
+        recorderRef.current.onstop = () => resolve();
       }
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, []);
+    });
+
+    const blob = new Blob(chunksRef.current, { type: "video/webm" });
+    chunksRef.current = [];
+
+    try {
+      const file = new File([blob], `video_${mockId}_${Date.now()}.webm`, {
+        type: "video/webm",
+      });
+      const [videoUrl, audioUrl] = await Promise.all([
+        uploadVideo(file),
+        uploadAudioToFirebase(blob, `audio_${mockId}_${Date.now()}.webm`),
+      ]);
+      await updateMockInterviewMedia(mockId, videoUrl, audioUrl);
+      processAudioSubmission(mockId);
+
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      router.push(ROUTES.MOCK_RESULT(mockId));
+    } catch (error) {
+      console.error("Error processing submission:", error);
+      setIsProcessing(false);
+      toast({
+        title: "Processing Error",
+        description: "An error occurred while processing your interview. Please try again.",
+        variant: "destructive",
+      });
+    }
+  }, [mockId, router, setIsRecording, setIsProcessing, toast]);
 
   return {
-    isRecording,
-    isProcessing,
-    remainingTime,
     startRecording,
     stopRecording,
-    isCountingDown,
-    countdownTime,
   };
 }

@@ -24,7 +24,6 @@ export function CameraView({ mockId, maxRecordingTime = 300, question }: CameraV
     countdownTime,
   } = useRecording(mockId, maxRecordingTime);
   const { toast } = useToast();
-  // const audioLevel = useAudioLevel(videoRef.current?.srcObject as MediaStream | null);
 
   const handleStartInterview = async () => {
     try {
