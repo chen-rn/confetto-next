@@ -8,28 +8,27 @@ import {
   RoomAudioRenderer,
   useTracks,
 } from "@livekit/components-react";
-
 import "@livekit/components-styles";
-
 import { useEffect, useState } from "react";
 import { Track } from "livekit-client";
+import { getLivekitRoomToken } from "../../lib/actions/getLivekitRoomToken";
 
 export default function Page() {
-  // TODO: get user input for room and name
-  const room = "quickstart-room";
-  const name = "quickstart-user";
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    (async () => {
+    const fetchToken = async () => {
       try {
-        const resp = await fetch(`/api/get-participant-token?room=${room}&username=${name}`);
-        const data = await resp.json();
-        setToken(data.token);
+        const result = await getLivekitRoomToken(
+          "What motivated you to pursue a career in medicine?"
+        );
+        setToken(result.accessToken);
       } catch (e) {
         console.error(e);
       }
-    })();
+    };
+
+    fetchToken();
   }, []);
 
   if (token === "") {

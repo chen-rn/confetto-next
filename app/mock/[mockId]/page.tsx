@@ -5,11 +5,13 @@ import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mic, Video, ChevronRight, Send, ArrowLeft } from "lucide-react";
+import { Mic, Video, Send, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { MiniCameraView } from "@/components/MiniCameraView";
 import { InterviewActionButton } from "@/components/InterviewActionButton";
 import { VideoViewfinder } from "@/components/VideoViewfinder";
+
+import { getLivekitRoomToken } from "@/lib/actions/getLivekitRoomToken";
+import { InterviewRoom } from "@/components/InterviewRoom";
 
 interface MMIInterviewInterfaceProps {
   params: {
@@ -38,6 +40,9 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
   }
 
   const { question } = mockInterview;
+
+  // Get LiveKit room token
+  const { accessToken } = await getLivekitRoomToken(question.content);
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 font-sans">
@@ -74,17 +79,10 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
         <div className="flex h-full max-w-7xl mx-auto">
           {/* Video Feed */}
           <div className="w-2/3 p-4 relative">
-            <div className="bg-gray-200 h-full rounded-lg flex items-center justify-center overflow-hidden">
-              {/* Replace CameraView with a static image */}
-              <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/oCLJ5wR6Iog98Wx2nd8Dn_163153a0f52b450fa9f303b40a03f91c-SXiIEwmTkLQaYadWuc7zAHuiJEZhXa.jpg" // Update this path to your actual image
-                alt="Doctor"
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </div>
-            <div className="absolute bottom-8 right-8">
+            <InterviewRoom token={accessToken} question={question.content} />
+            {/* <div className="absolute bottom-8 right-8">
               <VideoViewfinder />
-            </div>
+            </div> */}
           </div>
 
           {/* Transcript and Co-pilot */}
