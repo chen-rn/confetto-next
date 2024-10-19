@@ -1,17 +1,18 @@
 import { useCallback, useRef } from "react";
-import { useSetAtom } from "jotai";
+import { useSetAtom, useAtom } from "jotai";
 import { getSupportedMimeType } from "@/utils/mediaUtils";
 import { uploadVideo, uploadAudioToFirebase } from "@/lib/apis/firebase";
 import { updateMockInterviewMedia } from "@/lib/actions/updateMockInterviewMedia";
 import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
-import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interviewAtoms";
+import { isRecordingAtom, isProcessingAtom, isUploadingAtom } from "@/lib/atoms/interviewAtoms";
 import { useToast } from "@/hooks/use-toast";
 
 export function useRecording(mockId: string) {
   const setIsRecording = useSetAtom(isRecordingAtom);
   const setIsProcessing = useSetAtom(isProcessingAtom);
+  const [isUploading, setIsUploading] = useAtom(isUploadingAtom);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -88,11 +89,20 @@ export function useRecording(mockId: string) {
   );
 
   const stopRecording = useCallback(async () => {
+    if (isUploading) {
+      toast({
+        title: "Upload in Progress",
+        description: "Please wait for the current upload to finish.",
+      });
+      return;
+    }
+
     setIsRecording(false);
     setIsProcessing(true);
+    setIsUploading(true);
     toast({
       title: "Processing",
-      description: "Your interview is being processed. Please wait...",
+      description: "Your interview is being processed. Please leave this page open!",
     });
 
     if (recorderRef.current && recorderRef.current.state !== "inactive") {
@@ -112,17 +122,23 @@ export function useRecording(mockId: string) {
       const file = new File([blob], `video_${mockId}_${Date.now()}.webm`, {
         type: "video/webm",
       });
+
+      // Navigate to the results page immediately
+      router.push(ROUTES.MOCK_RESULT(mockId));
+
+      // Continue with the upload in the background
       const [videoUrl, audioUrl] = await Promise.all([
         uploadVideo(file),
         uploadAudioToFirebase(blob, `audio_${mockId}_${Date.now()}.webm`),
       ]);
       await updateMockInterviewMedia(mockId, videoUrl, audioUrl);
-      processAudioSubmission(mockId);
+      await processAudioSubmission(mockId);
 
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      router.push(ROUTES.MOCK_RESULT(mockId));
+      setIsUploading(false);
+      setIsProcessing(false);
     } catch (error) {
       console.error("Error processing submission:", error);
+      setIsUploading(false);
       setIsProcessing(false);
       toast({
         title: "Processing Error",
@@ -130,7 +146,7 @@ export function useRecording(mockId: string) {
         variant: "destructive",
       });
     }
-  }, [mockId, router, setIsRecording, setIsProcessing, toast]);
+  }, [mockId, router, setIsRecording, setIsProcessing, setIsUploading, isUploading, toast]);
 
   return {
     startRecording,

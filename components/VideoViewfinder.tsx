@@ -9,6 +9,7 @@ import {
   isCountingDownAtom,
   countdownTimeAtom,
 } from "@/lib/atoms/interviewAtoms";
+import { useIsSpeaking, useParticipants } from "@livekit/components-react";
 
 export function VideoViewfinder() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -17,6 +18,10 @@ export function VideoViewfinder() {
   const [isCountingDown] = useAtom(isCountingDownAtom);
   const [countdownTime] = useAtom(countdownTimeAtom);
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+
+  const participants = useParticipants();
+  const localParticipant = participants.find((p) => p.isLocal);
+  const isUserSpeaking = useIsSpeaking(localParticipant);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -42,7 +47,11 @@ export function VideoViewfinder() {
   }, []);
 
   return (
-    <div className="relative w-48 h-36 bg-gray-800 rounded-lg overflow-hidden">
+    <div
+      className={`relative w-48 h-36 rounded-xl overflow-hidden border-2 ${
+        isUserSpeaking ? "border-green-500" : "border-transparent"
+      }`}
+    >
       {videoStream ? (
         <video
           ref={videoRef}

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useAtom } from "jotai";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
@@ -15,9 +15,11 @@ export function InterviewActionButton({ mockId }: InterviewActionButtonProps) {
   const [isRecording] = useAtom(isRecordingAtom);
   const [isProcessing] = useAtom(isProcessingAtom);
   const { startRecording, stopRecording } = useRecording(mockId);
+  const [hasStarted, setHasStarted] = useState(false);
 
   const handleClick = async () => {
-    if (!isRecording && !isProcessing) {
+    if (!hasStarted) {
+      setHasStarted(true);
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       startRecording(stream);
     } else if (isRecording && !isProcessing) {
@@ -31,7 +33,7 @@ export function InterviewActionButton({ mockId }: InterviewActionButtonProps) {
       disabled={isProcessing}
       className="bg-[#635BFF] hover:bg-[#524ACC] text-white text-sm font-medium tracking-wide"
     >
-      {isProcessing ? "Processing..." : isRecording ? "Submit" : "I'm ready to answer"}
+      {isProcessing ? "Processing..." : !hasStarted ? "Start Interview" : "Submit"}
       <ChevronRight className="h-4 w-4 ml-2" />
     </Button>
   );
