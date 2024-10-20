@@ -8,6 +8,7 @@ import { CSPostHogProvider } from "@/components/CSPostHogProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { DynamicSidebar } from "@/components/DynamicSidebar";
 import { UserInitializer } from "@/components/UserInitializer";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Confetto - AI-Powered MMI Interview Prep",
@@ -27,6 +28,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <UserInitializer />
             <DynamicSidebar>{children}</DynamicSidebar>
             <Toaster />
+            <footer className="text-center text-xs mt-8">
+              <Link href="/prompt-manager" className="text-gray-400 hover:text-gray-600">
+                Manage Prompts
+              </Link>
+            </footer>
           </ClerkProvider>
         </CSPostHogProvider>
       </body>

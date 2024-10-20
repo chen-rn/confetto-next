@@ -205,19 +205,9 @@ ${categoryFeedbacks
 
   const feedback = await prisma.feedback.create({
     data: {
-      rawContent: combinedFeedback,
+      overallFeedback: combinedFeedback,
       overallScore: averageScore,
       mockInterviewId,
-      ethicalPrinciplesUnderstanding: categoryFeedbacks[1].score,
-      ethicalPrinciplesFeedback: categoryFeedbacks[1].feedback,
-      communicationSkills: categoryFeedbacks[0].score,
-      communicationSkillsFeedback: categoryFeedbacks[0].feedback,
-      professionalismAndEmpathy: categoryFeedbacks[5].score,
-      professionalismAndEmpathyFeedback: categoryFeedbacks[5].feedback,
-      legalAndMedicalLegislation: categoryFeedbacks[10].score,
-      legalAndMedicalLegislationFeedback: categoryFeedbacks[10].feedback,
-      organizationAndStructure: categoryFeedbacks[4].score,
-      organizationAndStructureFeedback: categoryFeedbacks[4].feedback,
     },
   });
 

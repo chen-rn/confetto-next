@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { revalidatePath } from "next/cache";
 import { Loader2 } from "lucide-react";
 import { ProcessingMessage } from "@/components/ProcessingMessage";
+import { CollapsibleTranscription } from "@/components/CollapsibleTranscription";
 
 interface ResultPageProps {
   params: {
@@ -87,26 +88,17 @@ export default async function ResultPage({ params }: ResultPageProps) {
       {transcription && (
         <Card>
           <CardHeader>
-            <CardTitle>Transcription</CardTitle>
+            <CollapsibleTranscription transcription={transcription} />
           </CardHeader>
-          <CardContent>
-            <p className="text-base whitespace-pre-wrap">{transcription}</p>
-          </CardContent>
         </Card>
       )}
 
       {feedback ? (
         <>
           <Card>
-            <CardHeader>
-              <CardTitle>Overall Feedback</CardTitle>
-            </CardHeader>
+            <CardHeader>{/* <CardTitle>Overall Feedback</CardTitle> */}</CardHeader>
             <CardContent>
-              {/*     <div className="mb-4">
-                <h3 className="text-lg font-semibold">Score: {feedback.overallScore}/100</h3>
-                <p className="text-base">{feedback.overallFeedback}</p>
-              </div> */}
-              <MarkdownRenderer content={feedback.rawContent} />
+              <MarkdownRenderer content={feedback.overallFeedback} />
             </CardContent>
           </Card>
 
@@ -127,22 +119,6 @@ export default async function ResultPage({ params }: ResultPageProps) {
           </form>
         </div>
       )}
-    </div>
-  );
-}
-
-interface FeedbackSectionProps {
-  title: string;
-  score: number;
-  feedback: string;
-}
-
-function FeedbackSection({ title, score, feedback }: FeedbackSectionProps) {
-  return (
-    <div className="mb-4">
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="text-base">Score: {score}/20</p>
-      <p className="text-base">{feedback}</p>
     </div>
   );
 }

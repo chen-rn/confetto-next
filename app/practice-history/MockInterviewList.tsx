@@ -16,23 +16,12 @@ export async function MockInterviewList({ userId }: MockInterviewListProps) {
       question: { select: { content: true } },
       recordingUrl: true,
       createdAt: true,
-      feedback: {
-        select: {
-          ethicalPrinciplesUnderstanding: true,
-          communicationSkills: true,
-          professionalismAndEmpathy: true,
-          legalAndMedicalLegislation: true,
-          organizationAndStructure: true,
-          overallScore: true,
-        },
-      },
     },
     orderBy: { createdAt: "desc" },
   });
 
   const formattedMockInterviews = mockInterviews.map((interview) => ({
     ...interview,
-    feedback: interview.feedback || undefined,
   }));
 
   if (mockInterviews.length === 0) {

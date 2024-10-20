@@ -33,33 +33,29 @@ export async function generateFeedback3({
 
     Finally, offer constructive feedback on areas of strength and potential improvement.
 
-    Format your response using Markdown as follows:
+    Format your response as follows:
 
-    ## Overall Score: X
+    Overall Score: X
 
-    ### Category 1: X/20
-    Brief explanation
+    [Category 1]: X
+    [Brief explanation]
 
-    ### Category 2: X/20
-    Brief explanation
+    [Category 2]: X
+    [Brief explanation]
 
-    ### Category 3: X/20
-    Brief explanation
+    [Category 3]: X
+    [Brief explanation]
 
     [Additional categories if necessary]
 
-    ## Strengths
-    - Key strength 1
-    - Key strength 2
-    - ...
+    Strengths:
+    [List key strengths]
 
-    ## Areas for Improvement
-    - Area 1
-    - Area 2
-    - ...
+    Areas for Improvement:
+    [List areas that need improvement]
 
-    ## Additional Comments
-    Any other relevant observations or advice
+    Additional Comments:
+    [Any other relevant observations or advice]
   `;
 
   try {
@@ -79,19 +75,9 @@ export async function generateFeedback3({
     const savedFeedback = await prisma.feedback.create({
       data: {
         overallScore: 0, // We're not extracting scores, so set to 0 or null
-        rawContent: feedback,
+
         overallFeedback: feedback,
         mockInterviewId,
-        ethicalPrinciplesUnderstanding: 0,
-        ethicalPrinciplesFeedback: "",
-        communicationSkills: 0,
-        communicationSkillsFeedback: "",
-        professionalismAndEmpathy: 0,
-        professionalismAndEmpathyFeedback: "",
-        legalAndMedicalLegislation: 0,
-        legalAndMedicalLegislationFeedback: "",
-        organizationAndStructure: 0,
-        organizationAndStructureFeedback: "",
       },
     });
 

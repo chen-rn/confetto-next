@@ -52,7 +52,7 @@ export async function processAudioSubmission(mockId: string) {
 
     // Generate feedback using LLM
     console.log("🤖 Generating feedback using LLM...");
-    await generateFeedback3({
+    await generateFeedback({
       mockInterviewId: mockId,
       question: mockInterview.question.content,
       answer: transcription,
