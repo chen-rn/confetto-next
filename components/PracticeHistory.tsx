@@ -144,8 +144,14 @@ function CollapsibleInterviewContent({ interview }: { interview: MockInterview }
             </div>
           </>
         ) : (
-          <div className="text-center text-gray-500">
-            Feedback not available for this interview.
+          <div className="flex flex-col items-center text-gray-500">
+            <p className="mb-4">Feedback not available for this interview.</p>
+            <Link href={ROUTES.MOCK_RESULT(interview.id)}>
+              <Button size="sm" variant="outline" className="text-xs">
+                <FileText className="mr-1 h-3 w-3" />
+                View Result
+              </Button>
+            </Link>
           </div>
         )}
       </div>
