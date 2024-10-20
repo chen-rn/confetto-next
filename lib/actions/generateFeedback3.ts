@@ -26,36 +26,40 @@ export async function generateFeedback3({
 
     Please evaluate the response and provide:
 
-    1. An overall score out of 100, wrapped in <score> tags.
+    1. An overall score out of 100.
     2. Break down the evaluation into 3-5 relevant categories based on the specific question and response. For each category:
        - Provide a brief explanation
-       - Assign a score out of 20, wrapped in <score> tags
+       - Assign a score out of 20
 
     Finally, offer constructive feedback on areas of strength and potential improvement.
 
-    Format your response as follows:
+    Format your response using Markdown as follows:
 
-    Overall Score: <score>X</score>
+    ## Overall Score: X
 
-    [Category 1]: <score>X</score>
-    [Brief explanation]
+    ### Category 1: X/20
+    Brief explanation
 
-    [Category 2]: <score>X</score>
-    [Brief explanation]
+    ### Category 2: X/20
+    Brief explanation
 
-    [Category 3]: <score>X</score>
-    [Brief explanation]
+    ### Category 3: X/20
+    Brief explanation
 
     [Additional categories if necessary]
 
-    Strengths:
-    [List key strengths]
+    ## Strengths
+    - Key strength 1
+    - Key strength 2
+    - ...
 
-    Areas for Improvement:
-    [List areas that need improvement]
+    ## Areas for Improvement
+    - Area 1
+    - Area 2
+    - ...
 
-    Additional Comments:
-    [Any other relevant observations or advice]
+    ## Additional Comments
+    Any other relevant observations or advice
   `;
 
   try {
