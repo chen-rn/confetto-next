@@ -6,6 +6,7 @@ import { transcribeAudio } from "./transcribeAudio";
 import { generateFeedback } from "./generateFeedback";
 import { ROUTES } from "@/lib/routes";
 import { generateFeedback2 } from "./generateFeedback2";
+import { generateFeedback3 } from "./generateFeedback3";
 
 /**
  * Processes the audio submission by transcribing the audio and generating feedback.
@@ -51,7 +52,7 @@ export async function processAudioSubmission(mockId: string) {
 
     // Generate feedback using LLM
     console.log("🤖 Generating feedback using LLM...");
-    await generateFeedback2({
+    await generateFeedback3({
       mockInterviewId: mockId,
       question: mockInterview.question.content,
       answer: transcription,

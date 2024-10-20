@@ -36,22 +36,11 @@ model MockInterview {
 }
 
 model Feedback {
-    id                                 String        @id @default(uuid())
-    rawContent                         String        @default("")
-    mockInterview                      MockInterview @relation(fields: [mockInterviewId], references: [id])
-    mockInterviewId                    String        @unique
-    ethicalPrinciplesUnderstanding     Int           @default(0)
-    ethicalPrinciplesFeedback          String        @default("")
-    communicationSkills                Int           @default(0)
-    communicationSkillsFeedback        String        @default("")
-    professionalismAndEmpathy          Int           @default(0)
-    professionalismAndEmpathyFeedback  String        @default("")
-    legalAndMedicalLegislation         Int           @default(0)
-    legalAndMedicalLegislationFeedback String        @default("")
-    organizationAndStructure           Int           @default(0)
-    organizationAndStructureFeedback   String        @default("")
-    overallScore                       Int           @default(0)
-    overallFeedback                    String        @default("")
-    createdAt                          DateTime      @default(now())
-    updatedAt                          DateTime      @updatedAt
+    id              String        @id @default(uuid())
+    mockInterview   MockInterview @relation(fields: [mockInterviewId], references: [id])
+    mockInterviewId String        @unique
+    overallScore    Int           @default(0)
+    overallFeedback String        @default("")
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
 }

@@ -7,6 +7,7 @@ import { prisma } from "@/lib/apis/prisma";
 import { CSPostHogProvider } from "@/components/CSPostHogProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { DynamicSidebar } from "@/components/DynamicSidebar";
+import { UserInitializer } from "@/components/UserInitializer";
 
 export const metadata: Metadata = {
   title: "Confetto - AI-Powered MMI Interview Prep",
@@ -15,16 +16,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { userId } = auth();
-
-  if (userId) {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-
-    if (!user) {
-      await prisma.user.create({ data: { id: userId } });
-    }
-  }
-
   return (
     <html lang="en">
       <head>
@@ -33,6 +24,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <CSPostHogProvider>
           <ClerkProvider>
+            <UserInitializer />
             <DynamicSidebar>{children}</DynamicSidebar>
             <Toaster />
           </ClerkProvider>
