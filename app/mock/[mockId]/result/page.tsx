@@ -49,7 +49,7 @@ export default async function ResultPage({ params }: ResultPageProps) {
       });
     }
 
-    await processAudioSubmission(mockId);
+    processAudioSubmission(mockId);
     revalidatePath(`/mock/${mockId}/result`);
   }
 
