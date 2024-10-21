@@ -30,6 +30,7 @@ export function VideoViewfinder() {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setVideoStream(stream);
         if (videoRef.current) {
+          // Ensure videoRef is available
           videoRef.current.srcObject = stream;
         }
       } catch (error) {
@@ -44,7 +45,7 @@ export function VideoViewfinder() {
         videoStream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, []);
+  }, [videoRef.current]); // Added videoRef.current to dependencies
 
   return (
     <div
