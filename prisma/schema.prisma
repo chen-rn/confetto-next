@@ -14,11 +14,12 @@ model User {
 }
 
 model Question {
-    id             String          @id @default(uuid())
-    content        String
-    mockInterviews MockInterview[]
-    createdAt      DateTime        @default(now())
-    updatedAt      DateTime        @updatedAt
+    id                 String          @id @default(uuid())
+    content            String
+    evaluationCriteria String?
+    mockInterviews     MockInterview[]
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @updatedAt
 }
 
 model MockInterview {
