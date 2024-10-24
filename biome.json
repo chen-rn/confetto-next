@@ -20,11 +20,13 @@
       },
       "a11y": {
         "useMediaCaption": "off",
-        "noSvgWithoutTitle": "off"
+        "noSvgWithoutTitle": "off",
+        "useButtonType": "off"
       },
       "style": {
         "noNonNullAssertion": "off",
-        "useSelfClosingElements": "off"
+        "useSelfClosingElements": "off",
+        "noUselessElse": "off"
       },
       "suspicious": {
         "noArrayIndexKey": "off"

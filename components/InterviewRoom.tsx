@@ -1,14 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  LiveKitRoom,
-  RoomAudioRenderer,
-  useVoiceAssistant,
-  BarVisualizer,
-  useIsSpeaking,
-  useParticipants,
-} from "@livekit/components-react";
+import { LiveKitRoom, RoomAudioRenderer } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { Button } from "@/components/ui/button";
 import { useRecording } from "@/hooks/useRecording";
@@ -16,6 +9,7 @@ import { useAtom, useAtomValue } from "jotai";
 import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interviewAtoms";
 import { VideoViewfinder } from "@/components/VideoViewfinder";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { VideoAvatar } from "@/components/VideoAvatar";
 
 interface InterviewRoomProps {
   token: string;
@@ -114,16 +108,16 @@ export function InterviewRoom({ token, question, mockId }: InterviewRoomProps) {
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
         data-lk-theme="default"
-        className="w-full h-full items-center flex justify-center"
+        className="w-full h-full"
       >
-        <SimpleVoiceAssistant />
+        <VideoAvatar />
         <RoomAudioRenderer />
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-3.5 py-1.5 rounded-full shadow-md">
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-3.5 py-1.5 rounded-full shadow-md z-10">
           <p className="text-md font-semibold text-black">
             Time remaining: {formatTime(interviewTimeLeft)}
           </p>
         </div>
-        <div className="h-[60px] flex items-center justify-end px-4 absolute right-4 bottom-4">
+        <div className="absolute right-4 bottom-4 z-10">
           <Button
             onClick={handleEndInterview}
             disabled={isProcessing}
@@ -132,31 +126,10 @@ export function InterviewRoom({ token, question, mockId }: InterviewRoomProps) {
             {isProcessing ? "Processing..." : "End Interview Early"}
           </Button>
         </div>
-        <div className="absolute bottom-4 left-4">
+        <div className="absolute bottom-4 left-4 z-10">
           <VideoViewfinder />
         </div>
       </LiveKitRoom>
-    </div>
-  );
-}
-
-function SimpleVoiceAssistant() {
-  const { state, audioTrack } = useVoiceAssistant();
-  const participants = useParticipants();
-  const localParticipant = participants.find((p) => p.isLocal);
-  const isUserSpeaking = useIsSpeaking(localParticipant);
-
-  const getMessage = () => {
-    if (state === "listening" && !isUserSpeaking) {
-      return "You may speak now";
-    }
-    return state;
-  };
-
-  return (
-    <div className="h-44 flex flex-col items-center justify-center">
-      <BarVisualizer state={state} barCount={5} trackRef={audioTrack} />
-      {/* <p className={"text-center opacity-50 mt-2"}>{getMessage()}</p> */}
     </div>
   );
 }
