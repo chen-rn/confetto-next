@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 // Move the interface to a separate types file if it's used in multiple components
 interface MockInterview {

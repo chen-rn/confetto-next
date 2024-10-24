@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { SidebarNav } from "@/components/dashboard/SidebarNav";
+import { UserButton } from "@clerk/nextjs";
 
 export function DynamicSidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -12,7 +13,7 @@ export function DynamicSidebar({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen">
       {showSidebar && (
         <div className="w-64 bg-white text-gray-800 p-4 shadow-sm flex flex-col">
-          <div className="flex items-center justify-center mb-6">
+          <div className="mb-6">
             <img
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202024-10-04%20at%2010.16.41%E2%80%AFPM-4hFlx0Az7EwTaqSDhnUPTjQmC0X8Cn.png"
               alt="Confetto Logo"
@@ -20,6 +21,9 @@ export function DynamicSidebar({ children }: { children: React.ReactNode }) {
             />
           </div>
           <SidebarNav />
+          <div className="mt-auto pt-4">
+            <UserButton />
+          </div>
         </div>
       )}
       <div className={`flex-1 overflow-auto bg-gray-50 ${showSidebar ? "" : "w-full"}`}>

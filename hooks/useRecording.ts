@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import { useSetAtom, useAtom } from "jotai";
-import { getSupportedMimeType } from "@/utils/mediaUtils";
+import { getSupportedMimeType } from "@/lib/utils/mediaUtils";
 import { uploadVideo, uploadAudioToFirebase } from "@/lib/apis/firebase";
 import { updateMockInterviewMedia } from "@/lib/actions/updateMockInterviewMedia";
 import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";

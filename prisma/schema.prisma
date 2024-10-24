@@ -7,19 +7,47 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-//this is basically just to link between ClerkUserID and Prisma DB
 model User {
     id             String          @id @default(uuid())
     mockInterviews MockInterview[]
+    schools        School[] // Many-to-many relation with School
+}
+
+model School {
+    id        String   @id @default(uuid())
+    name      String
+    state     String // or province 
+    country   String
+    users     User[] // Many-to-many relation with User
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Question {
-    id                 String          @id @default(uuid())
+    id                 String        @id @default(uuid())
     content            String
     evaluationCriteria String?
-    mockInterviews     MockInterview[]
-    createdAt          DateTime        @default(now())
-    updatedAt          DateTime        @updatedAt
+    tags               QuestionTag[] // Now handles both topics and other tags
+
+    mockInterviews MockInterview[]
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
+}
+
+model QuestionTag {
+    id        String     @id @default(uuid())
+    name      String     @unique
+    type      TagType // Updated enum below to include TOPIC type
+    questions Question[]
+
+    @@index([name])
+}
+
+enum TagType {
+    TOPIC // New type for former TopicName items
+    STATE
+    COUNTRY
+    SCHOOL
 }
 
 model MockInterview {

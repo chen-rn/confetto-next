@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { formatTime } from "@/utils/formatTime";
+import { formatTime } from "@/lib/utils/formatTime";
 import { Video } from "lucide-react";
 import { useAtom } from "jotai";
 import {

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { createMockInterview } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
+import { createMockInterview } from "@/lib/actions/createMockInterview";
 
 interface StartMockInterviewButtonProps {
   questionId: string;

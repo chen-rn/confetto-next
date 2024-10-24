@@ -2,8 +2,6 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/apis/prisma";
 import { CSPostHogProvider } from "@/components/CSPostHogProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { DynamicSidebar } from "@/components/DynamicSidebar";
