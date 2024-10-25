@@ -1,0 +1,1498 @@
+[
+  {
+    "provinceCode": "AB",
+    "provinceName": "Alberta",
+    "numSchools": 2,
+    "questions": [
+      {
+        "id": "AB-1",
+        "question": "How would you address a situation where a rural patient in Alberta cannot access specialized healthcare services due to geographic barriers?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-2",
+        "question": "A patient from an Indigenous community requests a traditional healing practice that conflicts with conventional medical treatment. How would you handle this situation?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-3",
+        "question": "Considering Alberta’s cultural diversity, how would you provide culturally sensitive care to a patient who is a recent immigrant and is unfamiliar with the Canadian healthcare system?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-4",
+        "question": "How would you approach an ethical dilemma where you must prioritize limited resources in Alberta's universal healthcare system?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-5",
+        "question": "Describe how you would support a patient experiencing mental health challenges in a small Alberta town with limited mental health services.",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-6",
+        "question": "How would you engage in reconciliation efforts while providing healthcare to an Indigenous patient in Alberta?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-7",
+        "question": "With Alberta’s growing immigrant population, what strategies would you implement to ensure effective communication with patients who have limited English proficiency?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-8",
+        "question": "How would you address the ethical implications of end-of-life care decisions in a patient who strongly adheres to their cultural or religious beliefs?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-9",
+        "question": "Alberta faces both urban and rural healthcare challenges. How would you adapt your medical practice to effectively serve diverse communities within the province?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-10",
+        "question": "Discuss how you would navigate a conflict between a patient's cultural practices and evidence-based medical guidelines within Alberta's healthcare framework.",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-11",
+        "question": "In the context of Alberta’s universal healthcare, how would you advocate for a patient who is facing long wait times for a necessary medical procedure?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-12",
+        "question": "Describe your approach to managing a case where an Indigenous patient expresses distrust in the healthcare system due to historical injustices.",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-13",
+        "question": "Alberta has both affluent urban centers and underserved rural areas. How would you ensure equitable healthcare delivery across these regions?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-14",
+        "question": "How would you address cultural misunderstandings that arise between you and a patient from a different cultural background in Alberta?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-15",
+        "question": "Given the current opioid crisis in Alberta, how would you handle a situation where a patient requires pain management but has a history of substance abuse?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-16",
+        "question": "How would you balance respecting a patient's cultural dietary restrictions with providing necessary nutritional advice in a hospital setting in Alberta?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-17",
+        "question": "Discuss how provincial health policies in Alberta influence your decision-making when treating patients with chronic diseases.",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-18",
+        "question": "How would you approach providing care to a transgender patient in a setting where there might be limited local understanding or support?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-19",
+        "question": "Alberta’s healthcare system includes both public and private providers. How would you navigate situations where patients have preferences or financial constraints impacting their care?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-20",
+        "question": "How would you support a refugee patient in Alberta who is dealing with both physical health issues and trauma from their migration experience?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-21",
+        "question": "Considering the rural-urban divide in Alberta, how would you propose improving access to mental health services in remote communities?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-22",
+        "question": "How would you handle a situation where a patient’s family in Alberta insists on alternative treatments that have no proven efficacy?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-23",
+        "question": "In the face of Alberta’s environmental health challenges, such as oil industry impacts, how would you address patients’ concerns related to environmental exposures?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-24",
+        "question": "How would you ensure that your medical practice in Alberta is inclusive and respectful of the province’s wide range of cultural and ethnic backgrounds?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-25",
+        "question": "Describe how you would approach a public health campaign in Alberta aimed at reducing vaccination hesitancy in culturally diverse populations.",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-26",
+        "question": "How would you manage a case where an Indigenous patient seeks treatment for a condition that requires both modern medical intervention and traditional healing practices?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-27",
+        "question": "Alberta’s healthcare system must adapt to changing demographics. How would you prepare to meet the needs of an aging population in both urban and rural settings?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-28",
+        "question": "How would you handle ethical concerns related to patient confidentiality when working within tight-knit communities in rural Alberta?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-29",
+        "question": "Discuss how you would advocate for changes in provincial health policies to better serve marginalized communities in Alberta.",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      },
+      {
+        "id": "AB-30",
+        "question": "How would you approach your role as a healthcare provider in Alberta when faced with systemic biases that affect patient care?",
+        "provinceCode": "AB",
+        "provinceName": "Alberta"
+      }
+    ]
+  },
+  {
+    "provinceCode": "BC",
+    "provinceName": "British Columbia",
+    "numSchools": 1,
+    "questions": [
+      {
+        "id": "BC-1",
+        "question": "How would you address the challenges of providing equitable healthcare access to Indigenous communities in British Columbia while respecting their cultural practices?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-2",
+        "question": "Describe a situation where you must balance provincial health policies with the individual needs of a patient from a diverse cultural background in BC.",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-3",
+        "question": "How should the Canadian universal healthcare system in British Columbia adapt to better serve rural populations with limited access to medical facilities?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-4",
+        "question": "What strategies would you implement to reduce healthcare disparities between urban and rural areas in British Columbia?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-5",
+        "question": "How can medical professionals in BC contribute to the reconciliation efforts with Indigenous peoples within the healthcare system?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-6",
+        "question": "Discuss the ethical considerations involved in allocating limited healthcare resources during a public health crisis in British Columbia.",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-7",
+        "question": "How would you handle a scenario where an immigrant patient in BC faces language barriers that hinder effective medical treatment?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-8",
+        "question": "What approaches would you take to integrate traditional Indigenous healing practices with Western medicine in British Columbia’s healthcare system?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-9",
+        "question": "How can British Columbia’s healthcare providers address the mental health challenges faced by youth in both urban and rural settings?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-10",
+        "question": "Describe how cultural diversity in British Columbia influences patient care and how you would ensure culturally sensitive treatment.",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-11",
+        "question": "What are the key challenges of implementing telemedicine in remote areas of British Columbia, and how would you overcome them?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-12",
+        "question": "How should British Columbia’s healthcare system address the opioid addiction crisis while respecting patients’ rights and promoting harm reduction?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-13",
+        "question": "In what ways can healthcare professionals in BC support immigrant populations to navigate and access the universal healthcare system effectively?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-14",
+        "question": "Discuss the role of provincial health policies in managing chronic diseases specific to the population of British Columbia.",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-15",
+        "question": "How would you approach an ethical dilemma where a patient's cultural beliefs conflict with standard medical treatments in BC?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-16",
+        "question": "What measures can be taken to improve mental health services accessibility in British Columbia’s underserved communities?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-17",
+        "question": "How does the cultural diversity of British Columbia impact the delivery of LGBTQ+ health services, and what improvements would you suggest?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-18",
+        "question": "Describe a plan to address homelessness-related health issues in a major city like Vancouver, British Columbia.",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-19",
+        "question": "How can medical professionals in BC advocate for policy changes that enhance the provincial healthcare system?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-20",
+        "question": "What are the implications of climate change on healthcare delivery in British Columbia, and how should the healthcare system respond?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-21",
+        "question": "How would you ensure patient confidentiality in a tight-knit rural community in British Columbia while providing effective healthcare?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-22",
+        "question": "Discuss the ethical responsibilities of physicians in British Columbia when faced with end-of-life care decisions.",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-23",
+        "question": "How can British Columbia’s healthcare system better incorporate mental health care into primary healthcare services?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-24",
+        "question": "What are the challenges and solutions for providing equitable healthcare to elderly populations in both urban and rural areas of BC?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-25",
+        "question": "How would you manage a situation where public health initiatives in British Columbia conflict with individual patient autonomy?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-26",
+        "question": "Describe ways to improve the integration of immigrant healthcare workers into British Columbia’s medical system.",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-27",
+        "question": "How can British Columbia’s healthcare providers address and reduce health disparities among different ethnic groups?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-28",
+        "question": "What role should medical professionals play in supporting environmental sustainability within British Columbia’s healthcare practices?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-29",
+        "question": "How can healthcare systems in British Columbia better support Indigenous youth experiencing mental health issues?",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      },
+      {
+        "id": "BC-30",
+        "question": "Discuss the importance of cultural competence in medical education for British Columbia and how it can be effectively incorporated into the curriculum.",
+        "provinceCode": "BC",
+        "provinceName": "British Columbia"
+      }
+    ]
+  },
+  {
+    "provinceCode": "MB",
+    "provinceName": "Manitoba",
+    "numSchools": 1,
+    "questions": [
+      {
+        "id": "MB-1",
+        "question": "How would you address the challenges of providing equitable healthcare to Indigenous communities in Manitoba while respecting their cultural practices?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-2",
+        "question": "Discuss the ethical considerations involved in allocating limited healthcare resources in rural Manitoba settings.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-3",
+        "question": "How can the universal healthcare system in Canada be improved to better serve the diverse population of Manitoba’s urban and rural areas?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-4",
+        "question": "Describe a strategy to bridge the healthcare access gap between Indigenous and non-Indigenous populations in Manitoba.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-5",
+        "question": "What are the key factors affecting mental health services in Manitoba, and how would you propose to address them?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-6",
+        "question": "How would you approach a situation where a patient from a cultural background different from your own declines a life-saving treatment based on their beliefs?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-7",
+        "question": "Discuss the impact of provincial health policies on the delivery of healthcare services in Manitoba’s remote communities.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-8",
+        "question": "How can medical professionals in Manitoba contribute to the reconciliation process with Indigenous peoples through healthcare?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-9",
+        "question": "What are the unique healthcare challenges faced by immigrants in Manitoba, and how can the healthcare system better support them?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-10",
+        "question": "Describe an ethical dilemma you might face when balancing patient autonomy with public health measures in a Manitoba outbreak scenario.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-11",
+        "question": "How would you ensure culturally competent care when treating patients from diverse backgrounds in Manitoba’s multicultural society?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-12",
+        "question": "Discuss the role of telemedicine in improving healthcare access in Manitoba’s rural areas and the potential ethical implications.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-13",
+        "question": "How can Manitoba’s healthcare system address the higher rates of chronic diseases in Indigenous populations?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-14",
+        "question": "What strategies would you implement to reduce wait times in Manitoba’s urban hospitals while maintaining quality care?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-15",
+        "question": "How would you handle a situation where provincial health policies conflict with a patient’s wishes or best interests?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-16",
+        "question": "Discuss the importance of cultural sensitivity in developing health promotion programs for Manitoba’s diverse communities.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-17",
+        "question": "How can medical practitioners in Manitoba support the mental health needs of newcomers facing integration challenges?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-18",
+        "question": "What are the ethical considerations when implementing public health initiatives that may disproportionately affect marginalized groups in Manitoba?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-19",
+        "question": "How would you advocate for improved healthcare infrastructure in remote Manitoba regions with limited resources?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-20",
+        "question": "Discuss the impact of socioeconomic factors on health outcomes in Manitoba and how the healthcare system can address these disparities.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-21",
+        "question": "How can Manitoba’s healthcare providers work towards eliminating systemic biases and ensuring equitable treatment for all patients?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-22",
+        "question": "Describe your approach to collaborating with Indigenous healers and traditional medicine practitioners within the Manitoba healthcare system.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-23",
+        "question": "What are the current public health issues in Manitoba, and how would you prioritize addressing them as a future physician?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-24",
+        "question": "How would you manage a conflict between a patient’s family and the medical team regarding end-of-life care in a culturally diverse Manitoba setting?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-25",
+        "question": "Discuss the challenges and ethical responsibilities of providing care in a Manitoba community facing high rates of substance abuse.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-26",
+        "question": "How can Manitoba’s healthcare system better integrate mental health services with primary care, especially in underserved areas?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-27",
+        "question": "What role does cultural competency play in patient outcomes, and how would you develop these skills as a medical student in Manitoba?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-28",
+        "question": "How would you address language barriers in providing effective healthcare to non-English speaking populations in Manitoba?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-29",
+        "question": "Discuss the implications of provincial health policy changes on Indigenous health services in Manitoba.",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      },
+      {
+        "id": "MB-30",
+        "question": "How can medical professionals in Manitoba balance the demands of a universal healthcare system with the need for personalized patient care?",
+        "provinceCode": "MB",
+        "provinceName": "Manitoba"
+      }
+    ]
+  },
+  {
+    "provinceCode": "NL",
+    "provinceName": "Newfoundland and Labrador",
+    "numSchools": 1,
+    "questions": [
+      {
+        "id": "NL-1",
+        "question": "How would you address the challenges of providing equitable healthcare access to residents in remote rural communities of Newfoundland and Labrador?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-2",
+        "question": "Discuss the ethical considerations involved in allocating limited medical resources within Newfoundland and Labrador’s universal healthcare system.",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-3",
+        "question": "How can healthcare professionals in Newfoundland and Labrador contribute to the reconciliation process with Indigenous communities?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-4",
+        "question": "What strategies would you implement to improve mental health services in the isolated regions of Newfoundland and Labrador?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-5",
+        "question": "Describe how cultural diversity and immigration trends in Newfoundland and Labrador should influence the delivery of healthcare services.",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-6",
+        "question": "How can the provincial healthcare system in Newfoundland and Labrador better support elderly populations in both urban and rural settings?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-7",
+        "question": "Discuss the impact of provincial health policies on the management of chronic diseases in Newfoundland and Labrador.",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-8",
+        "question": "How would you navigate a situation where traditional Indigenous healing practices conflict with conventional medical treatments in Newfoundland and Labrador?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-9",
+        "question": "What role does telemedicine play in enhancing healthcare access in Newfoundland and Labrador, and what are its potential limitations?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-10",
+        "question": "How should healthcare providers in Newfoundland and Labrador address the opioid crisis while respecting patients’ autonomy and dignity?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-11",
+        "question": "Discuss the ethical dilemmas that may arise when implementing public health measures during a pandemic in Newfoundland and Labrador.",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-12",
+        "question": "How can medical professionals in Newfoundland and Labrador ensure culturally competent care for immigrant populations?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-13",
+        "question": "What are the unique healthcare challenges faced by fishermen and maritime workers in Newfoundland and Labrador, and how would you address them?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-14",
+        "question": "How should Newfoundland and Labrador’s healthcare system balance cost-efficiency with quality of care in a universal healthcare model?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-15",
+        "question": "Discuss the importance of interprofessional collaboration in improving healthcare outcomes in Newfoundland and Labrador’s diverse communities.",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-16",
+        "question": "How can healthcare institutions in Newfoundland and Labrador support the mental well-being of frontline workers in high-stress environments?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-17",
+        "question": "What measures can be taken to reduce healthcare disparities between Indigenous and non-Indigenous populations in Newfoundland and Labrador?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-18",
+        "question": "How would you handle a situation where a patient's cultural or religious beliefs in Newfoundland and Labrador interfere with their medical treatment?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-19",
+        "question": "Discuss the role of community engagement in shaping health policies specific to Newfoundland and Labrador.",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-20",
+        "question": "How can medical education in Newfoundland and Labrador incorporate local healthcare challenges and cultural sensitivities into the curriculum?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-21",
+        "question": "What are the ethical implications of using limited ICU beds during a health crisis in Newfoundland and Labrador?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-22",
+        "question": "How can Newfoundland and Labrador address the shortage of healthcare professionals in its rural areas?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-23",
+        "question": "Discuss the impact of seasonal industries, such as fishing and tourism, on the healthcare needs of Newfoundland and Labrador’s population.",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-24",
+        "question": "How should healthcare providers in Newfoundland and Labrador approach end-of-life care to respect both medical ethics and cultural values?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-25",
+        "question": "What initiatives can be implemented to promote Indigenous health and wellness within Newfoundland and Labrador’s healthcare system?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-26",
+        "question": "How can technology be leveraged to improve patient care and healthcare delivery in Newfoundland and Labrador’s isolated communities?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-27",
+        "question": "Discuss the challenges and solutions for providing specialized medical services in Newfoundland and Labrador’s smaller towns.",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-28",
+        "question": "How can healthcare practitioners in Newfoundland and Labrador effectively communicate with patients from diverse linguistic backgrounds?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-29",
+        "question": "What role does preventative care play in the healthcare strategy of Newfoundland and Labrador, and how can it be enhanced?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      },
+      {
+        "id": "NL-30",
+        "question": "How would you address the stigma associated with mental health issues in the cultural context of Newfoundland and Labrador?",
+        "provinceCode": "NL",
+        "provinceName": "Newfoundland and Labrador"
+      }
+    ]
+  },
+  {
+    "provinceCode": "NS",
+    "provinceName": "Nova Scotia",
+    "numSchools": 1,
+    "questions": [
+      {
+        "id": "NS-1",
+        "question": "How would you address the challenges of providing adequate mental health services in rural communities of Nova Scotia while respecting local cultural practices?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-2",
+        "question": "Discuss the ethical considerations involved in allocating limited resources within Nova Scotia’s universal healthcare system during a public health crisis.",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-3",
+        "question": "How can healthcare providers in Nova Scotia effectively support the reconciliation process with Indigenous communities while delivering medical care?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-4",
+        "question": "What strategies would you implement to improve access to specialized medical services for patients living in remote areas of Nova Scotia?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-5",
+        "question": "Describe how cultural diversity in Nova Scotia influences patient care and how you would ensure culturally sensitive treatment plans.",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-6",
+        "question": "How should Nova Scotia’s healthcare system balance the needs of an aging population with the rising costs of healthcare services?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-7",
+        "question": "What are the ethical implications of implementing telemedicine in Nova Scotia’s rural regions, and how can potential challenges be mitigated?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-8",
+        "question": "How can medical professionals in Nova Scotia work towards reducing health disparities among immigrant populations?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-9",
+        "question": "Discuss the role of community engagement in developing effective public health policies in Nova Scotia.",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-10",
+        "question": "How would you handle a situation where a patient's cultural beliefs in Nova Scotia conflict with evidence-based medical practices?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-11",
+        "question": "What approaches can be taken to improve mental health care accessibility for Indigenous youth in Nova Scotia?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-12",
+        "question": "How can Nova Scotia’s healthcare providers ensure equitable care for both urban and rural populations amid provincial health policy changes?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-13",
+        "question": "Discuss the impact of seasonal industries, such as fishing and tourism, on healthcare delivery and workforce sustainability in Nova Scotia.",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-14",
+        "question": "How would you advocate for increased healthcare funding in Nova Scotia to address the shortage of family physicians in rural areas?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-15",
+        "question": "What measures can be implemented to enhance the cultural competency of healthcare workers in Nova Scotia’s diverse communities?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-16",
+        "question": "How should Nova Scotia’s medical schools incorporate Indigenous health perspectives into their curricula to promote reconciliation?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-17",
+        "question": "Discuss the ethical challenges of end-of-life care in Nova Scotia, considering both legal frameworks and cultural sensitivities.",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-18",
+        "question": "How can Nova Scotia leverage technology to bridge the gap in healthcare access between its urban centers and rural outskirts?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-19",
+        "question": "What role do you believe immigration plays in shaping the healthcare needs of Nova Scotia, and how should the healthcare system adapt accordingly?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-20",
+        "question": "How would you address the opioid crisis in Nova Scotia while respecting the rights and needs of affected individuals?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-21",
+        "question": "Discuss the importance of interprofessional collaboration in improving healthcare outcomes in Nova Scotia’s diverse communities.",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-22",
+        "question": "How can healthcare providers in Nova Scotia ensure that provincial health policies do not inadvertently disadvantage marginalized groups?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-23",
+        "question": "What steps can be taken to improve maternal health services in Nova Scotia’s remote and Indigenous communities?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-24",
+        "question": "How would you balance respecting patient autonomy with public health responsibilities in the context of Nova Scotia’s universal healthcare system?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-25",
+        "question": "Discuss the challenges and solutions for implementing preventive healthcare programs in Nova Scotia’s multicultural populations.",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-26",
+        "question": "How can Nova Scotia’s healthcare system better integrate traditional Indigenous healing practices with Western medicine?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-27",
+        "question": "What ethical considerations arise when conducting medical research in Nova Scotia’s Indigenous communities, and how should they be addressed?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-28",
+        "question": "How would you approach improving vaccination rates in Nova Scotia, particularly in communities with historical mistrust of the healthcare system?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-29",
+        "question": "Discuss the impact of climate change on health in Nova Scotia and how the healthcare system should respond to emerging challenges.",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      },
+      {
+        "id": "NS-30",
+        "question": "How can Nova Scotia’s medical professionals promote health equity in a province with significant urban-rural health disparities?",
+        "provinceCode": "NS",
+        "provinceName": "Nova Scotia"
+      }
+    ]
+  },
+  {
+    "provinceCode": "ON",
+    "provinceName": "Ontario",
+    "numSchools": 6,
+    "questions": [
+      {
+        "id": "ON-1",
+        "question": "How would you prioritize patient care in an Ontario hospital facing limited resources during a public health crisis?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-2",
+        "question": "Describe how you would approach providing medical care to a recent immigrant from a culture with different health beliefs and practices.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-3",
+        "question": "Explain how you would advocate for a patient who is experiencing barriers to accessing healthcare services within Ontario’s universal healthcare system.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-4",
+        "question": "How would you handle a situation where an Indigenous patient’s traditional healing practices conflict with the recommended medical treatment?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-5",
+        "question": "Discuss the impact of Ontario’s provincial health policies on your decision-making process as a physician.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-6",
+        "question": "What strategies would you employ to ensure adequate healthcare access for patients living in rural areas of Ontario?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-7",
+        "question": "How would you address ethical concerns related to implementing vaccination mandates in Ontario’s universal healthcare framework?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-8",
+        "question": "Describe ways you would support an Indigenous patient while respecting their cultural identity and promoting reconciliation in a healthcare setting.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-9",
+        "question": "How does Ontario’s cultural diversity influence patient care, and what approaches would you take to provide culturally competent healthcare?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-10",
+        "question": "Discuss the challenges of reducing wait times in Ontario’s healthcare system and propose potential solutions.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-11",
+        "question": "How would you manage a disagreement with a patient’s family who opposes the proposed treatment plan?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-12",
+        "question": "Explain the role of reconciliation in healthcare and how you would integrate these principles into your practice in Ontario.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-13",
+        "question": "What improvements would you suggest for mental health services within Ontario’s universal healthcare system?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-14",
+        "question": "How would you overcome language barriers when communicating with a non-English speaking patient in an Ontario hospital?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-15",
+        "question": "Discuss the effects of socioeconomic status on healthcare access in both urban and rural communities in Ontario.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-16",
+        "question": "How would you provide end-of-life care to a patient from a culture that has specific burial rituals and practices?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-17",
+        "question": "Explain how immigration patterns in Ontario affect the demand for certain medical services and how you would respond to these changes.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-18",
+        "question": "What are the ethical implications of allocating scarce resources, such as ICU beds, during a pandemic in Ontario?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-19",
+        "question": "Describe how you would collaborate with other healthcare professionals to improve care for an Indigenous patient.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-20",
+        "question": "How would you address a situation where you observe a colleague not adhering to Ontario’s healthcare policies?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-21",
+        "question": "Discuss the importance of cultural competence in addressing the opioid crisis within Ontario.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-22",
+        "question": "How would you advocate for enhanced healthcare services in a rural Ontario community?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-23",
+        "question": "Explain the challenges of managing chronic diseases within Ontario’s universal healthcare framework and how you would address them.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-24",
+        "question": "Describe how you would address potential biases when treating patients from diverse cultural backgrounds in Ontario.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-25",
+        "question": "How would you balance patient autonomy with public health guidelines during an infectious disease outbreak in Ontario?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-26",
+        "question": "Discuss strategies to improve the accessibility of mental health care for marginalized populations in Ontario.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-27",
+        "question": "How would you approach a case where Indigenous knowledge and Western medicine offer different treatment options?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-28",
+        "question": "Explain how you would handle confidentiality concerns in a tightly-knit rural community in Ontario.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-29",
+        "question": "Discuss the role of healthcare providers in promoting reconciliation efforts with Indigenous communities in Ontario.",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      },
+      {
+        "id": "ON-30",
+        "question": "How would you address disparities in healthcare outcomes between urban and rural populations in Ontario?",
+        "provinceCode": "ON",
+        "provinceName": "Ontario"
+      }
+    ]
+  },
+  {
+    "provinceCode": "QC",
+    "provinceName": "Quebec",
+    "numSchools": 4,
+    "questions": [
+      {
+        "id": "QC-1",
+        "question": "How would you address the challenges of providing equitable healthcare services to both urban and rural populations in Quebec?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-2",
+        "question": "Discuss an ethical dilemma you might face when allocating limited resources within Quebec’s universal healthcare system.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-3",
+        "question": "How can medical professionals contribute to reconciliation efforts with Indigenous communities in Quebec?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-4",
+        "question": "What strategies would you implement to improve access to healthcare for immigrants and culturally diverse populations in Quebec?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-5",
+        "question": "Describe how you would handle a situation where a patient's cultural beliefs conflict with standard medical treatments in Quebec.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-6",
+        "question": "How would you approach the issue of mental health service availability in Quebec’s rural areas?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-7",
+        "question": "Discuss the impact of Quebec’s language laws on patient care and communication in the healthcare system.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-8",
+        "question": "How can healthcare providers in Quebec ensure culturally sensitive care for First Nations, Inuit, and Métis patients?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-9",
+        "question": "What are the key challenges of integrating traditional Indigenous healing practices with Western medicine in Quebec?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-10",
+        "question": "How would you respond to a policy proposal that affects the funding of universal healthcare in Quebec?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-11",
+        "question": "Describe how you would navigate ethical considerations when treating undocumented immigrants in Quebec’s healthcare system.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-12",
+        "question": "How can Quebec’s healthcare system better address the needs of the aging population while maintaining universal coverage?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-13",
+        "question": "Discuss the role of medical professionals in promoting public health initiatives specific to Quebec’s current health issues.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-14",
+        "question": "How would you manage a situation where a patient in Quebec refuses a life-saving treatment for religious reasons?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-15",
+        "question": "What are the implications of urbanization on healthcare delivery in Quebec, and how would you address them?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-16",
+        "question": "How can medical schools in Quebec incorporate Indigenous health perspectives into their curriculum?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-17",
+        "question": "Discuss the ethical challenges of end-of-life care decisions within the context of Quebec’s healthcare policies.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-18",
+        "question": "How would you advocate for improved healthcare infrastructure in underserved regions of Quebec?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-19",
+        "question": "Describe your approach to addressing health disparities among different cultural groups in Quebec.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-20",
+        "question": "How can healthcare providers in Quebec balance respecting patient autonomy with ensuring public health safety?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-21",
+        "question": "What are the unique mental health challenges faced by immigrants in Quebec, and how would you address them as a healthcare provider?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-22",
+        "question": "How would you handle a situation where provincial health policies in Quebec conflict with your personal ethical beliefs?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-23",
+        "question": "Discuss the importance of interprofessional collaboration in addressing healthcare challenges specific to Quebec.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-24",
+        "question": "How can Quebec’s universal healthcare system adapt to better serve the needs of a rapidly aging population?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-25",
+        "question": "Describe how you would engage with Indigenous leaders to improve health outcomes in their communities within Quebec.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-26",
+        "question": "What measures would you propose to reduce wait times for medical procedures in Quebec’s healthcare system?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-27",
+        "question": "How can cultural competency training be enhanced for healthcare professionals in Quebec to better serve its diverse population?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-28",
+        "question": "Discuss the role of technology in bridging the gap between urban and rural healthcare access in Quebec.",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-29",
+        "question": "How would you address the stigma associated with mental health issues in culturally diverse communities in Quebec?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      },
+      {
+        "id": "QC-30",
+        "question": "What are the ethical considerations of implementing telemedicine in remote areas of Quebec, and how would you address them?",
+        "provinceCode": "QC",
+        "provinceName": "Quebec"
+      }
+    ]
+  },
+  {
+    "provinceCode": "SK",
+    "provinceName": "Saskatchewan",
+    "numSchools": 1,
+    "questions": [
+      {
+        "id": "SK-1",
+        "question": "How would you address the challenges of providing universal healthcare in Saskatchewan’s rural communities with limited access to medical facilities?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-2",
+        "question": "Discuss the ethical implications of prioritizing healthcare resources between Indigenous and non-Indigenous populations in Saskatchewan.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-3",
+        "question": "How can medical professionals contribute to the reconciliation process with Indigenous communities within the Saskatchewan healthcare system?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-4",
+        "question": "Describe a strategy to improve mental health services in Saskatchewan’s urban areas while respecting cultural diversity.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-5",
+        "question": "How would you handle a situation where a patient from an Indigenous background refuses treatment due to cultural beliefs?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-6",
+        "question": "What are the key factors influencing healthcare access for immigrants in Saskatchewan, and how would you address them?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-7",
+        "question": "Discuss the impact of provincial health policies on the delivery of healthcare services in Saskatchewan’s remote areas.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-8",
+        "question": "How would you approach a case where a rural patient requires specialized care that is only available in urban centers?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-9",
+        "question": "What steps would you take to ensure cultural competence when treating patients from diverse backgrounds in Saskatchewan?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-10",
+        "question": "How can the Saskatchewan healthcare system better integrate traditional Indigenous healing practices with Western medicine?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-11",
+        "question": "Describe how you would advocate for improved healthcare infrastructure in underserved Saskatchewan communities.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-12",
+        "question": "What are the ethical considerations when implementing telemedicine solutions in Saskatchewan’s remote regions?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-13",
+        "question": "How would you manage a public health crisis in Saskatchewan while ensuring equitable access to care for all cultural groups?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-14",
+        "question": "Discuss the role of healthcare professionals in promoting mental health awareness among Saskatchewan’s diverse populations.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-15",
+        "question": "How would you address potential language barriers when providing care to recently arrived immigrants in Saskatchewan?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-16",
+        "question": "What initiatives would you propose to reduce the disparity in healthcare outcomes between urban and rural populations in Saskatchewan?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-17",
+        "question": "How can medical schools in Saskatchewan incorporate Indigenous health and reconciliation into their curricula effectively?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-18",
+        "question": "Describe an approach to balance patient autonomy with public health mandates in the context of Saskatchewan’s universal healthcare system.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-19",
+        "question": "How would you navigate a conflict between a patient’s cultural practices and evidence-based medical recommendations in Saskatchewan?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-20",
+        "question": "What measures can be taken to improve the recruitment and retention of healthcare professionals in Saskatchewan’s remote areas?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-21",
+        "question": "How would you engage with community leaders to enhance healthcare delivery in culturally diverse communities in Saskatchewan?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-22",
+        "question": "Discuss the ethical challenges of enforcing provincial health policies that may disproportionately affect certain cultural groups in Saskatchewan.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-23",
+        "question": "How can technology be leveraged to improve healthcare access and quality in Saskatchewan’s Indigenous communities?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-24",
+        "question": "What role should medical professionals play in addressing the social determinants of health specific to Saskatchewan’s population?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-25",
+        "question": "How would you ensure that mental health services in Saskatchewan are inclusive and accessible to all cultural groups?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-26",
+        "question": "Describe your approach to handling implicit bias in a multicultural healthcare setting in Saskatchewan.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-27",
+        "question": "How can Saskatchewan’s healthcare system better support the health needs of an aging population across both urban and rural areas?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-28",
+        "question": "What strategies would you implement to enhance preventative care programs tailored to the unique health challenges in Saskatchewan?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-29",
+        "question": "How would you collaborate with other sectors to address the opioid crisis in Saskatchewan while respecting cultural sensitivities?",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      },
+      {
+        "id": "SK-30",
+        "question": "Discuss how you would prioritize healthcare initiatives in Saskatchewan to address both current and emerging health issues effectively.",
+        "provinceCode": "SK",
+        "provinceName": "Saskatchewan"
+      }
+    ]
+  }
+]

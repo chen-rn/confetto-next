@@ -47,7 +47,6 @@ enum TagType {
     TOPIC // New type for former TopicName items
     STATE
     COUNTRY
-    SCHOOL
 }
 
 model MockInterview {

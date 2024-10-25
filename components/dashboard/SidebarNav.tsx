@@ -1,59 +1,81 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Home, History, Calendar, BarChart2, BookOpen } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Home, History, BookOpen, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+
+interface NavItem {
+  label: string;
+  icon: React.ReactNode;
+  href: string;
+}
+
+const mainNavItems: NavItem[] = [
+  {
+    label: "Dashboard",
+    icon: <Home className="mr-2 h-4 w-4" />,
+    href: ROUTES.HOME,
+  },
+  {
+    label: "Question Bank",
+    icon: <BookOpen className="mr-2 h-4 w-4" />,
+    href: ROUTES.CREATE_MOCK,
+  },
+  {
+    label: "Practice History",
+    icon: <History className="mr-2 h-4 w-4" />,
+    href: ROUTES.MOCK_HISTORY,
+  },
+];
+
+const bottomNavItems: NavItem[] = [
+  {
+    label: "Settings",
+    icon: <Settings className="mr-2 h-4 w-4" />,
+    href: ROUTES.SETTINGS,
+  },
+];
 
 export function SidebarNav() {
-  const [activeNav, setActiveNav] = useState("Dashboard");
-  const router = useRouter();
+  const pathname = usePathname();
 
-  const handleNavClick = (navItem: string) => {
-    setActiveNav(navItem);
-    switch (navItem) {
-      case "Dashboard":
-        router.push(ROUTES.HOME);
-        break;
-      case "Calendar":
-        // Assuming there's no specific route for Calendar yet
-        break;
-      case "Analytics":
-        // Assuming there's no specific route for Analytics yet
-        break;
-      case "Question Bank":
-        // Assuming there's no specific route for Question Bank yet
-        router.push(ROUTES.CREATE_MOCK);
-
-        break;
-      case "Practice History":
-        router.push(ROUTES.MOCK_HISTORY);
-        break;
-    }
+  const NavButton = ({ item }: { item: NavItem }) => {
+    const isActive = pathname === item.href;
+    return (
+      <Button
+        key={item.label}
+        variant={isActive ? "secondary" : "ghost"}
+        className={cn(
+          "w-full justify-start",
+          isActive
+            ? "bg-[#F0F4FF] text-[#635BFF]"
+            : "text-gray-600 hover:bg-[#F0F4FF] hover:text-[#635BFF]"
+        )}
+        asChild
+      >
+        <Link href={item.href} prefetch>
+          {item.icon}
+          {item.label}
+        </Link>
+      </Button>
+    );
   };
 
   return (
-    <nav className="space-y-1">
-      {["Dashboard", /*  "Calendar", "Analytics",  */ "Question Bank", "Practice History"].map(
-        (item) => (
-          <Button
-            key={item}
-            variant={activeNav === item ? "secondary" : "ghost"}
-            className={`w-full justify-start ${
-              activeNav === item ? "bg-[#F0F4FF] text-[#635BFF]" : "text-gray-600"
-            } hover:bg-[#F0F4FF] hover:text-[#635BFF]`}
-            onClick={() => handleNavClick(item)}
-          >
-            {item === "Dashboard" && <Home className="mr-2 h-4 w-4" />}
-            {item === "Calendar" && <Calendar className="mr-2 h-4 w-4" />}
-            {item === "Analytics" && <BarChart2 className="mr-2 h-4 w-4" />}
-            {item === "Question Bank" && <BookOpen className="mr-2 h-4 w-4" />}
-            {item === "Practice History" && <History className="mr-2 h-4 w-4" />}
-            {item}
-          </Button>
-        )
-      )}
-    </nav>
+    <div className="flex h-full flex-col justify-between">
+      <nav className="space-y-1">
+        {mainNavItems.map((item) => (
+          <NavButton key={item.label} item={item} />
+        ))}
+      </nav>
+      <nav className="space-y-1">
+        {bottomNavItems.map((item) => (
+          <NavButton key={item.label} item={item} />
+        ))}
+      </nav>
+    </div>
   );
 }

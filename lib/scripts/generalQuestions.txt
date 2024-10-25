@@ -1,0 +1,239 @@
+A new study claims that a popular medication is linked to severe side effects, but other studies contradict this finding. How would you evaluate the validity of this new research before making clinical decisions? [Critical Thinking]
+
+You are part of a committee tasked with allocating limited funds between preventive care and treatment for existing conditions. How would you approach this decision? [Decision Making]
+
+A patient presents with a rare combination of symptoms that do not fit any known diagnosis. Outline your thought process for determining the next steps in their care. [Critical Thinking]
+
+Discuss how you would assess the potential benefits and risks of implementing a new, unproven medical technology in patient care. [Decision Making]
+
+You have two patients in critical condition but only one available ICU bed. How would you decide who gets the bed? [Medical Ethics]
+
+A pharmaceutical company offers a lucrative sponsorship for your research but requests early access to the results. Analyze the ethical and professional considerations involved. [Research Ethics]
+
+Evaluate the impact of cultural beliefs on medical decision-making and how you would navigate conflicts between a patient's cultural practices and standard medical advice. [Cultural Competency]
+
+A proposed healthcare policy aims to prioritize younger patients over older ones for certain treatments. Critically assess the implications of this policy. [Healthcare Policy]
+
+How would you approach the challenge of diagnosing a patient when diagnostic tests are inconclusive, and there is pressure to start treatment immediately? [Decision Making]
+
+Consider the potential consequences of over-reliance on artificial intelligence in medical diagnostics. What safeguards would you propose? [Critical Thinking]
+
+A colleague suggests implementing a cost-saving measure that might compromise patient privacy. How would you evaluate this proposal? [Ethics]
+
+Discuss the ethical and practical considerations of mandatory vaccination programs in the face of public resistance. [Healthcare Policy]
+
+You are reviewing a clinical trial that was conducted with a small, non-diverse sample population. How would this affect your interpretation of the results? [Research Ethics]
+
+A patient is eligible for a clinical trial that could potentially benefit them but also carries significant risks. How would you present this option to them? [Communication]
+
+Analyze the pros and cons of implementing a universal healthcare system in terms of quality of care and accessibility. [Healthcare Policy]
+
+You notice a discrepancy in patient outcomes between two demographic groups within your hospital. Outline how you would investigate and address this issue. [Social Issues]
+
+A new law requires reporting of patient genetic information to a national database. Critically examine the ethical implications of this mandate. [Ethics]
+
+How would you balance the need for patient autonomy with public health concerns during a contagious disease outbreak? [Medical Ethics]
+
+Evaluate the potential effects of telemedicine on the doctor-patient relationship and propose strategies to mitigate any negative impacts. [Patient Care]
+
+A senior physician insists on using an outdated treatment protocol. How would you assess the situation and decide whether to intervene? [Professionalism]
+
+Discuss how you would approach resource allocation during a mass casualty event when medical supplies are limited. [Decision Making]
+
+You are asked to recommend cost-cutting measures for your clinic that could affect patient services. How would you approach this task? [Leadership]
+
+A patient refuses a blood transfusion due to religious beliefs but is unlikely to survive without it. Analyze how you would handle this situation. [Medical Ethics]
+
+Consider the ethical and logistical challenges of implementing electronic health records in a rural clinic with limited resources. [Healthcare Policy]
+
+A research study you are conducting yields unexpected results that could have negative societal implications if published. How would you proceed? [Research Ethics]
+
+Evaluate the role of placebo treatments in clinical practice and discuss under what circumstances, if any, they should be used. [Medical Ethics]
+
+How would you address the issue of antibiotic resistance when patients demand antibiotics for viral infections? [Patient Care]
+
+A new policy proposes that patients with lifestyle-related illnesses should pay more for healthcare. Critically assess this policy. [Healthcare Policy]
+
+Discuss the challenges and potential solutions for ensuring equitable healthcare access in a highly privatized medical system. [Social Issues]
+
+You are developing a public health campaign but have limited data on the target population's behaviors. How would you design an effective strategy? [Healthcare Policy]
+
+You discover that a senior colleague is manipulating patient data to achieve better clinical trial results. How do you address this situation? [Research Ethics]
+
+A patient with a terminal illness wants to try an unapproved experimental treatment that has shown promise in other countries but is not yet authorized locally. How do you advise them? [Medical Ethics]
+
+During a pandemic, there's a shortage of ventilators. How would you decide which patients receive life-saving treatment? [Medical Ethics]
+
+You notice that a coworker is frequently late and seems distracted, potentially compromising patient care. How do you handle this? [Professionalism]
+
+A patient refuses a blood transfusion due to religious beliefs, but without it, they will likely die. How do you proceed? [Medical Ethics]
+
+You are part of a committee deciding whether to implement a new policy that could improve overall patient care but may disadvantage a minority group. What factors do you consider? [Ethics]
+
+A minor comes to you seeking contraception without their parents' knowledge. How do you handle their request while considering confidentiality and consent laws? [Medical Ethics]
+
+You suspect that a patient is a victim of domestic abuse, but they deny it when asked. What are your next steps? [Patient Care]
+
+Discuss the ethical considerations of using gene editing technologies like CRISPR in humans. [Research Ethics]
+
+A pharmaceutical company offers to fund your research if you promote their new drug. How do you navigate this potential conflict of interest? [Research Ethics]
+
+You are treating two patients in critical condition: one is a respected community leader, and the other has a criminal background. Resources allow you to save only one. How do you decide? [Medical Ethics]
+
+A patient's family insists on pursuing aggressive treatment, but you believe it will only prolong suffering. How do you communicate your professional opinion? [Communication]
+
+You learn that a popular over-the-counter medication has serious side effects not yet publicized. What is your responsibility? [Ethics]
+
+A colleague is using outdated practices that could harm patients. How do you address this without damaging professional relationships? [Professionalism]
+
+Discuss the ethics of mandatory vaccination policies for healthcare workers. [Healthcare Policy]
+
+You are aware that medical errors are underreported in your institution due to fear of repercussions. How would you address this culture? [Patient Care]
+
+A patient asks you to keep a diagnosis of a sexually transmitted infection confidential from their spouse. How do you handle this request? [Medical Ethics]
+
+How would you approach a situation where resource allocation decisions might unintentionally discriminate against a vulnerable population? [Social Issues]
+
+You are treating a patient who is an undocumented immigrant and fears deportation if they seek medical help. How do you provide care while respecting their concerns? [Cultural Competency]
+
+Discuss the ethical implications of using artificial intelligence to make diagnostic decisions in healthcare. [Medical Ethics]
+
+A terminally ill patient requests assistance in hastening death in a region where physician-assisted dying is legal. How do you respond? [Medical Ethics]
+
+You notice a pattern of racial bias in patient treatment within your department. What steps do you take to address it? [Social Issues]
+
+A patient's religious beliefs prohibit them from accepting certain medical treatments for their child. How do you navigate this conflict to ensure the child's well-being? [Cultural Competency]
+
+You are asked to participate in a marketing campaign for a new drug that you believe offers no significant benefit over existing treatments. What do you do? [Ethics]
+
+How do you handle a situation where a patient prefers traditional healing methods over medical advice that you believe is critical for their health? [Cultural Competency]
+
+A colleague shares confidential patient information in a social setting outside of work. How do you address this breach of ethics? [Professionalism]
+
+You are involved in a study that requires placebo use in patients who are seriously ill. Discuss the ethical considerations. [Research Ethics]
+
+A patient is unable to pay for their treatment and asks for it to be billed under another patient's insurance. How do you respond? [Ethics]
+
+You are treating a patient who expresses extremist views that conflict with your personal values. How do you ensure they receive unbiased care? [Professionalism]
+
+Discuss the ethical challenges of implementing telemedicine in underserved communities with limited access to technology. [Healthcare Policy]
+
+A patient from a low-income background is unable to afford a life-saving medication. How should you, as their physician, navigate this situation to ensure they receive proper care? [Social Issues]
+
+Discuss the ethical implications of a healthcare system where access to advanced treatments is determined by a patient's ability to pay. [Healthcare Policy]
+
+You encounter a colleague making biased remarks about a patient based on their ethnicity. How would you address this situation to promote a more inclusive environment? [Cultural Competency]
+
+How should medical professionals balance respecting cultural beliefs with providing evidence-based care when the two are in conflict? [Cultural Competency]
+
+Consider the impact of social determinants of health on patient outcomes. What role do physicians have in addressing these factors beyond clinical care? [Social Issues]
+
+Discuss the challenges and strategies for obtaining informed consent from patients with limited health literacy. [Communication]
+
+A community is facing a measles outbreak due to low vaccination rates influenced by cultural beliefs. How would you approach increasing vaccination acceptance in this community? [Cultural Competency]
+
+What are the ethical considerations of providing experimental treatments to terminally ill patients who have exhausted all other options? [Medical Ethics]
+
+How can the medical community address the underrepresentation of minority groups in clinical research to ensure findings are applicable to diverse populations? [Social Issues]
+
+You are treating a transgender patient who feels uncomfortable due to previous negative healthcare experiences. How would you ensure they receive respectful and competent care? [Cultural Competency]
+
+Discuss the potential consequences of implicit bias in healthcare and strategies to mitigate its impact on patient care. [Cultural Competency]
+
+What responsibilities do physicians have in advocating for policy changes that address public health issues like obesity and smoking? [Healthcare Policy]
+
+How should healthcare providers respond when a patient refuses treatment for their child based on personal or religious beliefs that may harm the child's well-being? [Medical Ethics]
+
+Consider the ethical dilemmas involved in allocating scarce medical resources during a crisis, such as ventilators during a pandemic. [Medical Ethics]
+
+What role does social media play in the patient-physician relationship, and how should physicians navigate professional boundaries online? [Professionalism]
+
+Discuss the challenges faced by patients with mental health disorders in accessing care and how healthcare providers can improve support for these patients. [Patient Care]
+
+You notice that a new medical device being marketed heavily has not been adequately tested on diverse populations. How would you address this concern? [Research Ethics]
+
+How can physicians contribute to reducing health disparities caused by environmental factors, such as pollution in low-income neighborhoods? [Social Issues]
+
+A patient confides that they are a victim of domestic abuse but asks you not to report it. How do you handle this situation, balancing ethical obligations and patient trust? [Medical Ethics]
+
+Discuss the impact of globalization on the spread of infectious diseases and the responsibilities of healthcare professionals in preventing pandemics. [Healthcare Policy]
+
+What are the ethical considerations of conducting medical missions in developing countries, and how can they be addressed to ensure sustainable benefits? [Ethics]
+
+How should the healthcare system address the needs of aging populations while managing limited resources? [Healthcare Policy]
+
+Consider the role of physicians in recognizing and addressing human trafficking among their patients. [Social Issues]
+
+Discuss the implications of direct-to-consumer genetic testing and how physicians should respond to patients seeking guidance on these results. [Patient Care]
+
+You are aware that socioeconomic status significantly affects patient adherence to treatment plans. How would you tailor your approach to improve compliance? [Social Issues]
+
+What strategies can medical schools implement to foster a more diverse and culturally competent workforce? [Cultural Competency]
+
+How should healthcare providers approach conversations about end-of-life care with patients from cultures that avoid discussing death? [Cultural Competency]
+
+Discuss the ethical challenges of implementing mandatory reporting laws for infectious diseases that carry social stigma, such as HIV. [Medical Ethics]
+
+A patient requests a medical procedure that you believe is unnecessary and potentially harmful, influenced by misinformation. How do you counsel the patient? [Communication]
+
+What is the role of physicians in addressing and mitigating the health impacts of climate change on vulnerable populations? [Social Issues]
+
+A patient doesn't understand the instructions you've given for their medication regimen. How would you ensure they comprehend and feel comfortable following it? [Communication]
+
+You witness a colleague giving misleading information to a patient due to a communication breakdown. How would you address this with your colleague? [Communication]
+
+Explain a complex medical procedure, like an MRI scan, to a child in a way they can understand and feel at ease with. [Communication]
+
+During a team project, one member is not effectively communicating their progress, causing delays. How would you approach this situation? [Teamwork]
+
+A non-English speaking patient needs important pre-surgery instructions, but no interpreter is immediately available. How would you handle the communication? [Communication]
+
+You are tasked with delivering bad news to a patient about a terminal diagnosis. Describe how you would communicate this sensitively and supportively. [Communication]
+
+A patient's family member is upset and confrontational due to perceived lack of communication from the healthcare team. How would you address their concerns? [Communication]
+
+You're in a leadership role and notice that team meetings are unproductive due to poor communication dynamics. What steps would you take to improve this? [Leadership]
+
+Explain the importance of a new hospital policy to staff who are resistant to change, ensuring they understand and accept the new procedures. [Leadership]
+
+A colleague often uses technical jargon when speaking with patients, leading to confusion. How would you advise them to improve their communication with patients? [Communication]
+
+You are caring for a patient who speaks a different language and no interpreter is available. What alternative methods would you use to communicate effectively? [Communication]
+
+A patient's family disagrees with the proposed treatment plan and communication has broken down. How would you facilitate a constructive dialogue to reach a consensus? [Communication]
+
+Describe how you would adjust your communication style when speaking with an elderly patient versus a teenage patient. [Communication]
+
+You receive critical feedback from a supervisor about your communication skills. How would you respond and what steps would you take to improve? [Personal Growth]
+
+In a multidisciplinary team meeting, you notice that your suggestions are being overlooked. How would you assertively communicate your ideas? [Teamwork]
+
+How would you handle a situation where a patient's religious beliefs conflict with medical advice, impacting communication and consent? [Cultural Competency]
+
+You need to explain a complex health condition to a patient with low health literacy. Describe your approach to ensure they understand. [Communication]
+
+A colleague shares confidential patient information in a public area. How would you address this breach of communication protocol? [Professionalism]
+
+Discuss the role of non-verbal communication in patient interactions and how you would use it to enhance understanding. [Communication]
+
+Explain how you would use telemedicine to communicate effectively with patients in remote areas, considering potential technological barriers. [Communication]
+
+You are working with a patient who is hard of hearing and reads lips. Due to mask protocols, they can't understand you. How would you adapt your communication? [Communication]
+
+A patient's family is pressuring you to withhold certain medical information from the patient. How do you navigate this communication dilemma? [Communication]
+
+Describe how you would handle a situation where a patient refuses to speak with you due to a lack of trust. How would you build rapport? [Communication]
+
+You need to communicate complex genetic test results to a patient with limited scientific background. How would you ensure they understand? [Communication]
+
+During a critical procedure, a team member makes a mistake but is unaware of it. How would you communicate this to them without disrupting the team's performance? [Teamwork]
+
+Explain how technology, like electronic health records, can both aid and hinder effective communication in healthcare. How would you maximize its benefits? [Communication]
+
+A patient is using alternative medicine and is skeptical of conventional treatments. How would you communicate to bridge this gap in understanding? [Communication]
+
+You are assigned to a community outreach program in a culturally diverse neighborhood. How would you tailor your communication to effectively engage the community? [Cultural Competency]
+
+Discuss a time when you had to deliver constructive feedback to a peer who was not receptive. How did you approach the communication? [Communication]
+
+How would you handle a situation where miscommunication has led to a medical error? Describe the steps you would take to address it with the patient and the team. [Communication]

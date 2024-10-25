@@ -6,4 +6,5 @@ export const ROUTES = {
   LIVEKIT_TEST: "/livekit-test",
   MOCK_RESULT: (id: string) => `/mock/${id}/result`,
   MOCK: (id: string) => `/mock/${id}`,
+  SETTINGS: "/settings",
 } as const;

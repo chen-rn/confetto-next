@@ -13,7 +13,7 @@ interface MedicalSchool {
 async function seedMedicalSchools() {
   try {
     // Read the CSV file
-    const csvPath = path.join(process.cwd(), "medical_schools.csv");
+    const csvPath = path.join(process.cwd(), "./lib/scripts/medical_schools.csv");
     const fileContent = fs.readFileSync(csvPath, "utf-8");
 
     // Parse CSV content
