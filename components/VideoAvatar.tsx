@@ -11,8 +11,16 @@ export function VideoAvatar() {
   // Get the voice assistant state
   const { state } = useVoiceAssistant();
   const isSpeaking = state === "speaking";
+  // Fix the isDisconnected logic
+  const isDisconnected =
+    state === "disconnected" || state === "initializing" || state === "connecting";
+
+  console.log("state", state);
+  console.log("isDisconnected", isDisconnected);
 
   useEffect(() => {
+    if (isDisconnected) return;
+
     const talkingVideo = talkingVideoRef.current;
     const idleVideo = idleVideoRef.current;
 
@@ -57,7 +65,18 @@ export function VideoAvatar() {
       };
       playIdle();
     }
-  }, [isSpeaking]);
+  }, [isSpeaking, isDisconnected]);
+
+  if (isDisconnected) {
+    return (
+      <div className="relative w-full h-full bg-black flex items-center justify-center">
+        <div className="text-center space-y-2">
+          <p className="text-white/80 text-lg">AI Interviewer is not connected</p>
+          <p className="text-white/60 text-sm">Please wait while the AI joins the room...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-full z-0">
