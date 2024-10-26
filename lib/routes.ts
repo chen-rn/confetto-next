@@ -3,6 +3,8 @@ export const ROUTES = {
   DASHBOARD: "/dashboard",
   QUESTION_BANK: "/question-bank",
   MOCK_HISTORY: "/practice-history",
+  SETTINGS: "/settings",
+
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
   PRICING: "/pricing",
@@ -10,12 +12,17 @@ export const ROUTES = {
   LIVEKIT_TEST: "/livekit-test",
   MOCK_RESULT: (id: string) => `/mock/${id}/result`,
   MOCK: (id: string) => `/mock/${id}`,
-  SETTINGS: "/settings",
-  CREATE_MOCK: "/create-mock", // Added this since it's used in the dashboard
 } as const;
 
-// Routes that don't require authentication and shouldn't show the sidebar
-export const PUBLIC_ROUTES = [ROUTES.SIGN_IN, ROUTES.SIGN_UP, ROUTES.PRICING] as const;
+// Routes that should show the sidebar
+export const SIDEBAR_ROUTES = [
+  ROUTES.DASHBOARD,
+  ROUTES.QUESTION_BANK,
+  ROUTES.MOCK_HISTORY,
+  ROUTES.SETTINGS,
+] as const;
 
-// Routes that require authentication but shouldn't show the sidebar
-export const NO_SIDEBAR_ROUTES = [ROUTES.ONBOARDING, ...PUBLIC_ROUTES] as const;
+// Helper function to check if a route should show the sidebar
+export function shouldShowSidebar(pathname: string): boolean {
+  return SIDEBAR_ROUTES.includes(pathname as any);
+}

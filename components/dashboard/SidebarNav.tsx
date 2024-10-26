@@ -17,7 +17,7 @@ const mainNavItems: NavItem[] = [
   {
     label: "Dashboard",
     icon: <Home className="mr-2 h-4 w-4" />,
-    href: ROUTES.HOME,
+    href: ROUTES.DASHBOARD,
   },
   {
     label: "Question Bank",
@@ -49,9 +49,9 @@ export function SidebarNav() {
         key={item.label}
         variant={isActive ? "secondary" : "ghost"}
         className={cn(
-          "w-full justify-start",
+          "w-full justify-start relative",
           isActive
-            ? "bg-[#F0F4FF] text-[#635BFF]"
+            ? "bg-[#F0F4FF] text-[#635BFF] border-l-2 border-[#635BFF]"
             : "text-gray-600 hover:bg-[#F0F4FF] hover:text-[#635BFF]"
         )}
         asChild

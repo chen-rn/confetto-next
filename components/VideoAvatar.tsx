@@ -71,8 +71,8 @@ export function VideoAvatar() {
     return (
       <div className="relative w-full h-full bg-black flex items-center justify-center">
         <div className="text-center space-y-2">
-          <p className="text-white/80 text-lg">AI Interviewer is not connected</p>
-          <p className="text-white/60 text-sm">Please wait while the AI joins the room...</p>
+          <p className="text-white/80 text-lg">Your interviewer is connecting...</p>
+          <p className="text-white/60 text-sm">Please wait...</p>
         </div>
       </div>
     );

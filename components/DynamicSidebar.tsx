@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
-import { NO_SIDEBAR_ROUTES } from "@/lib/routes";
+import { shouldShowSidebar } from "@/lib/routes";
 import { SidebarNav } from "@/components/dashboard/SidebarNav";
 
 interface DynamicSidebarProps {
@@ -13,13 +13,11 @@ export function DynamicSidebar({ children }: DynamicSidebarProps) {
   const { isSignedIn } = useAuth();
   const pathname = usePathname();
 
-  // Check if current route should hide sidebar
-  const shouldHideSidebar = NO_SIDEBAR_ROUTES.some((route) =>
-    typeof route === "string" ? pathname === route : pathname.startsWith(route)
-  );
+  // Check if current route should show sidebar
+  const showSidebar = shouldShowSidebar(pathname);
 
   // If not signed in or route should hide sidebar, render without sidebar
-  if (!isSignedIn || shouldHideSidebar) {
+  if (!isSignedIn || !showSidebar) {
     return <div className="flex-1 overflow-auto bg-gray-50 w-full">{children}</div>;
   }
 
