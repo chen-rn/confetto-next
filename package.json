@@ -12,7 +12,10 @@
     "format": "biome format .",
     "lint": "biome check .",
     "postinstall": "npx prisma generate",
-    "db:seed": "ts-node prisma/seed.ts"
+    "db:seed": "ts-node prisma/seed.ts",
+    "stripe:setup": "bun run scripts/stripe-setup.ts",
+    "stripe:create-trial": "bun run scripts/create-trial-coupon.ts",
+    "migrate:subscription": "bun run scripts/migrate-subscription-status.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.1",
@@ -66,7 +69,9 @@
     "biome": "^0.3.3",
     "postcss": "^8",
     "prisma": "^5.20.0",
+    "stripe": "^17.2.1",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.1",
     "typescript": "^5"
   }
 }
