@@ -2,16 +2,12 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import type { TagType } from "@prisma/client";
+import type { QuestionTag, TagType } from "@prisma/client";
 import { useQueryState } from "nuqs";
 import { useTransition } from "react";
 
 interface QuestionFiltersProps {
-  tags: {
-    id: string;
-    name: string;
-    type: TagType;
-  }[];
+  tags: QuestionTag[];
 }
 
 export function QuestionFilters({ tags }: QuestionFiltersProps) {

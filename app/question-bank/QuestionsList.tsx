@@ -3,27 +3,16 @@
 import { StartMockInterviewButton } from "@/components/buttons/StartMockInterviewButton";
 import { Card } from "@/components/ui/card";
 import type { Question, QuestionTag } from "@prisma/client";
-import { useSearchParams } from "next/navigation";
 
 interface QuestionsListProps {
-  questions: (Question & {
-    tags: QuestionTag[];
-  })[];
+  questions: (Question & { tags: QuestionTag[] })[];
   userId: string;
 }
 
 export function QuestionsList({ questions, userId }: QuestionsListProps) {
-  const searchParams = useSearchParams();
-  const selectedTags = searchParams.get("tags")?.split(",") || [];
-
-  const filteredQuestions =
-    selectedTags.length > 0
-      ? questions.filter((question) => question.tags.some((tag) => selectedTags.includes(tag.name)))
-      : questions;
-
   return (
     <div className="space-y-4">
-      {filteredQuestions.map((question) => (
+      {questions.map((question) => (
         <Card key={question.id} className="p-4">
           <div className="flex justify-between items-start gap-4">
             <div className="flex-grow">
@@ -41,7 +30,7 @@ export function QuestionsList({ questions, userId }: QuestionsListProps) {
         </Card>
       ))}
 
-      {filteredQuestions.length === 0 && (
+      {questions.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           No questions found matching the selected filters.
         </div>

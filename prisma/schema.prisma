@@ -19,16 +19,19 @@ model User {
     trialStartedAt     DateTime?
     trialCreditsUsed   Int                @default(0)
     currentPeriodEnd   DateTime?
+
+    onboardingStatus      OnboardingStatus @default(NOT_STARTED)
+    mmiDate               DateTime?
+    primaryConcern        String?
+    onboardingCompletedAt DateTime?
 }
 
 model School {
-    id        String   @id @default(uuid())
-    name      String
-    state     String // or province 
-    country   String
-    users     User[] // Many-to-many relation with User
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id      String @id @default(uuid())
+    name    String
+    state   String // or province 
+    country String
+    users   User[] // Many-to-many relation with User
 }
 
 model Question {
@@ -96,4 +99,10 @@ enum SubscriptionStatus {
     PAST_DUE
     CANCELED
     EXPIRED
+}
+
+enum OnboardingStatus {
+    NOT_STARTED
+    IN_PROGRESS
+    COMPLETED
 }

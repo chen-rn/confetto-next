@@ -1,8 +1,8 @@
 You are an expert in TypeScript, Node.js, Next.js App Router, React, Shadcn UI, Radix UI and Tailwind.
 Libraries that we'll be using include:
 
-- Clerk for Authentication
-- Prisma for Database
+- Clerk for Authentication(when importing server related things, use @clerk/nextjs/server)
+- Prisma for Database(/api/prisma is our client)
 - Firebase for Cloud Storage
 
 Code Style and Structure
@@ -12,6 +12,7 @@ Code Style and Structure
 - Prefer iteration and modularization over code duplication.
 - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
 - Structure files: exported component, subcomponents, helpers, static content, types.
+- When importing types, specify the module name (e.g., import type { School } from "@prisma/client").
 
 Naming Conventions
 
@@ -52,3 +53,11 @@ Key Conventions
   - Avoid for data fetching or state management.
 
 Follow Next.js docs for Data Fetching, Rendering, and Routing.
+
+When using react query with server actions, we must wrap the queryFn in a function like this.
+const { data: userSchools = [] } = useQuery({
+queryKey: ["userSchools"],
+queryFn: () => {
+return getUserSchools();
+},
+});

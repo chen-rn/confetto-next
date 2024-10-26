@@ -22,7 +22,7 @@ const mainNavItems: NavItem[] = [
   {
     label: "Question Bank",
     icon: <BookOpen className="mr-2 h-4 w-4" />,
-    href: ROUTES.CREATE_MOCK,
+    href: ROUTES.QUESTION_BANK,
   },
   {
     label: "Practice History",
