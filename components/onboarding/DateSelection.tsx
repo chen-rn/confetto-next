@@ -1,5 +1,3 @@
-"use client";
-
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
