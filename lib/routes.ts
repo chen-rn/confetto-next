@@ -11,6 +11,7 @@ export const ROUTES = {
   MOCK_RESULT: (id: string) => `/mock/${id}/result`,
   MOCK: (id: string) => `/mock/${id}`,
   SETTINGS: "/settings",
+  CREATE_MOCK: "/create-mock", // Added this since it's used in the dashboard
 } as const;
 
 // Routes that don't require authentication and shouldn't show the sidebar

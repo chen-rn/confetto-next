@@ -232,7 +232,7 @@ The database schema is defined using Prisma ORM and includes the following model
 
 3. **Dashboard:**
 
-   - **URL:** `/dashboard`
+   - **URL:** `/`
    - **Description:** Displays user statistics, recent practice sessions, and a button to start a new session. Shows progress charts using dynamic data.
 
 4. **Practice Session Page:**
