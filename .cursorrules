@@ -61,3 +61,115 @@ queryFn: () => {
 return getUserSchools();
 },
 });
+
+Here's my schema, for your reference, no need to change unless necessary:
+generator client {
+provider = "prisma-client-js"
+}
+
+datasource db {
+provider = "postgresql" // or your preferred database
+url = env("DATABASE_URL")
+}
+
+model User {
+id String @id @default(uuid())
+mockInterviews MockInterview[]
+schools School[] // Many-to-many relation with School
+
+    // Subscription related fields
+    stripeCustomerId   String?            @unique
+    subscriptionStatus SubscriptionStatus @default(NOT_SUBSCRIBED)
+    stripePriceId      String? // Store the active price ID instead of enum
+    trialStartedAt     DateTime?
+    trialCreditsUsed   Int                @default(0)
+    currentPeriodEnd   DateTime?
+
+    onboardingStatus OnboardingStatus @default(NOT_STARTED)
+    mmiDate          DateTime?
+    primaryConcern   String?
+
+}
+
+model School {
+id String @id @default(uuid())
+name String
+state String // or province
+country String
+users User[] // Many-to-many relation with User
+}
+
+model Question {
+id String @id @default(uuid())
+content String
+evaluationCriteria String?
+tags QuestionTag[] // Now handles both topics and other tags
+
+    mockInterviews MockInterview[]
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
+
+}
+
+model QuestionTag {
+id String @id @default(uuid())
+name String @unique
+type TagType // Updated enum below to include TOPIC type
+questions Question[]
+
+    @@index([name])
+
+}
+
+enum TagType {
+TOPIC // New type for former TopicName items
+STATE
+COUNTRY
+}
+
+model MockInterview {
+id String @id @default(uuid())
+user User @relation(fields: [userId], references: [id])
+userId String
+question Question @relation(fields: [questionId], references: [id])
+questionId String
+recordingUrl String? // This will store the audio URL
+videoUrl String? // This will store the video URL
+recordingTranscription String?
+feedback Feedback?
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Feedback {
+id String @id @default(uuid())
+mockInterview MockInterview @relation(fields: [mockInterviewId], references: [id])
+mockInterviewId String @unique
+overallScore Int @default(0)
+overallFeedback String @default("")
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model FeedbackPrompt {
+id String @id @default(cuid())
+name String @unique
+prompt String @db.Text
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+enum SubscriptionStatus {
+NOT_SUBSCRIBED
+TRIAL
+ACTIVE
+PAST_DUE
+CANCELED
+EXPIRED
+}
+
+enum OnboardingStatus {
+NOT_STARTED
+IN_PROGRESS
+COMPLETED
+}

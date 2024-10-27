@@ -1,4 +1,3 @@
-import { openai } from "../apis/openai";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 
 interface CallGPT4Options {
@@ -152,6 +151,7 @@ Say if abortion was banned in BC, how do you think it will impact the number of 
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import { openai } from "@/lib/openai";
 async function saveGPT4Response() {
   try {
     const response = await callGPT4({

@@ -76,7 +76,8 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
         });
         setStep(STEPS.TRIAL);
       } else if (step === STEPS.TRIAL) {
-        router.push("/trial");
+        // When they complete trial, send them to pricing
+        router.push("/pricing?redirect=/welcome");
       } else {
         setStep((prev) => (prev + 1) as StepType);
       }

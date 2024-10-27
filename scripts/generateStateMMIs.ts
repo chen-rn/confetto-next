@@ -1,7 +1,6 @@
-import { prisma } from "../apis/prisma";
 import allQuestions from "./state specific mmi_questions o1mini/all_questions.json";
 import allCanadianQuestions from "./state specific mmi_questions o1mini/all_canadian_questions.json";
-import { getTagByName } from "../constants/tags";
+import { prisma } from "@/lib/prisma";
 
 // Helper function to process questions in batches
 async function processBatch(questions: any[], batchSize: number) {

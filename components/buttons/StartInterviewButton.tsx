@@ -34,7 +34,7 @@ export function StartInterviewButton({ user, className }: StartInterviewButtonPr
 
   function handleStartClick() {
     if (isEligible) {
-      router.push("/interview/new");
+      router.push("/mock/new");
     } else {
       setShowDialog(true);
     }

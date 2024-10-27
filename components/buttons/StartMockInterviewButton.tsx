@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
 import { createMockInterview } from "@/lib/actions/createMockInterview";
+import { Loader2 } from "lucide-react";
 
 interface StartMockInterviewButtonProps {
   questionId: string;
@@ -27,8 +28,20 @@ export function StartMockInterviewButton({ questionId, userId }: StartMockInterv
   };
 
   return (
-    <Button onClick={handleStartMockInterview} disabled={isLoading}>
-      {isLoading ? "Starting..." : "Start"}
+    <Button
+      onClick={handleStartMockInterview}
+      disabled={isLoading}
+      size="lg"
+      className="min-w-[200px]"
+    >
+      {isLoading ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Preparing...
+        </>
+      ) : (
+        "Start Interview"
+      )}
     </Button>
   );
 }

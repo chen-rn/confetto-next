@@ -1,4 +1,4 @@
-import { openai } from "../apis/openai";
+import { openai } from "@/lib/openai";
 import fs from "node:fs/promises";
 import path from "node:path";
 

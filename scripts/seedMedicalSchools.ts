@@ -1,7 +1,7 @@
+import { prisma } from "@/lib/prisma";
 import { parse } from "csv-parse/sync";
 import fs from "node:fs";
 import path from "node:path";
-import { prisma } from "../apis/prisma";
 
 interface MedicalSchool {
   country: string;

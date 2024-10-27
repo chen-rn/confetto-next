@@ -46,7 +46,8 @@ export async function createCheckoutSession(priceId: string) {
     stripeCustomerId = customer.id;
   }
 
-  const returnUrl = absoluteUrl("/dashboard"); // Changed to redirect to dashboard after trial starts
+  // Change the return URL based on whether it's a new trial or not
+  const returnUrl = hasHadTrial ? absoluteUrl("/dashboard") : absoluteUrl("/welcome");
 
   const session = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,
