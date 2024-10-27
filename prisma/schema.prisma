@@ -20,10 +20,9 @@ model User {
     trialCreditsUsed   Int                @default(0)
     currentPeriodEnd   DateTime?
 
-    onboardingStatus      OnboardingStatus @default(NOT_STARTED)
-    mmiDate               DateTime?
-    primaryConcern        String?
-    onboardingCompletedAt DateTime?
+    onboardingStatus OnboardingStatus @default(NOT_STARTED)
+    mmiDate          DateTime?
+    primaryConcern   String?
 }
 
 model School {

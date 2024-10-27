@@ -16,9 +16,6 @@ export default async function MockHistoryPage() {
   return (
     <div className="container mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
-        <Link href={ROUTES.HOME}>
-          <Button variant="outline">Home</Button>
-        </Link>
         <h1 className="text-3xl font-bold">Mock Interview History</h1>
         <div className="w-24" />
       </div>

@@ -8,7 +8,7 @@ import {
   isProcessingAtom,
   isCountingDownAtom,
   countdownTimeAtom,
-} from "@/lib/atoms/interviewAtoms";
+} from "@/lib/atoms/interview";
 import { useIsSpeaking, useParticipants } from "@livekit/components-react";
 
 export function VideoViewfinder() {

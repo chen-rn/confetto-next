@@ -1,4 +1,4 @@
-import { openrouter } from "../apis/openrouter";
+import { openrouter } from "../openrouter";
 
 export async function extractCriteriaAndWeights(analysis: string): Promise<string> {
   const prompt = `

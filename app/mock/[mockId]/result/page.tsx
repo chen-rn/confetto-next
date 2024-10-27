@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/apis/prisma";
-import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import { prisma } from "@/lib/prisma";
+import { MarkdownRenderer } from "@/app/mock/[mockId]/result/MarkdownRenderer";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
@@ -8,8 +8,8 @@ import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { revalidatePath } from "next/cache";
 import { Loader2 } from "lucide-react";
-import { ProcessingMessage } from "@/components/ProcessingMessage";
-import { CollapsibleTranscription } from "@/components/CollapsibleTranscription";
+import { ProcessingMessage } from "@/app/mock/[mockId]/result/ProcessingMessage";
+import { CollapsibleTranscription } from "@/app/mock/[mockId]/result/CollapsibleTranscription";
 
 interface ResultPageProps {
   params: {

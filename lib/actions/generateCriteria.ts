@@ -1,7 +1,7 @@
 // Start of Selection
 "use server";
 
-import { openai } from "../apis/openai";
+import { openai } from "../openai";
 import { extractCriteriaAndWeights } from "./extractCriteriaAndWeights";
 
 export async function generateCriteria(questionContent: string): Promise<string> {

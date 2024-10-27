@@ -24,5 +24,5 @@ export const SIDEBAR_ROUTES = [
 
 // Helper function to check if a route should show the sidebar
 export function shouldShowSidebar(pathname: string): boolean {
-  return SIDEBAR_ROUTES.includes(pathname as any);
+  return (SIDEBAR_ROUTES as readonly string[]).includes(pathname);
 }

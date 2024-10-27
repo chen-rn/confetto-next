@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { prisma } from "../apis/prisma";
+import { prisma } from "../prisma";
 import { redirect } from "next/navigation";
 
 /**

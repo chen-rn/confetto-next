@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
-import { prisma } from "@/lib/apis/prisma";
+import { OnboardingFlow } from "@/app/onboarding/OnboardingFlow";
+import { prisma } from "@/lib/prisma";
 
 export default async function OnboardingPage() {
   const { userId } = auth();

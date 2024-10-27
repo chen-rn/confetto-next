@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SchoolSelector } from "@/components/shared/SchoolSelector";
+import { SchoolSelector } from "@/components/SchoolSelector";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { addSchool, removeSchool, getUserSchools } from "@/lib/actions/schoolActions";

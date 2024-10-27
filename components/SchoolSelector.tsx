@@ -1,6 +1,4 @@
-"use client";
-
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import Fuse from "fuse.js";
 import {
@@ -39,7 +37,13 @@ export function SchoolSelector({
 }: SchoolSelectorProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [localSelectedSchools, setLocalSelectedSchools] = useState(selectedSchools);
   const debouncedSearch = useDebounce(search, 300);
+
+  // Update local state when prop changes
+  useEffect(() => {
+    setLocalSelectedSchools(selectedSchools);
+  }, [selectedSchools]);
 
   const { data: availableSchools = [], isLoading } = useQuery({
     queryKey: ["schools"],
@@ -81,6 +85,28 @@ export function SchoolSelector({
   const formatLocation = (state: string, country: string) =>
     country === "United States of America" ? `${state}, US` : `${state}, ${country}`;
 
+  const handleSchoolToggle = (school: School) => {
+    // Optimistically update local state
+    const isSelected = localSelectedSchools.some((s) => s.id === school.id);
+    if (isSelected) {
+      setLocalSelectedSchools(localSelectedSchools.filter((s) => s.id !== school.id));
+    } else {
+      setLocalSelectedSchools([...localSelectedSchools, school]);
+    }
+
+    // Call the parent handler
+    onSchoolToggle(school);
+    setOpen(false);
+  };
+
+  const handleSchoolRemove = (schoolId: string) => {
+    // Optimistically update local state
+    setLocalSelectedSchools(localSelectedSchools.filter((s) => s.id !== schoolId));
+
+    // Call the parent handler
+    onSchoolRemove(schoolId);
+  };
+
   return (
     <div className={cn("space-y-4", className)}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -91,9 +117,9 @@ export function SchoolSelector({
             aria-expanded={open}
             className="w-full justify-between bg-white"
           >
-            {selectedSchools.length > 0
-              ? `${selectedSchools.length} school${
-                  selectedSchools.length === 1 ? "" : "s"
+            {localSelectedSchools.length > 0
+              ? `${localSelectedSchools.length} school${
+                  localSelectedSchools.length === 1 ? "" : "s"
                 } selected`
               : buttonText}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -128,17 +154,14 @@ export function SchoolSelector({
                     <CommandItem
                       key={school.id}
                       value={school.name}
-                      onSelect={() => {
-                        onSchoolToggle(school);
-                        setOpen(false);
-                      }}
+                      onSelect={() => handleSchoolToggle(school)}
                       className="flex items-center py-2"
                     >
                       <div className="flex items-center w-full min-w-0">
                         <Check
                           className={cn(
                             "h-4 w-4 flex-shrink-0 mr-2",
-                            selectedSchools.some((s) => s.id === school.id)
+                            localSelectedSchools.some((s) => s.id === school.id)
                               ? "opacity-100"
                               : "opacity-0"
                           )}
@@ -162,13 +185,10 @@ export function SchoolSelector({
       </Popover>
 
       <div className="flex flex-wrap gap-2">
-        {selectedSchools.map((school) => (
+        {localSelectedSchools.map((school) => (
           <Badge key={school.id} variant="secondary" className="text-sm">
             {school.name}
-            <button
-              className="ml-1 rounded-full hover:bg-destructive/20"
-              onClick={() => onSchoolRemove(school.id)}
-            >
+            <button className="ml-1 rounded-full" onClick={() => handleSchoolRemove(school.id)}>
               <X className="h-3 w-3" />
             </button>
           </Badge>

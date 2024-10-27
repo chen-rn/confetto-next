@@ -6,10 +6,10 @@ import "@livekit/components-styles";
 import { Button } from "@/components/ui/button";
 import { useRecording } from "@/hooks/useRecording";
 import { useAtom, useAtomValue } from "jotai";
-import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interviewAtoms";
-import { VideoViewfinder } from "@/components/VideoViewfinder";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import { VideoAvatar } from "@/components/VideoAvatar";
+import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interview";
+import { VideoViewfinder } from "@/app/mock/[mockId]/VideoViewfinder";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
+import { VideoAvatar } from "@/app/mock/[mockId]/VideoAvatar";
 
 interface InterviewRoomProps {
   token: string;

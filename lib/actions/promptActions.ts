@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "../apis/prisma";
+import { prisma } from "../prisma";
 
 export async function getPrompts() {
   return prisma.feedbackPrompt.findMany();

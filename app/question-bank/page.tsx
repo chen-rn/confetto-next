@@ -19,9 +19,6 @@ export default async function QuestionBankPage() {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
-        <Link href={ROUTES.HOME}>
-          <Button variant="outline">Home</Button>
-        </Link>
         <h1 className="text-2xl font-bold">Practice Questions</h1>
       </div>
 

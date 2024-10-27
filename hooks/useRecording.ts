@@ -1,12 +1,12 @@
 import { useCallback, useRef } from "react";
 import { useSetAtom, useAtom } from "jotai";
 import { getSupportedMimeType } from "@/lib/utils/mediaUtils";
-import { uploadVideo, uploadAudioToFirebase } from "@/lib/apis/firebase";
+import { uploadVideo, uploadAudioToFirebase } from "@/lib/firebase";
 import { updateMockInterviewMedia } from "@/lib/actions/updateMockInterviewMedia";
 import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
-import { isRecordingAtom, isProcessingAtom, isUploadingAtom } from "@/lib/atoms/interviewAtoms";
+import { isRecordingAtom, isProcessingAtom, isUploadingAtom } from "@/lib/atoms/interview";
 import { useToast } from "@/hooks/use-toast";
 
 export function useRecording(mockId: string) {

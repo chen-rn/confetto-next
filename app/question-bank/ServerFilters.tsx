@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/apis/prisma";
+import { prisma } from "@/lib/prisma";
 import { QuestionFilters } from "./QuestionFilters";
 
 export async function ServerFilters() {

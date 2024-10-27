@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { SchoolSelector } from "@/components/shared/SchoolSelector";
+import { SchoolSelector } from "@/components/SchoolSelector";
 import type { School } from "@prisma/client";
 
 interface SchoolSelectionProps {

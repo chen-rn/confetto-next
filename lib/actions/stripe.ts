@@ -3,7 +3,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
-import { prisma } from "@/lib/apis/prisma";
+import { prisma } from "@/lib/prisma";
+import { SubscriptionStatus } from "@prisma/client";
 
 export async function createCheckoutSession(priceId: string) {
   const { userId } = auth();
@@ -34,13 +35,18 @@ export async function createCheckoutSession(priceId: string) {
 
     await prisma.user.update({
       where: { id: userId },
-      data: { stripeCustomerId: customer.id },
+      data: {
+        stripeCustomerId: customer.id,
+        // Update trial and subscription status when starting trial
+        trialStartedAt: new Date(),
+        subscriptionStatus: SubscriptionStatus.TRIAL,
+      },
     });
 
     stripeCustomerId = customer.id;
   }
 
-  const returnUrl = absoluteUrl("/pricing");
+  const returnUrl = absoluteUrl("/dashboard"); // Changed to redirect to dashboard after trial starts
 
   const session = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,

@@ -1,9 +1,9 @@
 "use server";
 
 import type { Feedback } from "@prisma/client";
-import { openai } from "../apis/openai";
-import { openrouter } from "../apis/openrouter";
-import { prisma } from "../apis/prisma";
+import { openai } from "../openai";
+import { openrouter } from "../openrouter";
+import { prisma } from "../prisma";
 
 interface GenerateFeedbackParams {
   question: string;

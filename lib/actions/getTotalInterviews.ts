@@ -1,6 +1,6 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
-import { prisma } from "../apis/prisma";
+import { prisma } from "../prisma";
 
 export async function getTotalInterviews() {
   const userId = auth().userId;

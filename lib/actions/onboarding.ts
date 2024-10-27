@@ -1,33 +1,33 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/apis/prisma";
-import { revalidatePath } from "next/cache";
+import { prisma } from "@/lib/prisma";
 import type { School } from "@prisma/client";
+import { OnboardingStatus } from "@prisma/client";
 
 interface OnboardingData {
-  mmiDate: Date | null;
-  schools: School[]; // Changed from Pick<School, "id">[]
-  primaryConcern: string | null;
+  mmiDate?: Date | null;
+  schools?: School[];
+  primaryConcern?: string | null;
+  onboardingStatus?: OnboardingStatus;
 }
 
 export async function updateOnboarding(data: OnboardingData) {
   const { userId } = auth();
-  if (!userId) throw new Error("Unauthorized");
 
-  const user = await prisma.user.update({
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  return prisma.user.update({
     where: { id: userId },
     data: {
       mmiDate: data.mmiDate,
       schools: {
-        set: data.schools.map((school) => ({ id: school.id })),
+        set: data.schools,
       },
       primaryConcern: data.primaryConcern,
-      onboardingStatus: "COMPLETED",
-      onboardingCompletedAt: new Date(),
+      onboardingStatus: data.onboardingStatus,
     },
   });
-
-  revalidatePath("/onboarding");
-  return user;
 }

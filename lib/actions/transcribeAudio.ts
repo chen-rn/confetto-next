@@ -1,7 +1,7 @@
 "use server";
 
-import { openai } from "../apis/openai";
-import { replicate } from "../apis/replicate";
+import { openai } from "../openai";
+import { replicate } from "../replicate";
 
 /**
  * Transcribes audio using OpenAI's Whisper model, with Replicate as a backup.

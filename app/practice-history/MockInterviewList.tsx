@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/apis/prisma";
-import { PracticeHistory } from "@/components/PracticeHistory";
+import { prisma } from "@/lib/prisma";
+import { PracticeHistory } from "@/app/practice-history/PracticeHistory";
 
 interface MockInterviewListProps {
   userId: string;

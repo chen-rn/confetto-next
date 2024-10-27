@@ -1,13 +1,14 @@
 import { Suspense } from "react";
-import { TotalInterviews } from "../../components/dashboard/TotalInterviews";
-import { CurrentStreak } from "../../components/dashboard/CurrentStreak";
-import { AverageScore } from "../../components/dashboard/AverageScore";
-import { RecentInterviewScores } from "../../components/dashboard/RecentInterviewScores";
-import { UpcomingInterviews } from "../../components/dashboard/UpcomingInterviews";
-import { Button } from "@/components/ui/button";
+import { TotalInterviews } from "./TotalInterviews";
+import { CurrentStreak } from "./CurrentStreak";
+import { AverageScore } from "./AverageScore";
+import { RecentInterviewScores } from "./RecentInterviewScores";
+import { UpcomingInterviews } from "./UpcomingInterviews";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
-import { ROUTES } from "@/lib/routes";
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import { StartInterviewButton } from "@/components/buttons/StartInterviewButton";
 
 function StatCardSkeleton() {
   return (
@@ -35,15 +36,27 @@ function ChartCardSkeleton() {
   );
 }
 
-export default function Dashboard() {
+export default async function DashboardPage() {
+  const { userId } = auth();
+
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
   return (
     <div className="flex h-screen bg-[#F7F9FC]">
       <div className="flex-1 p-10 overflow-auto">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl font-semibold text-gray-900">Welcome back, Brotha</h1>
-          <Button className="bg-purple-600 hover:bg-purple-700 text-white" asChild>
-            <Link href={ROUTES.QUESTION_BANK}>Start Interview</Link>
-          </Button>
+          <StartInterviewButton user={user} />
         </div>
         <p className="text-gray-500 mb-6 text-sm">
           Here's an overview of your interview practice progress

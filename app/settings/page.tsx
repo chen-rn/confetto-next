@@ -1,7 +1,9 @@
-import { SchoolPreferences } from "@/components/settings/SchoolPreferences";
-import { SubscriptionSettings } from "@/components/settings/SubscriptionSettings";
-import { UserProfile } from "@/components/settings/UserProfile";
-import { prisma } from "@/lib/apis/prisma";
+import { SchoolPreferences } from "@/app/settings/SchoolPreferences";
+import { SubscriptionSettings } from "@/app/settings/SubscriptionSettings";
+import { UserProfile } from "@/app/settings/UserProfile";
+import { InterviewPreferences } from "@/app/settings/InterviewPreferences";
+import { NotificationSettings } from "@/app/settings/NotificationSettings";
+import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { SignOutButton } from "@clerk/nextjs";
 
@@ -18,6 +20,9 @@ export default async function SettingsPage() {
       subscriptionStatus: true,
       stripePriceId: true,
       currentPeriodEnd: true,
+      mmiDate: true,
+      primaryConcern: true,
+      onboardingStatus: true,
     },
   });
 
@@ -35,13 +40,17 @@ export default async function SettingsPage() {
           </p>
         </div>
         <UserProfile />
+        <InterviewPreferences mmiDate={user.mmiDate} primaryConcern={user.primaryConcern} />
         <SchoolPreferences />
+        <NotificationSettings />
         <SubscriptionSettings
           subscriptionStatus={user.subscriptionStatus}
           stripePriceId={user.stripePriceId}
           currentPeriodEnd={user.currentPeriodEnd}
         />
-        <SignOutButton />
+        <div className="pt-6">
+          <SignOutButton />
+        </div>
       </div>
     </div>
   );

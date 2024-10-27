@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/apis/prisma";
+import { prisma } from "@/lib/prisma";
 
 export async function updateMockInterviewMedia(
   mockId: string,

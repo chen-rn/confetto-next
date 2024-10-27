@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import { shouldShowSidebar } from "@/lib/routes";
-import { SidebarNav } from "@/components/dashboard/SidebarNav";
+import { SidebarNav } from "@/app/dashboard/SidebarNav";
 
 interface DynamicSidebarProps {
   children: React.ReactNode;

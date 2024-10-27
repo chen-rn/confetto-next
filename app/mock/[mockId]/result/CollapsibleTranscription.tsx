@@ -1,9 +1,13 @@
 "use client";
 import { useState } from "react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../../../../components/ui/collapsible";
 import { ChevronUp, ChevronDown } from "lucide-react";
-import { Button } from "./ui/button";
-import { CardTitle } from "./ui/card";
+import { Button } from "../../../../components/ui/button";
+import { CardTitle } from "../../../../components/ui/card";
 
 export function CollapsibleTranscription({ transcription }: { transcription: string }) {
   const [isOpen, setIsOpen] = useState(false);

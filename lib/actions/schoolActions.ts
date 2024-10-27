@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/apis/prisma";
+import { prisma } from "@/lib/prisma";
 import type { School } from "@prisma/client";
 
 export async function addSchool(schoolId: string): Promise<void> {

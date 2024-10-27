@@ -1,12 +1,11 @@
 import React from "react";
 import { notFound, redirect } from "next/navigation";
-import { prisma } from "@/lib/apis/prisma";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { InterviewRoom } from "@/components/InterviewRoom";
-import { VideoViewfinder } from "@/components/VideoViewfinder";
+import { InterviewRoom } from "@/app/mock/[mockId]/InterviewRoom";
 
 import { getLivekitRoomToken } from "@/lib/actions/getLivekitRoomToken";
 
