@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DateSelection } from "./DateSelection";
-import { SchoolSelection } from "../../components/onboarding/SchoolSelection";
 import { ConcernSelection } from "./ConcernSelection";
-import { OnboardingProgress } from "../../components/onboarding/OnboardingProgress";
 import { updateOnboarding } from "@/lib/actions/onboarding";
 import type { School } from "@prisma/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { OnboardingStatus } from "@prisma/client";
+import { SchoolSelection } from "./SchoolSelection";
+import { OnboardingProgress } from "./OnboardingProgress";
 
 interface OnboardingFlowProps {
   initialData: {
