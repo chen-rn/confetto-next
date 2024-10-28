@@ -49,7 +49,7 @@ export function VideoViewfinder() {
 
   return (
     <div
-      className={`relative rounded-xl overflow-hidden border-2 ${
+      className={`relative rounded-xl overflow-hidden border-2 w-1/3 lg:w-full bg-neutral-900 shadow-md ${
         isUserSpeaking ? "border-green-500" : "border-transparent"
       }`}
     >
@@ -59,7 +59,7 @@ export function VideoViewfinder() {
           autoPlay
           playsInline
           muted
-          className="w-full h-full object-cover transform scale-x-[-1]"
+          className="w-full h-full transform scale-x-[-1] object-cover"
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-900">

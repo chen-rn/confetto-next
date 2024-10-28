@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Mic, Video } from "lucide-react";
+import { EndInterviewModal } from "@/app/mock/[mockId]/components/EndInterviewModal";
 
 interface InterviewRoomProps {
   token: string;
@@ -37,8 +38,13 @@ export function InterviewRoom({
   const isRecording = useAtomValue(isRecordingAtom);
   const isProcessing = useAtomValue(isProcessingAtom);
   const { startRecording, stopRecording } = useRecording(mockId);
+  const [showEndModal, setShowEndModal] = useState(false);
 
   const handleEndInterview = useCallback(async () => {
+    setShowEndModal(true);
+  }, []);
+
+  const handleSubmitInterview = useCallback(async () => {
     if (isRecording && !isProcessing) {
       await stopRecording();
     }
@@ -248,34 +254,29 @@ export function InterviewRoom({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 container mx-auto p-6 bg-transparent">
-          <div className="h-full flex gap-6">
-            {/* Interviewer Video */}
-            <div className="flex-1 relative rounded-2xl overflow-hidden bg-neutral-900 shadow-lg">
-              <VideoAvatar />
-              <div className="absolute top-4 left-4 bg-black/50 px-3 py-1.5 rounded-full">
-                <span className="text-white text-sm font-medium">Interviewer</span>
+        <div className="flex-1 container mx-auto p-4 lg:p-6 bg-transparent">
+          <div className="h-full flex flex-col lg:flex-row gap-4 lg:gap-6">
+            {/* Interviewer Video - Now with fixed aspect ratio */}
+            <div className="flex-1 relative">
+              <div className="w-full h-full rounded-2xl overflow-hidden bg-neutral-900 shadow-lg">
+                <VideoAvatar />
+                <div className="absolute top-4 left-4 bg-black/50 px-3 py-1.5 rounded-full">
+                  <span className="text-white text-sm font-medium">Interviewer</span>
+                </div>
               </div>
             </div>
 
-            {/* Right Sidebar */}
-            <div className="w-96 flex flex-col gap-4">
-              {/* Your Video Preview */}
-              <div className="relative rounded-xl overflow-hidden bg-neutral-900 shadow-lg">
-                <div className="aspect-video">
-                  <VideoViewfinder />
-                </div>
-                <div className="absolute bottom-3 left-3 text-white text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
-                  You
-                </div>
-              </div>
+            {/* Right Sidebar - Now more compact on mobile */}
+            <div className="lg:w-72 w-full flex flex-row lg:flex-col gap-4">
+              {/* Your Video Preview - Smaller on mobile */}
+              <VideoViewfinder />
 
-              {/* Interview Info Card */}
+              {/* Interview Info Card - Takes remaining width on mobile */}
               <Card className="flex-1">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center justify-between">
-                    <span>Interview Progress</span>
-                    <div className="w-16 h-16">
+                    <span className="text-base">Interview Progress</span>
+                    <div className="w-14 h-14 lg:w-16 lg:h-16">
                       <CircularProgressbar
                         value={((480 - interviewTimeLeft) / 480) * 100}
                         text={formatTime(interviewTimeLeft)}
@@ -290,10 +291,10 @@ export function InterviewRoom({
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                  {/* Question Section */}
-                  <div className="space-y-2">
+                  {/* Question Section - Hide on very small screens */}
+                  <div className="space-y-2 hidden sm:block">
                     <div className="font-medium text-sm text-neutral-600">Question</div>
-                    <p className="text-sm line-clamp-4 text-neutral-900">{question}</p>
+                    <p className="text-sm text-neutral-900">{question}</p>
                   </div>
 
                   {/* Recording Status */}
@@ -302,7 +303,7 @@ export function InterviewRoom({
                       <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
                       <span className="text-neutral-700 font-medium">Recording in progress</span>
                     </div>
-                    <div className="text-xs text-neutral-500 mt-1">
+                    <div className="text-xs text-neutral-500 mt-1 hidden sm:block">
                       Video and audio are being recorded
                     </div>
                   </div>
@@ -314,20 +315,21 @@ export function InterviewRoom({
                     variant="outline"
                     className="w-full mt-2 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors"
                   >
-                    {isProcessing ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing Recording
-                      </>
-                    ) : (
-                      "End Interview"
-                    )}
+                    End Interview
                   </Button>
                 </CardContent>
               </Card>
             </div>
           </div>
         </div>
+
+        {/* Add the modal */}
+        <EndInterviewModal
+          isOpen={showEndModal}
+          onOpenChange={setShowEndModal}
+          onSubmit={handleSubmitInterview}
+          isProcessing={isProcessing}
+        />
 
         <RoomAudioRenderer />
       </LiveKitRoom>
