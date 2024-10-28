@@ -54,13 +54,13 @@ export default async function DashboardPage() {
   return (
     <div className="flex h-screen bg-neutral-100">
       <div className="flex-1 p-8 overflow-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-semibold text-gray-800">Welcome back, Brotha</h1>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-semibold text-gray-800">Dashboard</h1>
+            <p className="text-gray-400 text-sm">Track your interview practice progress</p>
+          </div>
           <StartInterviewButton user={user} />
         </div>
-        <p className="text-gray-400 mb-8 text-sm">
-          Here's an overview of your interview practice progress
-        </p>
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
             <Suspense fallback={<StatCardSkeleton />}>

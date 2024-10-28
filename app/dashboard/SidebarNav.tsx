@@ -24,7 +24,6 @@ const mainNavItems: NavItem[] = [
     label: "Question Bank",
     icon: <BookOpen className="mr-3 h-4 w-4" />,
     href: ROUTES.QUESTION_BANK,
-    badge: 3, // New questions badge
   },
   {
     label: "Practice History",
@@ -53,8 +52,8 @@ export function SidebarNav() {
         className={cn(
           "w-full justify-start relative px-4 py-6 transition-all duration-200 rounded-none",
           isActive
-            ? "bg-gradient-to-r from-purple-50 to-transparent text-purple-700 border-l-4 border-purple-600 font-medium"
-            : "text-gray-600 hover:bg-gray-50/80 hover:text-gray-900"
+            ? "bg-gradient-to-r from-[#635BFF]/10 to-transparent text-[#4b45cc] border-l-4 border-[#635BFF] font-medium"
+            : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
         )}
         asChild
       >
@@ -65,11 +64,11 @@ export function SidebarNav() {
           </div>
           <div className="flex items-center">
             {item.badge && (
-              <span className="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full mr-2">
+              <span className="bg-[#635BFF]/10 text-[#635BFF] text-xs px-2 py-0.5 rounded-full mr-2">
                 {item.badge}
               </span>
             )}
-            {isActive && <ChevronRight className="h-4 w-4 text-purple-400" />}
+            {isActive && <ChevronRight className="h-4 w-4 text-[#635BFF]" />}
           </div>
         </Link>
       </Button>

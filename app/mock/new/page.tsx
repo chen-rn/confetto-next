@@ -1,6 +1,6 @@
 "use client";
 import { Rocket, BookOpen, Library, ChevronLeft, LucideIcon } from "lucide-react";
-import { Card, CardDescription, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,6 @@ export default function NewMockInterviewPage() {
 
     const question = await getRandomQuestionByTag(tagId);
     if (!question) {
-      // Handle no questions found for this topic
       console.log("no questions found for this topic");
       return;
     }
@@ -53,54 +52,63 @@ export default function NewMockInterviewPage() {
   }
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 h-screen relative">
-      <Link href="/dashboard" className="absolute top-8 left-8">
-        <Button variant="secondary" className="gap-2">
-          <ChevronLeft className="h-4 w-4" />
-          Back
-        </Button>
-      </Link>
-
-      <div className="w-full max-w-5xl space-y-12">
-        <div className="text-center space-y-3">
-          <h1 className="text-4xl font-bold tracking-tight">Start Mock Interview</h1>
-          <p className="text-muted-foreground text-lg">Choose your interview mode</p>
+    <div className="min-h-screen bg-neutral-100 flex flex-col ">
+      <div className="max-w-7xl mx-auto px-4 py-8 flex-1">
+        <div className="flex items-center">
+          <Link href="/dashboard">
+            <Button variant="ghost" size="sm" className="gap-2">
+              <ChevronLeft className="h-4 w-4" />
+              Back to Dashboard
+            </Button>
+          </Link>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3 md:wegap-12">
-          <InterviewOption
-            onClick={handleStartMock}
-            icon={Rocket}
-            title="Quick Start"
-            description="Jump right in with a random high-quality question"
-          />
+        {/* Center content vertically */}
+        <div className="flex flex-col justify-center min-h-[calc(100vh-200px)] pb-14">
+          <div className="text-center space-y-4 mb-16">
+            <h1 className="text-3xl font-semibold text-gray-800">Start Interview</h1>
+            <p className="text-gray-500">Choose your preferred practice mode to begin</p>
+          </div>
 
-          <InterviewOption
-            onClick={() => {
-              setIsTopicModalOpen(true);
-              console.log("hihihih onclikc");
-            }}
-            icon={BookOpen}
-            title="Pick a Topic"
-            description="Choose from our curated topic categories"
-          />
+          {/* Cards Grid */}
+          <div className="max-w-5xl mx-auto w-full">
+            <div className="grid gap-6 md:grid-cols-3">
+              <InterviewOption
+                onClick={handleStartMock}
+                icon={Rocket}
+                title="Quick Start"
+                description="Jump right in with a random high-quality question"
+                primaryText="Fastest way to practice"
+                secondaryText="Random question selection"
+              />
 
-          <InterviewOption
-            onClick={() => {
-              router.push("/question-bank");
-            }}
-            icon={Library}
-            title="Question Bank"
-            description="Browse and select from all available questions"
-          />
+              <InterviewOption
+                onClick={() => setIsTopicModalOpen(true)}
+                icon={BookOpen}
+                title="Pick a Topic"
+                description="Focus your practice on specific areas"
+                primaryText="Topic-focused practice"
+                secondaryText="Targeted improvement"
+              />
+
+              <InterviewOption
+                onClick={() => router.push("/question-bank")}
+                icon={Library}
+                title="Question Bank"
+                description="Browse and select from our complete collection"
+                primaryText="Full control"
+                secondaryText="Choose any question"
+              />
+            </div>
+          </div>
         </div>
-
-        <TopicSelectModal
-          isOpen={isTopicModalOpen}
-          onClose={() => setIsTopicModalOpen(false)}
-          onSelectTopic={handleTopicSelect}
-        />
       </div>
+
+      <TopicSelectModal
+        isOpen={isTopicModalOpen}
+        onClose={() => setIsTopicModalOpen(false)}
+        onSelectTopic={handleTopicSelect}
+      />
     </div>
   );
 }
@@ -110,31 +118,51 @@ interface InterviewOptionProps {
   icon: LucideIcon;
   title: string;
   description: string;
+  primaryText: string;
+  secondaryText: string;
 }
 
-function InterviewOption({ onClick, icon: Icon, title, description }: InterviewOptionProps) {
+function InterviewOption({
+  onClick,
+  icon: Icon,
+  title,
+  description,
+  primaryText,
+  secondaryText,
+}: InterviewOptionProps) {
   return (
     <Card
       onClick={onClick}
       className={cn(
-        "relative overflow-hidden transition-all duration-300",
-        "hover:shadow-xl hover:-translate-y-1 cursor-pointer",
-        "border-[1.5px] hover:border-primary/50 group",
-        "bg-card/50 backdrop-blur-sm"
+        "rounded-2xl",
+        "relative p-6 transition-all duration-200",
+        "hover:shadow-md cursor-pointer",
+        "border hover:border-primary/20",
+        "flex flex-col h-full"
       )}
     >
-      <CardHeader className="space-y-8 p-8">
-        <div className="flex justify-center">
-          <Icon
-            size={52}
-            className="text-primary/75 group-hover:text-primary transition-colors duration-300"
-          />
+      {/* Icon and Title Section */}
+      <div className="space-y-6">
+        <div className="rounded-lg bg-primary/5 p-3 w-fit">
+          <Icon className="h-6 w-6 text-primary" />
         </div>
-        <div className="space-y-3 text-center">
-          <h2 className="font-bold text-2xl tracking-tight">{title}</h2>
-          <CardDescription className="text-sm">{description}</CardDescription>
+        <div className="space-y-2">
+          <h2 className="font-semibold text-lg text-gray-800">{title}</h2>
+          <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
         </div>
-      </CardHeader>
+      </div>
+
+      {/* Features List */}
+      <div className="mt-8 space-y-3">
+        <div className="flex items-center gap-2 text-sm">
+          <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+          <span className="text-gray-600">{primaryText}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+          <span className="text-gray-600">{secondaryText}</span>
+        </div>
+      </div>
     </Card>
   );
 }

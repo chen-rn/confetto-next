@@ -4,14 +4,14 @@ export const ROUTES = {
   QUESTION_BANK: "/question-bank",
   MOCK_HISTORY: "/practice-history",
   SETTINGS: "/settings",
-
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
+  MOCK_NEW: "/mock/new",
+  START_INTERVIEW: "/start-interview",
+  MOCK: (id: string) => `/mock/${id}`,
+  MOCK_RESULT: (id: string) => `/mock/${id}/result`,
   PRICING: "/pricing",
   ONBOARDING: "/onboarding",
-  LIVEKIT_TEST: "/livekit-test",
-  MOCK_RESULT: (id: string) => `/mock/${id}/result`,
-  MOCK: (id: string) => `/mock/${id}`,
 } as const;
 
 // Routes that should show the sidebar

@@ -6,7 +6,7 @@ export async function AverageScore() {
   const { average, difference } = await getAverageScore();
 
   return (
-    <Card className="bg-white border-none shadow-sm">
+    <Card className="bg-white border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-1">
         <CardTitle className="text-sm font-medium text-gray-500">Average Score</CardTitle>
         <TrendingUp className="h-5 w-5 text-[#635BFF]" />

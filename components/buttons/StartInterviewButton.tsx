@@ -15,6 +15,7 @@ import type { User } from "@prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Crown } from "lucide-react";
+import { ROUTES } from "@/lib/routes";
 
 interface StartInterviewButtonProps {
   user: User;
@@ -34,7 +35,7 @@ export function StartInterviewButton({ user, className }: StartInterviewButtonPr
 
   function handleStartClick() {
     if (isEligible) {
-      router.push("/mock/new");
+      router.push(ROUTES.MOCK_NEW);
     } else {
       setShowDialog(true);
     }

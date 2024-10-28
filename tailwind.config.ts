@@ -9,6 +9,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        sm: "0 4px 12px 0 rgb(0 0 0 / 0.05)",
+        md: "0 6px 15px 0 rgb(0 0 0 / 0.08)",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

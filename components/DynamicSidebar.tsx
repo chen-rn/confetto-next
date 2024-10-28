@@ -19,10 +19,10 @@ export function DynamicSidebar({ children }: DynamicSidebarProps) {
   }
 
   return (
-    <div className="flex h-screen bg-white">
-      <div className="w-64 border-r border-gray-100 bg-gradient-to-b from-white to-gray-50 text-gray-500 flex flex-col shadow-sm">
+    <div className="flex h-screen bg-white border-r border-gray-100">
+      <div className="w-60 border-r border-gray-100 bg-gradient-to-b from-white to-gray-50 text-gray-500 flex flex-col shadow-sm">
         <div className="p-6 border-b border-gray-100">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-[#635BFF] to-[#5a52f0] bg-clip-text text-transparent tracking-tight font-serif italic mb-2">
             Confetto
           </h1>
           <p className="text-xs text-gray-400 font-medium">AI-Powered MMI Prep</p>

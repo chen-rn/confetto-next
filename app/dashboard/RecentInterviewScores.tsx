@@ -6,7 +6,7 @@ export async function RecentInterviewScores() {
   const recentScores = await getRecentScores();
 
   return (
-    <Card className="md:col-span-2 bg-white border-none shadow-sm">
+    <Card className="md:col-span-2 bg-white border shadow-sm">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-gray-900">
           Recent Interview Scores

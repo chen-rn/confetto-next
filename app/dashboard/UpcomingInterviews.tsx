@@ -16,7 +16,7 @@ export async function UpcomingInterviews() {
   const upcomingInterviews = await getUpcomingInterviews();
 
   return (
-    <Card className="bg-white border-none shadow-sm">
+    <Card className="bg-white border shadow-sm">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-gray-900">Upcoming Interviews</CardTitle>
       </CardHeader>

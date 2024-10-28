@@ -4,6 +4,7 @@ Libraries that we'll be using include:
 - Clerk for Authentication(when importing server related things, use @clerk/nextjs/server)
 - Prisma for Database(/api/prisma is our client)
 - Firebase for Cloud Storage
+- Server Actions instead of creating /API routes when possible.
 
 Code Style and Structure
 
