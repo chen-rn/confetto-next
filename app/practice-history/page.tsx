@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
 import { Suspense } from "react";
-import { MockInterviewList } from "./MockInterviewList";
 import { PracticeHistory } from "./PracticeHistory";
 import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/lib/prisma";
