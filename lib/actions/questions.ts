@@ -19,28 +19,29 @@ export async function getTags() {
   return tags;
 }
 
-export async function getQuestions(topics: string[]) {
-  const questions = await prisma.question.findMany({
-    where: {
-      ...(topics.length > 0
-        ? {
-            tags: {
-              some: {
-                name: {
-                  in: topics,
-                },
-              },
-            },
-          }
-        : {}),
-    },
-    include: {
-      tags: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+export async function getQuestions(topics: string[] = [], page: number = 1, limit: number = 50) {
+  const skip = (page - 1) * limit;
 
-  return questions;
+  const where = topics.length > 0 ? { tags: { some: { name: { in: topics } } } } : {};
+
+  const [questions, total] = await Promise.all([
+    prisma.question.findMany({
+      where,
+      include: {
+        tags: true,
+      },
+      take: limit,
+      skip,
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+    prisma.question.count({ where }),
+  ]);
+
+  return {
+    questions,
+    hasMore: skip + questions.length < total,
+    total,
+  };
 }

@@ -1,10 +1,8 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getTags } from "@/lib/actions/questions";
@@ -47,35 +45,25 @@ export function ServerFilters() {
   };
 
   return (
-    <Card className="p-4 pr-2">
-      <div className="space-y-4">
-        <h2 className="font-medium text-sm">Filter by Topic</h2>
-        <ScrollArea className="h-[400px]">
-          <div className="space-y-3 pr-4">
-            {activeTopics.map((topic) => (
-              <div key={topic.id} className="flex items-start gap-3">
-                <Checkbox
-                  id={topic.id}
-                  checked={localSelectedTopics.includes(topic.name)}
-                  onCheckedChange={() => updateFilters(topic.name)}
-                  className="mt-0.5"
-                />
-                <div className="flex flex-1 items-center justify-between min-w-0">
-                  <Label
-                    htmlFor={topic.id}
-                    className="text-sm font-normal cursor-pointer leading-tight"
-                  >
-                    {topic.name}
-                  </Label>
-                  <Badge variant="secondary" className="ml-2 shrink-0">
-                    {topic._count.questions}
-                  </Badge>
-                </div>
-              </div>
-            ))}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {activeTopics.map((topic) => (
+        <div key={topic.id} className="flex items-start gap-3">
+          <Checkbox
+            id={topic.id}
+            checked={localSelectedTopics.includes(topic.name)}
+            onCheckedChange={() => updateFilters(topic.name)}
+            className="mt-0.5"
+          />
+          <div className="flex flex-1 items-center justify-between min-w-0">
+            <Label htmlFor={topic.id} className="text-sm font-normal cursor-pointer leading-tight">
+              {topic.name}
+            </Label>
+            <Badge variant="secondary" className="ml-2 shrink-0">
+              {topic._count.questions}
+            </Badge>
           </div>
-        </ScrollArea>
-      </div>
-    </Card>
+        </div>
+      ))}
+    </div>
   );
 }

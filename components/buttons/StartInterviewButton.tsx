@@ -29,7 +29,6 @@ export function StartInterviewButton({ user, className }: StartInterviewButtonPr
   const router = useRouter();
 
   const isEligible = user.subscriptionStatus === "TRIAL" || user.subscriptionStatus === "ACTIVE";
-
   const remainingCredits = MAX_TRIAL_CREDITS - (user.trialCreditsUsed || 0);
   const isTrialUser = user.subscriptionStatus === "TRIAL";
 
@@ -44,20 +43,35 @@ export function StartInterviewButton({ user, className }: StartInterviewButtonPr
   return (
     <>
       <div className={cn("flex flex-col gap-2", className)}>
-        <Button onClick={handleStartClick} className="flex items-center gap-2">
-          Start Interview
-          <ArrowRight className="w-4 h-4" />
+        <Button
+          onClick={handleStartClick}
+          size="default"
+          className={cn(
+            "relative group transition-all duration-300 ease-out rounded-xl",
+            "bg-gradient-to-r from-[#635BFF] to-[#5a52f0] hover:from-[#5a52f0] hover:to-[#4b44e3]",
+            "shadow-lg hover:shadow-xl hover:scale-[1.02]",
+            "flex items-center gap-3 px-6"
+          )}
+        >
+          <span className="font-semibold">Start Interview</span>
+          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
         </Button>
 
         {isTrialUser && (
-          <Badge variant="secondary" className="w-fit">
+          <Badge
+            variant="secondary"
+            className="w-fit text-xs font-normal bg-transparent border border-slate-200 text-slate-500 shadow-sm"
+          >
             {remainingCredits} trial {remainingCredits === 1 ? "interview" : "interviews"} remaining
           </Badge>
         )}
 
         {user.subscriptionStatus === "ACTIVE" && (
-          <Badge variant="secondary" className="w-fit bg-gradient-to-r from-purple-500 to-pink-500">
-            <Crown className="w-4 h-4 mr-1" />
+          <Badge
+            variant="secondary"
+            className="w-fit bg-gradient-to-r from-[#635BFF] to-[#5a52f0] text-white shadow-sm"
+          >
+            <Crown className="w-4 h-4 mr-1.5" />
             Premium Member
           </Badge>
         )}

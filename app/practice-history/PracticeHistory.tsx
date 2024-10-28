@@ -85,7 +85,7 @@ function InterviewHeader({ interview }: { interview: MockInterview }) {
   }
 
   return (
-    <Card className="hover:shadow-md transition-shadow duration-200">
+    <Card className="shadow-none duration-200">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center space-x-4 flex-1 min-w-0">
           <div className="w-20 h-14 rounded bg-gray-100 flex items-center justify-center">

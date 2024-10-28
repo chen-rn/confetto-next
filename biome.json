@@ -27,7 +27,8 @@
         "noNonNullAssertion": "off",
         "useSelfClosingElements": "off",
         "noUselessElse": "off",
-        "useImportType": "off"
+        "useImportType": "off",
+        "noInferrableTypes": "off"
       },
       "suspicious": {
         "noArrayIndexKey": "off"

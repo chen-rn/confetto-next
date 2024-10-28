@@ -8,6 +8,7 @@ import { MockInterviewList } from "./MockInterviewList";
 import { PracticeHistory } from "./PracticeHistory";
 import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/lib/prisma";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 function InterviewHistorySkeleton() {
   return (
@@ -34,9 +35,13 @@ export default async function PracticeHistoryPage() {
   if (!userId) {
     redirect(ROUTES.SIGN_IN);
   }
-
   const mockInterviews = await prisma.mockInterview.findMany({
-    where: { userId },
+    where: {
+      userId,
+      recordingUrl: {
+        not: null,
+      },
+    },
     include: {
       question: {
         select: {
@@ -62,20 +67,22 @@ export default async function PracticeHistoryPage() {
   });
 
   return (
-    <div className="flex h-screen bg-neutral-100">
-      <div className="flex-1 p-8 overflow-auto">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-2xl font-semibold text-gray-800">Practice History</h1>
-              <p className="text-gray-400 text-sm">Review your past interview sessions</p>
+    <div className="flex h-screen bg-neutral-100 ">
+      <ScrollArea className="flex-1 h-full">
+        <div className="p-8">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-2xl font-semibold text-gray-800">Practice History</h1>
+                <p className="text-gray-400 text-sm">Review your past interview sessions</p>
+              </div>
             </div>
+            <Suspense fallback={<InterviewHistorySkeleton />}>
+              <PracticeHistory mockInterviews={mockInterviews} />
+            </Suspense>
           </div>
-          <Suspense fallback={<InterviewHistorySkeleton />}>
-            <PracticeHistory mockInterviews={mockInterviews} />
-          </Suspense>
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
 }
