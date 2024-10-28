@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SchoolSelector } from "@/components/SchoolSelector";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -67,6 +67,10 @@ export function SchoolPreferences() {
     <Card>
       <CardHeader>
         <CardTitle>School Preferences</CardTitle>
+        <CardDescription>
+          Select your target medical schools. We'll customize practice questions based on your
+          schools' locations and requirements.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <SchoolSelector

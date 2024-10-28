@@ -24,7 +24,13 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
 
   const mockInterview = await prisma.mockInterview.findUnique({
     where: { id: mockId },
-    include: { question: true },
+    include: {
+      question: {
+        include: {
+          tags: true, // Include the tags relation
+        },
+      },
+    },
   });
 
   if (!mockInterview || !mockInterview.question) {
@@ -40,29 +46,19 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
   // Get LiveKit room token
   const { accessToken } = await getLivekitRoomToken(question.content);
 
+  // Get the question type from the tags
+  const questionType =
+    mockInterview.question.tags.find((tag) => tag.type === "TOPIC")?.name || "Ethics";
+
   return (
     <div className="flex flex-col h-screen bg-gray-50 font-sans">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 p-4">
-        <div className="flex justify-between items-center max-w-7xl mx-auto">
-          <div className="flex items-center space-x-4">
-            <Link href={ROUTES.HOME}>
-              <Button variant="ghost" className="mr-2">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back
-              </Button>
-            </Link>
-            <h1 className="text-xl font-semibold text-gray-900 tracking-tight">
-              MMI Station: Ethics Scenario
-            </h1>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
       <main className="flex-1 overflow-hidden">
-        {/* Video Feed */}
-        <InterviewRoom token={accessToken} question={question.content} mockId={mockId} />
+        <InterviewRoom
+          token={accessToken}
+          question={question.content}
+          mockId={mockId}
+          questionType={questionType}
+        />
       </main>
     </div>
   );

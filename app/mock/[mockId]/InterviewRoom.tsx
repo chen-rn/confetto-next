@@ -5,20 +5,32 @@ import { LiveKitRoom, RoomAudioRenderer } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { Button } from "@/components/ui/button";
 import { useRecording } from "@/hooks/useRecording";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interview";
 import { VideoViewfinder } from "@/app/mock/[mockId]/VideoViewfinder";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { VideoAvatar } from "@/app/mock/[mockId]/VideoAvatar";
-import { useRouter } from "next/navigation";
+import { ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { ROUTES } from "@/lib/routes";
+import { motion } from "framer-motion";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { Mic, Video } from "lucide-react";
 
 interface InterviewRoomProps {
   token: string;
   question: string;
   mockId: string;
+  questionType?: string; // Add this to make the header dynamic
 }
 
-export function InterviewRoom({ token, question, mockId }: InterviewRoomProps) {
+export function InterviewRoom({
+  token,
+  question,
+  mockId,
+  questionType = "Ethics",
+}: InterviewRoomProps) {
   const [showQuestion, setShowQuestion] = useState(true);
   const [timeLeft, setTimeLeft] = useState(60);
   const [interviewTimeLeft, setInterviewTimeLeft] = useState(8 * 60); // 8 minutes in seconds
@@ -77,59 +89,247 @@ export function InterviewRoom({ token, question, mockId }: InterviewRoomProps) {
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
+
+  // Add phase calculation
+  const currentPhase = timeLeft > 30 ? "Reading" : "Planning";
+  const phaseTimeLeft = timeLeft > 30 ? timeLeft - 30 : timeLeft;
+  const progress = ((60 - timeLeft) / 60) * 100;
+
   if (!token) {
     return <div>Loading...</div>;
   }
 
   if (showQuestion) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 flex-col gap-4">
-        <div className="text-xl font-semibold text-primary">Time remaining: {timeLeft} seconds</div>
-        <Card className="w-full max-w-2xl shadow-md rounded-2xl overflow-hidden">
-          <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl">
-            <CardTitle className="text-2xl font-semibold text-center">Question</CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <p className="text-gray-700 leading-relaxed mb-4">{question}</p>
-          </CardContent>
-          <CardFooter className="flex flex-col items-center justify-center space-y-4 bg-gray-50 p-6 rounded-b-2xl">
-            <Button onClick={handleEnterEarly} className="w-full max-w-xs rounded-full">
-              Enter Interview Room Now
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="min-h-screen bg-neutral-100"
+      >
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 py-4">
+          <div className="container max-w-5xl mx-auto px-4">
+            <div className="flex items-center justify-center gap-4">
+              <Link href={ROUTES.HOME} className="absolute left-4">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back
+                </Button>
+              </Link>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-semibold text-gray-900">
+                  MMI Station • {questionType} Scenario
+                </h1>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content - Center Everything */}
+        <div className="flex-1 container max-w-5xl mx-auto px-4 flex items-center justify-center min-h-[calc(100vh-5rem)]">
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col items-center w-full max-w-2xl"
+          >
+            {/* Add the hint text */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-sm text-neutral-400 mb-3"
+            >
+              You have 60 seconds to read and understand the question
+            </motion.p>
+
+            <Card className="w-full shadow-sm transition-all duration-200 hover:shadow-md relative overflow-hidden">
+              {/* Progress bar as border */}
+              <div
+                className="absolute top-0 left-0 h-1 bg-[#635BFF] transition-all duration-200 ease-linear"
+                style={{ width: `${progress}%` }}
+              />
+
+              <CardHeader className="bg-gradient-to-r from-[#635BFF]/5 to-transparent border-b flex flex-row items-center justify-between">
+                <CardTitle className="text-xl">Question</CardTitle>
+                <div className="text-lg font-semibold text-[#635BFF]">{timeLeft}s</div>
+              </CardHeader>
+              <CardContent className="p-8">
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-neutral-700 leading-relaxed text-lg font-medium"
+                >
+                  {question}
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="mt-8"
+                >
+                  <Button
+                    onClick={handleEnterEarly}
+                    className="w-full bg-[#635BFF] hover:bg-[#5a52f0] text-white transition-all duration-200 hover:shadow-lg"
+                    size="lg"
+                  >
+                    Enter Interview Room
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </motion.div>
+              </CardContent>
+            </Card>
+
+            {/* System Status Card - More spacing */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mt-6 w-full mb-16" // Increased margin-top
+            >
+              <Card className="bg-white/50 border-dashed hover:bg-white/80 transition-colors duration-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between text-sm text-gray-500">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                      <span>System Ready</span>
+                    </div>
+                    <span className="text-gray-400">Recording will start automatically</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="h-full flex flex-col relative">
+    <div className="h-screen flex flex-col bg-neutral-100">
       <LiveKitRoom
         audio={true}
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
-        data-lk-theme="default"
-        className="w-full h-full"
+        data-lk-theme="light"
+        className="flex flex-col h-full"
       >
-        <VideoAvatar />
+        {/* Header with interview info */}
+        <div className="bg-white border-b border-neutral-200 py-3">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-semibold text-neutral-900">{questionType} Interview</h1>
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-neutral-600 hover:text-neutral-900"
+                  onClick={() => {
+                    /* Toggle mic */
+                  }}
+                >
+                  <Mic className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-neutral-600 hover:text-neutral-900"
+                  onClick={() => {
+                    /* Toggle camera */
+                  }}
+                >
+                  <Video className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 container mx-auto p-6 bg-transparent">
+          <div className="h-full flex gap-6">
+            {/* Interviewer Video */}
+            <div className="flex-1 relative rounded-2xl overflow-hidden bg-neutral-900 shadow-lg">
+              <VideoAvatar />
+              <div className="absolute top-4 left-4 bg-black/50 px-3 py-1.5 rounded-full">
+                <span className="text-white text-sm font-medium">Interviewer</span>
+              </div>
+            </div>
+
+            {/* Right Sidebar */}
+            <div className="w-96 flex flex-col gap-4">
+              {/* Your Video Preview */}
+              <div className="relative rounded-xl overflow-hidden bg-neutral-900 shadow-lg">
+                <div className="aspect-video">
+                  <VideoViewfinder />
+                </div>
+                <div className="absolute bottom-3 left-3 text-white text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
+                  You
+                </div>
+              </div>
+
+              {/* Interview Info Card */}
+              <Card className="flex-1">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center justify-between">
+                    <span>Interview Progress</span>
+                    <div className="w-16 h-16">
+                      <CircularProgressbar
+                        value={((480 - interviewTimeLeft) / 480) * 100}
+                        text={formatTime(interviewTimeLeft)}
+                        styles={buildStyles({
+                          textSize: "1rem",
+                          pathColor: interviewTimeLeft < 60 ? "#ef4444" : "#635BFF",
+                          textColor: "#1f2937",
+                        })}
+                      />
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent className="space-y-4">
+                  {/* Question Section */}
+                  <div className="space-y-2">
+                    <div className="font-medium text-sm text-neutral-600">Question</div>
+                    <p className="text-sm line-clamp-4 text-neutral-900">{question}</p>
+                  </div>
+
+                  {/* Recording Status */}
+                  <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
+                      <span className="text-neutral-700 font-medium">Recording in progress</span>
+                    </div>
+                    <div className="text-xs text-neutral-500 mt-1">
+                      Video and audio are being recorded
+                    </div>
+                  </div>
+
+                  {/* End Interview Button */}
+                  <Button
+                    onClick={handleEndInterview}
+                    disabled={isProcessing}
+                    variant="outline"
+                    className="w-full mt-2 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing Recording
+                      </>
+                    ) : (
+                      "End Interview"
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+
         <RoomAudioRenderer />
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-3.5 py-1.5 rounded-full shadow-md z-10">
-          <p className="text-md font-semibold text-black">
-            Time remaining: {formatTime(interviewTimeLeft)}
-          </p>
-        </div>
-        <div className="absolute right-4 bottom-4 z-10">
-          <Button
-            onClick={handleEndInterview}
-            disabled={isProcessing}
-            className="bg-red-600 hover:bg-red-700 text-white text-sm font-bold tracking-wide"
-          >
-            {isProcessing ? "Processing..." : "End Interview Early"}
-          </Button>
-        </div>
-        <div className="absolute bottom-4 left-4 z-10">
-          <VideoViewfinder />
-        </div>
       </LiveKitRoom>
     </div>
   );

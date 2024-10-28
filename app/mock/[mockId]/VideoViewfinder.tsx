@@ -49,7 +49,7 @@ export function VideoViewfinder() {
 
   return (
     <div
-      className={`relative w-48 h-36 rounded-xl overflow-hidden border-2 ${
+      className={`relative rounded-xl overflow-hidden border-2 ${
         isUserSpeaking ? "border-green-500" : "border-transparent"
       }`}
     >
@@ -66,10 +66,6 @@ export function VideoViewfinder() {
           <Video className="h-12 w-12 text-gray-400" />
         </div>
       )}
-
-      <div className="absolute bottom-2 left-2 text-white text-sm font-medium bg-black bg-opacity-50 px-1 rounded">
-        Me
-      </div>
 
       {isRecording && (
         <div className="absolute top-2 left-2 flex items-center space-x-1 bg-black bg-opacity-50 px-1 rounded">

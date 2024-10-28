@@ -122,6 +122,9 @@ importers:
       react:
         specifier: ^18
         version: 18.3.1
+      react-circular-progressbar:
+        specifier: ^2.1.0
+        version: 2.1.0(react@18.3.1)
       react-confetti:
         specifier: ^6.1.0
         version: 6.1.0(react@18.3.1)
@@ -2647,6 +2650,11 @@ packages:
   quick-lru@6.1.2:
     resolution: {integrity: sha512-AAFUA5O1d83pIHEhJwWCq/RQcRukCkn/NSm2QsTEMle5f2hP0ChI2+3Xb051PZCkLryI/Ir1MVKviT2FIloaTQ==}
     engines: {node: '>=12'}
+
+  react-circular-progressbar@2.1.0:
+    resolution: {integrity: sha512-xp4THTrod4aLpGy68FX/k1Q3nzrfHUjUe5v6FsdwXBl3YVMwgeXYQKDrku7n/D6qsJA9CuunarAboC2xCiKs1g==}
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
 
   react-confetti@6.1.0:
     resolution: {integrity: sha512-7Ypx4vz0+g8ECVxr88W9zhcQpbeujJAVqL14ZnXJ3I23mOI9/oBVTQ3dkJhUmB0D6XOtCZEM6N0Gm9PMngkORw==}
@@ -5802,6 +5810,10 @@ snapshots:
   queue-microtask@1.2.3: {}
 
   quick-lru@6.1.2: {}
+
+  react-circular-progressbar@2.1.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-confetti@6.1.0(react@18.3.1):
     dependencies:
