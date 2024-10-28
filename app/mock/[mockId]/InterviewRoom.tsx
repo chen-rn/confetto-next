@@ -10,6 +10,7 @@ import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interview";
 import { VideoViewfinder } from "@/app/mock/[mockId]/VideoViewfinder";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
 import { VideoAvatar } from "@/app/mock/[mockId]/VideoAvatar";
+import { useRouter } from "next/navigation";
 
 interface InterviewRoomProps {
   token: string;

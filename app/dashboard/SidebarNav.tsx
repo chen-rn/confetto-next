@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Home, History, BookOpen, Settings } from "lucide-react";
+import { Home, History, BookOpen, Settings, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
 import { cn } from "@/lib/utils";
@@ -11,22 +11,24 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   href: string;
+  badge?: number;
 }
 
 const mainNavItems: NavItem[] = [
   {
     label: "Dashboard",
-    icon: <Home className="mr-2 h-4 w-4" />,
+    icon: <Home className="mr-3 h-4 w-4" />,
     href: ROUTES.DASHBOARD,
   },
   {
     label: "Question Bank",
-    icon: <BookOpen className="mr-2 h-4 w-4" />,
+    icon: <BookOpen className="mr-3 h-4 w-4" />,
     href: ROUTES.QUESTION_BANK,
+    badge: 3, // New questions badge
   },
   {
     label: "Practice History",
-    icon: <History className="mr-2 h-4 w-4" />,
+    icon: <History className="mr-3 h-4 w-4" />,
     href: ROUTES.MOCK_HISTORY,
   },
 ];
@@ -34,7 +36,7 @@ const mainNavItems: NavItem[] = [
 const bottomNavItems: NavItem[] = [
   {
     label: "Settings",
-    icon: <Settings className="mr-2 h-4 w-4" />,
+    icon: <Settings className="mr-3 h-4 w-4" />,
     href: ROUTES.SETTINGS,
   },
 ];
@@ -49,28 +51,40 @@ export function SidebarNav() {
         key={item.label}
         variant={isActive ? "secondary" : "ghost"}
         className={cn(
-          "w-full justify-start relative",
+          "w-full justify-start relative px-4 py-6 transition-all duration-200 rounded-none",
           isActive
-            ? "bg-[#F0F4FF] text-[#635BFF] border-l-2 border-[#635BFF]"
-            : "text-gray-600 hover:bg-[#F0F4FF] hover:text-[#635BFF]"
+            ? "bg-gradient-to-r from-purple-50 to-transparent text-purple-700 border-l-4 border-purple-600 font-medium"
+            : "text-gray-600 hover:bg-gray-50/80 hover:text-gray-900"
         )}
         asChild
       >
-        <Link href={item.href} prefetch>
-          {item.icon}
-          {item.label}
+        <Link href={item.href} prefetch className="flex items-center justify-between w-full">
+          <div className="flex items-center">
+            {item.icon}
+            <span>{item.label}</span>
+          </div>
+          <div className="flex items-center">
+            {item.badge && (
+              <span className="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full mr-2">
+                {item.badge}
+              </span>
+            )}
+            {isActive && <ChevronRight className="h-4 w-4 text-purple-400" />}
+          </div>
         </Link>
       </Button>
     );
   };
 
   return (
-    <div className="flex h-full flex-col justify-between">
-      <nav className="space-y-1">
-        {mainNavItems.map((item) => (
-          <NavButton key={item.label} item={item} />
-        ))}
-      </nav>
+    <div className="flex h-full flex-col justify-between py-4">
+      <div>
+        <nav className="space-y-1">
+          {mainNavItems.map((item) => (
+            <NavButton key={item.label} item={item} />
+          ))}
+        </nav>
+      </div>
       <nav className="space-y-1">
         {bottomNavItems.map((item) => (
           <NavButton key={item.label} item={item} />

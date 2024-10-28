@@ -100,11 +100,8 @@ export function useRecording(mockId: string) {
     setIsRecording(false);
     setIsProcessing(true);
     setIsUploading(true);
-    toast({
-      title: "Processing",
-      description: "Your interview is being processed. Please leave this page open!",
-    });
 
+    // Stop the recorder first
     if (recorderRef.current && recorderRef.current.state !== "inactive") {
       recorderRef.current.stop();
     }
@@ -118,34 +115,39 @@ export function useRecording(mockId: string) {
     const blob = new Blob(chunksRef.current, { type: "video/webm" });
     chunksRef.current = [];
 
-    try {
-      const file = new File([blob], `video_${mockId}_${Date.now()}.webm`, {
-        type: "video/webm",
-      });
+    // Navigate immediately before starting the upload process
+    router.push(ROUTES.MOCK_RESULT(mockId));
 
-      // Navigate to the results page immediately
-      router.push(ROUTES.MOCK_RESULT(mockId));
+    // Use a separate async function for background processing
+    const processInBackground = async () => {
+      try {
+        const file = new File([blob], `video_${mockId}_${Date.now()}.webm`, {
+          type: "video/webm",
+        });
 
-      // Continue with the upload in the background
-      const [videoUrl, audioUrl] = await Promise.all([
-        uploadVideo(file),
-        uploadAudioToFirebase(blob, `audio_${mockId}_${Date.now()}.webm`),
-      ]);
-      await updateMockInterviewMedia(mockId, videoUrl, audioUrl);
-      await processAudioSubmission(mockId);
+        const [videoUrl, audioUrl] = await Promise.all([
+          uploadVideo(file),
+          uploadAudioToFirebase(blob, `audio_${mockId}_${Date.now()}.webm`),
+        ]);
+        await updateMockInterviewMedia(mockId, videoUrl, audioUrl);
+        await processAudioSubmission(mockId);
 
-      setIsUploading(false);
-      setIsProcessing(false);
-    } catch (error) {
-      console.error("Error processing submission:", error);
-      setIsUploading(false);
-      setIsProcessing(false);
-      toast({
-        title: "Processing Error",
-        description: "An error occurred while processing your interview. Please try again.",
-        variant: "destructive",
-      });
-    }
+        setIsUploading(false);
+        setIsProcessing(false);
+      } catch (error) {
+        console.error("Error processing submission:", error);
+        setIsUploading(false);
+        setIsProcessing(false);
+        toast({
+          title: "Processing Error",
+          description: "An error occurred while processing your interview. Please try again.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    // Start background processing without awaiting it
+    processInBackground();
   }, [mockId, router, setIsRecording, setIsProcessing, setIsUploading, isUploading, toast]);
 
   return {

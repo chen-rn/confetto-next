@@ -12,28 +12,30 @@ interface DynamicSidebarProps {
 export function DynamicSidebar({ children }: DynamicSidebarProps) {
   const { isSignedIn } = useAuth();
   const pathname = usePathname();
-
-  // Check if current route should show sidebar
   const showSidebar = shouldShowSidebar(pathname);
 
-  // If not signed in or route should hide sidebar, render without sidebar
   if (!isSignedIn || !showSidebar) {
-    return <div className="flex-1 overflow-auto bg-gray-50 w-full">{children}</div>;
+    return <div className="flex-1 overflow-auto bg-white w-full">{children}</div>;
   }
 
   return (
-    <div className="flex h-screen">
-      <div className="w-64 bg-white text-gray-800 p-4 shadow-sm flex flex-col">
-        <div className="mb-6">
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202024-10-04%20at%2010.16.41%E2%80%AFPM-4hFlx0Az7EwTaqSDhnUPTjQmC0X8Cn.png"
-            alt="Confetto Logo"
-            className="h-16 w-auto"
-          />
+    <div className="flex h-screen bg-white">
+      <div className="w-64 border-r border-gray-100 bg-gradient-to-b from-white to-gray-50 text-gray-500 flex flex-col shadow-sm">
+        <div className="p-6 border-b border-gray-100">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
+            Confetto
+          </h1>
+          <p className="text-xs text-gray-400 font-medium">AI-Powered MMI Prep</p>
         </div>
         <SidebarNav />
+        <div className="mt-auto p-4 border-t border-gray-100">
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span className="text-xs text-gray-400">Connected to AI</span>
+          </div>
+        </div>
       </div>
-      <div className="flex-1 overflow-auto bg-gray-50">{children}</div>
+      <div className="flex-1 overflow-auto bg-[#fafafa]">{children}</div>
     </div>
   );
 }

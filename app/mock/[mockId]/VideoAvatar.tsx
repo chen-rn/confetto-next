@@ -15,9 +15,6 @@ export function VideoAvatar() {
   const isDisconnected =
     state === "disconnected" || state === "initializing" || state === "connecting";
 
-  console.log("state", state);
-  console.log("isDisconnected", isDisconnected);
-
   useEffect(() => {
     if (isDisconnected) return;
 
