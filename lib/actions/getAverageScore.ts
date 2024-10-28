@@ -9,11 +9,21 @@ export async function getAverageScore() {
     throw new Error("User not authenticated");
   }
 
-  const currentWeekStart = new Date();
-  currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+  // Get current date
+  const now = new Date();
 
+  // Calculate start of current week (Sunday)
+  const currentWeekStart = new Date(now);
+  currentWeekStart.setDate(now.getDate() - now.getDay());
+  currentWeekStart.setHours(0, 0, 0, 0);
+
+  // Calculate start of last week
   const lastWeekStart = new Date(currentWeekStart);
-  lastWeekStart.setDate(lastWeekStart.getDate() - 7);
+  lastWeekStart.setDate(currentWeekStart.getDate() - 7);
+
+  // Calculate end of last week (end of Saturday)
+  const lastWeekEnd = new Date(currentWeekStart);
+  lastWeekEnd.setMilliseconds(-1);
 
   const [currentWeekAvg, lastWeekAvg] = await Promise.all([
     prisma.feedback.aggregate({
@@ -29,7 +39,10 @@ export async function getAverageScore() {
       where: {
         mockInterview: {
           userId,
-          createdAt: { gte: lastWeekStart, lt: currentWeekStart },
+          createdAt: {
+            gte: lastWeekStart,
+            lt: currentWeekStart,
+          },
         },
       },
       _avg: { overallScore: true },

@@ -12,7 +12,9 @@ export async function CurrentStreak() {
         <Flame className="h-5 w-5 text-[#635BFF]" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-semibold text-gray-900">{streak} days</div>
+        <div className="text-2xl font-semibold text-gray-900">
+          {streak} {streak === 1 ? "day" : "days"}
+        </div>
         <div className="flex items-center mt-1 text-sm text-[#635BFF]">
           <span>Keep it up!</span>
         </div>

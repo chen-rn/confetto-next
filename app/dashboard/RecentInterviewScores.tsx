@@ -1,19 +1,67 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getRecentScores } from "@/lib/actions/getRecentScores";
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
 import { InterviewScoresChart } from "./InterviewScoresChart";
 
+async function getDailyAverageScores() {
+  const { userId } = auth();
+  if (!userId) return [];
+
+  const interviews = await prisma.mockInterview.findMany({
+    where: {
+      userId,
+      feedback: {
+        isNot: null,
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+    include: {
+      feedback: {
+        select: {
+          overallScore: true,
+        },
+      },
+    },
+  });
+
+  // Group interviews by date and calculate average
+  const dailyScores = interviews.reduce((acc, interview) => {
+    const date = new Date(interview.createdAt).toISOString().split("T")[0];
+
+    if (!acc[date]) {
+      acc[date] = {
+        totalScore: 0,
+        count: 0,
+      };
+    }
+
+    if (interview.feedback?.overallScore) {
+      acc[date].totalScore += interview.feedback.overallScore;
+      acc[date].count += 1;
+    }
+
+    return acc;
+  }, {} as Record<string, { totalScore: number; count: number }>);
+
+  // Convert to array of daily averages
+  return Object.entries(dailyScores).map(([date, { totalScore, count }]) => ({
+    date,
+    score: Math.round(totalScore / count),
+  }));
+}
+
 export async function RecentInterviewScores() {
-  const recentScores = await getRecentScores();
+  const dailyScores = await getDailyAverageScores();
 
   return (
-    <Card className="md:col-span-2 bg-white border shadow-sm">
+    <Card className="md:col-span-2 bg-white border shadow-sm h-full">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-gray-900">
-          Recent Interview Scores
-        </CardTitle>
+        <CardTitle className="text-lg font-semibold text-gray-900">Daily Average Scores</CardTitle>
       </CardHeader>
-      <CardContent>
-        <InterviewScoresChart scores={recentScores} />
+      <CardContent className="h-[calc(100%-5rem)]">
+        <InterviewScoresChart scores={dailyScores} />
       </CardContent>
     </Card>
   );

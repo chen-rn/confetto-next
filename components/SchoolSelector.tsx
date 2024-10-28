@@ -136,7 +136,7 @@ export function SchoolSelector({
               placeholder="Search schools..."
               value={search}
               onValueChange={setSearch}
-              className="border-none focus:ring-0"
+              className="focus:ring-0"
             />
             <CommandList>
               <CommandEmpty>

@@ -31,25 +31,37 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="container max-w-4xl mx-auto py-6 px-6">
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-medium">Profile Settings</h3>
-          <p className="text-sm text-muted-foreground">
-            Manage your account settings and preferences.
-          </p>
-        </div>
-        <UserProfile />
-        <InterviewPreferences mmiDate={user.mmiDate} primaryConcern={user.primaryConcern} />
-        <SchoolPreferences />
-        <NotificationSettings />
-        <SubscriptionSettings
-          subscriptionStatus={user.subscriptionStatus}
-          stripePriceId={user.stripePriceId}
-          currentPeriodEnd={user.currentPeriodEnd}
-        />
-        <div className="pt-6">
-          <SignOutButton />
+    <div className="flex h-screen bg-neutral-100">
+      <div className="flex-1 p-8 overflow-auto">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-800">Settings</h1>
+              <p className="text-gray-400 text-sm">Manage your account preferences</p>
+            </div>
+          </div>
+
+          <div className="grid gap-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              <UserProfile />
+              <InterviewPreferences mmiDate={user.mmiDate} primaryConcern={user.primaryConcern} />
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <SchoolPreferences />
+              <NotificationSettings />
+            </div>
+
+            <SubscriptionSettings
+              subscriptionStatus={user.subscriptionStatus}
+              stripePriceId={user.stripePriceId}
+              currentPeriodEnd={user.currentPeriodEnd}
+            />
+
+            <div className="flex justify-end">
+              <SignOutButton />
+            </div>
+          </div>
         </div>
       </div>
     </div>

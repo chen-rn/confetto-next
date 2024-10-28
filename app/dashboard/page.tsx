@@ -3,6 +3,7 @@ import { TotalInterviews } from "./TotalInterviews";
 import { CurrentStreak } from "./CurrentStreak";
 import { AverageScore } from "./AverageScore";
 import { RecentInterviewScores } from "./RecentInterviewScores";
+import { RecentPractice } from "./RecentPractice";
 import { UpcomingInterviews } from "./UpcomingInterviews";
 import { Skeleton } from "@/components/ui/skeleton";
 import { auth } from "@clerk/nextjs/server";
@@ -24,7 +25,7 @@ function StatCardSkeleton() {
 
 function ChartCardSkeleton() {
   return (
-    <div className="p-6 rounded-lg bg-white border border-gray-100 shadow-sm h-[400px]">
+    <div className="p-6 rounded-lg bg-white border border-gray-100 shadow-sm h-full min-h-[400px]">
       <div className="space-y-6">
         <div className="space-y-2">
           <Skeleton className="h-6 w-48" />
@@ -61,8 +62,8 @@ export default async function DashboardPage() {
           </div>
           <StartInterviewButton user={user} />
         </div>
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+        <div className="max-w-6xl mx-auto h-[calc(100vh-12rem)]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5 h-[140px]">
             <Suspense fallback={<StatCardSkeleton />}>
               <TotalInterviews />
             </Suspense>
@@ -74,12 +75,12 @@ export default async function DashboardPage() {
             </Suspense>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 h-[calc(100%-180px)]">
             <Suspense fallback={<ChartCardSkeleton />}>
               <RecentInterviewScores />
             </Suspense>
             <Suspense fallback={<ChartCardSkeleton />}>
-              <UpcomingInterviews />
+              <RecentPractice />
             </Suspense>
           </div>
         </div>
