@@ -56,11 +56,11 @@ export async function RecentInterviewScores() {
   const dailyScores = await getDailyAverageScores();
 
   return (
-    <Card className="md:col-span-2 bg-white border shadow-sm h-full">
+    <Card className="md:col-span-2 bg-white border shadow-sm">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-gray-900">Daily Average Scores</CardTitle>
       </CardHeader>
-      <CardContent className="h-[calc(100%-5rem)]">
+      <CardContent className="min-h-[300px] h-full">
         <InterviewScoresChart scores={dailyScores} />
       </CardContent>
     </Card>

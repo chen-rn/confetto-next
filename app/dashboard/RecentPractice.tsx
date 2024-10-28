@@ -12,8 +12,13 @@ async function getRecentPractice() {
   if (!userId) return [];
 
   return await prisma.mockInterview.findMany({
-    where: { userId },
-    take: 3,
+    where: {
+      userId,
+      recordingUrl: {
+        not: null,
+      },
+    },
+    take: 5,
     orderBy: { createdAt: "desc" },
     include: {
       question: {
@@ -36,7 +41,7 @@ export async function RecentPractice() {
   const recentPractice = await getRecentPractice();
 
   return (
-    <Card className="bg-white border shadow-sm h-full">
+    <Card className="bg-white border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-semibold text-gray-900">Recent Practice</CardTitle>
         <Link href={ROUTES.MOCK_HISTORY}>
@@ -46,7 +51,7 @@ export async function RecentPractice() {
           </Button>
         </Link>
       </CardHeader>
-      <CardContent className="h-[calc(100%-5rem)] overflow-auto">
+      <CardContent>
         {recentPractice.length === 0 ? (
           <div className="text-center py-6 text-gray-500">
             <p className="mb-2">No practice sessions yet</p>
@@ -57,7 +62,7 @@ export async function RecentPractice() {
             </Link>
           </div>
         ) : (
-          <ul className="space-y-4">
+          <ul className="space-y-4 max-h-[500px] overflow-y-auto">
             {recentPractice.map((practice) => (
               <Link href={ROUTES.MOCK_RESULT(practice.id)} key={practice.id}>
                 <li className="flex items-center justify-between group hover:bg-gray-50 p-2 rounded-lg transition-colors">
