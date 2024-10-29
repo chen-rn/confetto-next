@@ -6,7 +6,6 @@ import { Plus } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { QuestionsList } from "./QuestionsList";
-import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 import { PageContainer } from "@/components/PageContainer";
 
@@ -23,7 +22,7 @@ export default async function QuestionBankPage({
       <PageHeader title="Question Bank" description="Browse and manage your practice questions">
         <Sheet>
           <SheetTrigger asChild>
-            <Button size="sm" className="gap-2">
+            <Button size="sm" className="gap-2 bg-[#635BFF] hover:bg-[#635BFF]/90 rounded-lg">
               <Plus className="h-4 w-4" />
               Add Question
             </Button>
@@ -36,9 +35,7 @@ export default async function QuestionBankPage({
         </Sheet>
       </PageHeader>
 
-      <Card className="overflow-hidden">
-        <QuestionsList />
-      </Card>
+      <QuestionsList />
     </PageContainer>
   );
 }

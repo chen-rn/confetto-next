@@ -22,8 +22,8 @@ export function DynamicSidebar({ children }: DynamicSidebarProps) {
     <div className="flex h-screen bg-white border-r border-gray-100">
       <div className="w-60 border-r border-gray-100 bg-gradient-to-b from-white to-gray-50 text-gray-500 flex flex-col shadow-sm">
         <div className="p-6 border-b border-gray-100">
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-[#635BFF] to-[#5a52f0] bg-clip-text text-transparent tracking-tight font-serif italic mb-2">
-            Confetto
+          <h1 className="text-3xl font-medium bg-gradient-to-r from-[#635BFF] to-[#5a52f0] bg-clip-text text-transparent font-['Lustria'] mb-2">
+            Confetto AI
           </h1>
           <p className="text-xs text-gray-400 font-medium">AI-Powered MMI Prep</p>
         </div>

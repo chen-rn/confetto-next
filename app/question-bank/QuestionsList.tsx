@@ -14,6 +14,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ServerFilters } from "./ServerFilters";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { getTagStyles } from "./utils";
 
 interface QuestionWithTags extends Question {
   tags: QuestionTag[];
@@ -44,18 +45,23 @@ export function QuestionsList() {
   const questions = data?.pages.flatMap((page) => page.questions) ?? [];
 
   return (
-    <div>
+    <div className="rounded-xl border border-border overflow-hidden bg-white">
       {/* Filters Section */}
       <Collapsible
         open={isFiltersOpen}
         onOpenChange={setIsFiltersOpen}
         className="border-b border-border"
       >
-        <div className="px-6 py-4 flex items-center justify-between bg-secondary/40">
+        <div className="px-6 py-4 flex items-center justify-between bg-[#635BFF]/5">
           <div className="flex items-center gap-4">
-            <h3 className="text-sm font-medium">Filters</h3>
+            <h3 className="text-sm font-medium text-gray-700">Filters</h3>
             {selectedTopics.length > 0 && (
-              <Badge variant="secondary">{selectedTopics.length} selected</Badge>
+              <Badge
+                variant="secondary"
+                className="bg-[#635BFF]/10 text-[#635BFF] border-transparent rounded-lg"
+              >
+                {selectedTopics.length} selected
+              </Badge>
             )}
           </div>
           <CollapsibleTrigger asChild>
@@ -131,14 +137,23 @@ function EmptyState() {
 
 function QuestionCard({ question }: { question: QuestionWithTags }) {
   return (
-    <Card className="transition-shadow duration-200 shadow-none">
+    <div className="group rounded-xl border border-gray-100 bg-white transition-all duration-200 hover:shadow-md hover:border-[#635BFF]/20">
       <div className="p-4 flex items-start gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex flex-col gap-2.5">
-            <h3 className="text-base font-medium leading-tight">{question.content}</h3>
+            <h3 className="text-base font-medium leading-tight text-gray-900">
+              {question.content}
+            </h3>
             <div className="flex flex-wrap gap-1.5">
               {question.tags.map((tag) => (
-                <Badge key={tag.id} variant="secondary" className="px-2 py-0.5 text-xs font-normal">
+                <Badge
+                  key={tag.id}
+                  variant="secondary"
+                  className={cn(
+                    "border-transparent rounded-lg transition-colors font-medium",
+                    getTagStyles(tag.name)
+                  )}
+                >
                   {tag.name}
                 </Badge>
               ))}
@@ -146,13 +161,16 @@ function QuestionCard({ question }: { question: QuestionWithTags }) {
           </div>
         </div>
         <Link href={`${ROUTES.START_INTERVIEW}?questionId=${question.id}`}>
-          <Button size="sm" className="shrink-0 h-8 px-3" variant="default">
+          <Button
+            size="sm"
+            className="shrink-0 h-8 px-3 bg-[#635BFF] hover:bg-[#635BFF]/90 rounded-lg"
+          >
             <Play className="h-3.5 w-3.5 mr-1.5" />
             Practice
           </Button>
         </Link>
       </div>
-    </Card>
+    </div>
   );
 }
 

@@ -2,11 +2,13 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getTags } from "@/lib/actions/questions";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { getTagStyles } from "./utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function ServerFilters() {
   const searchParams = useSearchParams();
@@ -46,24 +48,55 @@ export function ServerFilters() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {activeTopics.map((topic) => (
-        <div key={topic.id} className="flex items-start gap-3">
-          <Checkbox
-            id={topic.id}
-            checked={localSelectedTopics.includes(topic.name)}
-            onCheckedChange={() => updateFilters(topic.name)}
-            className="mt-0.5"
-          />
-          <div className="flex flex-1 items-center justify-between min-w-0">
-            <Label htmlFor={topic.id} className="text-sm font-normal cursor-pointer leading-tight">
-              {topic.name}
-            </Label>
-            <Badge variant="secondary" className="ml-2 shrink-0">
-              {topic._count.questions}
-            </Badge>
-          </div>
-        </div>
-      ))}
+      {activeTopics.map((topic) => {
+        const isSelected = localSelectedTopics.includes(topic.name);
+
+        return (
+          <button
+            key={topic.id}
+            onClick={() => updateFilters(topic.name)}
+            className={cn(
+              "flex items-center gap-3 p-2 rounded-xl transition-all w-full text-left",
+              "hover:bg-[#635BFF]/5 active:bg-[#635BFF]/10",
+              "border border-transparent",
+              isSelected && "border-[#635BFF]/20 bg-[#635BFF]/5"
+            )}
+          >
+            <Checkbox
+              id={topic.id}
+              checked={isSelected}
+              onClick={(e) => e.stopPropagation()}
+              className={cn(
+                "transition-colors shrink-0",
+                "border-[#635BFF]/30 data-[state=checked]:bg-[#635BFF] data-[state=checked]:border-[#635BFF]"
+              )}
+            />
+            <div className="flex flex-1 items-center justify-between min-w-0">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="text-sm font-normal leading-tight text-gray-700 truncate">
+                      {topic.name}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-[300px]">
+                    {topic.name}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <Badge
+                variant="secondary"
+                className={cn(
+                  "ml-2 shrink-0 border-transparent rounded-lg",
+                  getTagStyles(topic.name)
+                )}
+              >
+                {topic._count.questions}
+              </Badge>
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
 }
