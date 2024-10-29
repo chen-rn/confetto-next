@@ -19,6 +19,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { Mic, Video } from "lucide-react";
 import { EndInterviewModal } from "@/app/mock/[mockId]/components/EndInterviewModal";
 import { TagType } from "@prisma/client";
+import { DevicePermissionsCheck } from "./components/DevicePermissionsCheck";
 
 interface InterviewRoomProps {
   token: string;
@@ -36,25 +37,40 @@ export function InterviewRoom({
   tags,
 }: InterviewRoomProps) {
   const [showQuestion, setShowQuestion] = useState(true);
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [interviewTimeLeft, setInterviewTimeLeft] = useState(8 * 60); // 8 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [interviewTimeLeft, setInterviewTimeLeft] = useState(8 * 60);
   const isRecording = useAtomValue(isRecordingAtom);
   const isProcessing = useAtomValue(isProcessingAtom);
   const { startRecording, stopRecording } = useRecording(mockId);
   const [showEndModal, setShowEndModal] = useState(false);
+  const [hasDevicePermissions, setHasDevicePermissions] = useState<boolean | null>(null);
 
-  const handleEndInterview = useCallback(async () => {
-    setShowEndModal(true);
+  // All useEffects need to be here, before any conditional returns
+  useEffect(() => {
+    async function checkInitialPermissions() {
+      try {
+        const permissions = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        permissions.getTracks().forEach((track) => track.stop());
+        setHasDevicePermissions(true);
+        setTimeLeft(60);
+      } catch (error) {
+        if (
+          (error as Error).name === "NotAllowedError" ||
+          (error as Error).name === "NotFoundError"
+        ) {
+          setHasDevicePermissions(false);
+        } else {
+          console.error("Error checking device permissions:", error);
+          setHasDevicePermissions(false);
+        }
+      }
+    }
+
+    checkInitialPermissions();
   }, []);
 
-  const handleSubmitInterview = useCallback(async () => {
-    if (isRecording && !isProcessing) {
-      await stopRecording();
-    }
-  }, [isRecording, isProcessing, stopRecording]);
-
   useEffect(() => {
-    if (timeLeft > 0 && showQuestion) {
+    if (timeLeft !== null && timeLeft > 0 && showQuestion) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     }
@@ -77,7 +93,7 @@ export function InterviewRoom({
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [showQuestion, handleEndInterview]);
+  }, [showQuestion]);
 
   useEffect(() => {
     if (!showQuestion && !isRecording && !isProcessing) {
@@ -88,6 +104,16 @@ export function InterviewRoom({
       startInterviewRecording();
     }
   }, [showQuestion, isRecording, isProcessing, startRecording]);
+
+  const handleEndInterview = useCallback(async () => {
+    setShowEndModal(true);
+  }, []);
+
+  const handleSubmitInterview = useCallback(async () => {
+    if (isRecording && !isProcessing) {
+      await stopRecording();
+    }
+  }, [isRecording, isProcessing, stopRecording]);
 
   const handleEnterEarly = () => {
     setShowQuestion(false);
@@ -100,12 +126,39 @@ export function InterviewRoom({
   };
 
   // Add phase calculation
-  const currentPhase = timeLeft > 30 ? "Reading" : "Planning";
-  const phaseTimeLeft = timeLeft > 30 ? timeLeft - 30 : timeLeft;
-  const progress = ((60 - timeLeft) / 60) * 100;
+  const currentPhase = timeLeft != null && timeLeft > 30 ? "Reading" : "Planning";
+  const phaseTimeLeft = timeLeft != null ? (timeLeft > 30 ? timeLeft - 30 : timeLeft) : 0;
+  const progress = timeLeft != null ? ((60 - timeLeft) / 60) * 100 : 0;
 
+  // Conditional returns after all hooks
   if (!token) {
     return <div>Loading...</div>;
+  }
+
+  if (hasDevicePermissions === null) {
+    return (
+      <div className="min-h-screen bg-neutral-100 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col items-center justify-center"
+        >
+          <Loader2 className="h-8 w-8 animate-spin text-[#635BFF] mb-4" />
+          <p className="text-neutral-600 text-sm">Checking device permissions...</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (hasDevicePermissions === false) {
+    return (
+      <DevicePermissionsCheck
+        onPermissionsGranted={() => {
+          setHasDevicePermissions(true);
+          setTimeLeft(60);
+        }}
+      />
+    );
   }
 
   if (showQuestion) {
@@ -169,7 +222,9 @@ export function InterviewRoom({
 
               <CardHeader className="bg-gradient-to-r from-[#635BFF]/5 to-transparent border-b flex flex-row items-center justify-between">
                 <CardTitle className="text-xl">Question</CardTitle>
-                <div className="text-lg font-semibold text-[#635BFF]">{timeLeft}s</div>
+                <div className="text-lg font-semibold text-[#635BFF]">
+                  {timeLeft === null ? "--" : `${timeLeft}s`}
+                </div>
               </CardHeader>
               <CardContent className="p-8">
                 <motion.p
@@ -265,7 +320,7 @@ export function InterviewRoom({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 container mx-auto p-4 lg:p-6 bg-transparent">
+        <div className="flex-1 container mx-auto p-4 bg-transparent">
           <div className="h-full flex flex-col lg:flex-row gap-4 lg:gap-6">
             {/* Interviewer Video - Now with fixed aspect ratio */}
             <div className="flex-1 relative">
