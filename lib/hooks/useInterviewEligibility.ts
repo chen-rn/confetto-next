@@ -5,8 +5,6 @@ import type { SubscriptionStatus } from "@prisma/client";
 
 export const MAX_TRIAL_CREDITS = 3;
 
-const ELIGIBLE_STATUSES: SubscriptionStatus[] = ["ACTIVE", "TRIAL"];
-
 export function useInterviewEligibility() {
   const { data: user } = useQuery({
     queryKey: ["currentUser"],
@@ -31,10 +29,10 @@ export function useInterviewEligibility() {
   const subscriptionActive = user.subscriptionStatus === "ACTIVE";
   const isInTrial = user.subscriptionStatus === "TRIAL";
 
-  const isEligible = subscriptionActive || (isInTrial && user.trialCreditsUsed < MAX_TRIAL_CREDITS);
+  const isEligible = subscriptionActive || (isInTrial && interviewCount < MAX_TRIAL_CREDITS);
 
   const remainingCredits = isInTrial
-    ? Math.max(0, MAX_TRIAL_CREDITS - user.trialCreditsUsed)
+    ? Math.max(0, MAX_TRIAL_CREDITS - interviewCount)
     : subscriptionActive
     ? Number.POSITIVE_INFINITY
     : 0;

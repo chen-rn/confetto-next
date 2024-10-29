@@ -31,7 +31,7 @@ export default function NewMockInterviewPage() {
     }
 
     const mockId = await createMockInterview(randomQuestion.id, userId);
-    router.push(ROUTES.MOCK(mockId));
+    router.push(`${ROUTES.MOCK}/${mockId}`);
   }
 
   async function handleTopicSelect(tagId: string) {
@@ -48,7 +48,7 @@ export default function NewMockInterviewPage() {
 
     const mockId = await createMockInterview(question.id, userId);
     setIsTopicModalOpen(false);
-    router.push(ROUTES.MOCK(mockId));
+    router.push(`${ROUTES.MOCK}/${mockId}`);
   }
 
   return (
