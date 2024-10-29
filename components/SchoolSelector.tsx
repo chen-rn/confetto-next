@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import type { School } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { getAllSchools } from "@/lib/actions/schoolActions";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface SchoolSelectorProps {
   selectedSchools: School[];
@@ -186,12 +187,25 @@ export function SchoolSelector({
 
       <div className="flex flex-wrap gap-2">
         {localSelectedSchools.map((school) => (
-          <Badge key={school.id} variant="secondary" className="text-sm">
-            {school.name}
-            <button className="ml-1 rounded-full" onClick={() => handleSchoolRemove(school.id)}>
-              <X className="h-3 w-3" />
-            </button>
-          </Badge>
+          <TooltipProvider key={school.id}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge variant="secondary" className="max-w-full flex items-center gap-1 pr-1">
+                  <span className="truncate">{school.name}</span>
+                  <button
+                    className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                    onClick={() => handleSchoolRemove(school.id)}
+                  >
+                    <X className="h-3 w-3" />
+                    <span className="sr-only">Remove {school.name}</span>
+                  </button>
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{school.name}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         ))}
       </div>
     </div>

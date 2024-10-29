@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { QuestionsList } from "./QuestionsList";
 import { PageHeader } from "@/components/PageHeader";
 import { PageContainer } from "@/components/PageContainer";
+import { Suspense } from "react";
+import { QuestionsLoading } from "./QuestionsLoading";
 
-export default async function QuestionBankPage() {
+export default function QuestionBankPage() {
   return (
     <PageContainer>
       <PageHeader title="Question Bank" description="Browse and manage your practice questions">
@@ -25,7 +27,9 @@ export default async function QuestionBankPage() {
         </Sheet>
       </PageHeader>
 
-      <QuestionsList />
+      <Suspense fallback={<QuestionsLoading />}>
+        <QuestionsList />
+      </Suspense>
     </PageContainer>
   );
 }

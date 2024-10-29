@@ -1,24 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { User } from "@prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Crown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ROUTES } from "@/lib/routes";
-import { useQuery } from "@tanstack/react-query";
-import { getInterviewCount } from "@/lib/actions/mock-interviews";
-import Link from "next/link";
 import { useInterviewEligibility } from "@/lib/hooks/useInterviewEligibility";
 import { SubscriptionDialog } from "@/components/dialogs/SubscriptionDialog";
 

@@ -21,7 +21,8 @@
       "a11y": {
         "useMediaCaption": "off",
         "noSvgWithoutTitle": "off",
-        "useButtonType": "off"
+        "useButtonType": "off",
+        "useKeyWithClickEvents": "off"
       },
       "style": {
         "noNonNullAssertion": "off",

@@ -18,12 +18,14 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Mic, Video } from "lucide-react";
 import { EndInterviewModal } from "@/app/mock/[mockId]/components/EndInterviewModal";
+import { TagType } from "@prisma/client";
 
 interface InterviewRoomProps {
   token: string;
   question: string;
   mockId: string;
-  questionType?: string; // Add this to make the header dynamic
+  questionType?: string;
+  tags: { id: string; name: string; type: TagType }[];
 }
 
 export function InterviewRoom({
@@ -31,6 +33,7 @@ export function InterviewRoom({
   question,
   mockId,
   questionType = "Ethics",
+  tags,
 }: InterviewRoomProps) {
   const [showQuestion, setShowQuestion] = useState(true);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -122,10 +125,18 @@ export function InterviewRoom({
                   Back
                 </Button>
               </Link>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl font-semibold text-gray-900">
-                  MMI Station • {questionType} Scenario
-                </h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-xl font-semibold text-gray-900">MMI Station</h1>
+                <div className="flex gap-2">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="text-xs px-2 py-1 rounded-full bg-[#635BFF]/10 text-[#635BFF]"
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

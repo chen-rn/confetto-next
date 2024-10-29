@@ -5,9 +5,6 @@ import { AverageScore } from "./AverageScore";
 import { RecentInterviewScores } from "./RecentInterviewScores";
 import { RecentPractice } from "./RecentPractice";
 import { Skeleton } from "@/components/ui/skeleton";
-import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import { StartInterviewButton } from "@/components/buttons/StartInterviewButton";
 import { PageHeader } from "@/components/PageHeader";
 import { PageContainer } from "@/components/PageContainer";
@@ -39,20 +36,6 @@ function ChartCardSkeleton() {
 }
 
 export default async function DashboardPage() {
-  const { userId } = auth();
-
-  if (!userId) {
-    redirect("/sign-in");
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
-
-  if (!user) {
-    redirect("/sign-in");
-  }
-
   return (
     <PageContainer>
       <PageHeader title="Dashboard" description="Track your interview practice progress">

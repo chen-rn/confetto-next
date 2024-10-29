@@ -71,10 +71,6 @@ export function useRecording(mockId: string) {
         console.log("MediaRecorder started");
 
         setIsRecording(true);
-        toast({
-          title: "Recording Started",
-          description: "Your interview is now being recorded.",
-        });
       } catch (error) {
         console.error("Error starting recording:", error);
         toast({
