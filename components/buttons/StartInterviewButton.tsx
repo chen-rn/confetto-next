@@ -16,20 +16,23 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Crown } from "lucide-react";
 import { ROUTES } from "@/lib/routes";
+import { useQuery } from "@tanstack/react-query";
+import { getInterviewCount } from "@/lib/actions/mock-interviews";
+import Link from "next/link";
+import { useInterviewEligibility } from "@/lib/hooks/useInterviewEligibility";
+import { SubscriptionDialog } from "@/components/dialogs/SubscriptionDialog";
 
 interface StartInterviewButtonProps {
-  user: User;
   className?: string;
 }
 
-const MAX_TRIAL_CREDITS = 3; // Move this to a constants file if used elsewhere
-
-export function StartInterviewButton({ user, className }: StartInterviewButtonProps) {
+export function StartInterviewButton({ className }: StartInterviewButtonProps) {
   const [showDialog, setShowDialog] = useState(false);
   const router = useRouter();
+  const { isEligible, user, hasTrialStarted, remainingCredits } = useInterviewEligibility();
 
-  const isEligible = user.subscriptionStatus === "TRIAL" || user.subscriptionStatus === "ACTIVE";
-  const remainingCredits = MAX_TRIAL_CREDITS - (user.trialCreditsUsed || 0);
+  if (!user) return null;
+
   const isTrialUser = user.subscriptionStatus === "TRIAL";
 
   function handleStartClick() {
@@ -77,29 +80,11 @@ export function StartInterviewButton({ user, className }: StartInterviewButtonPr
         )}
       </div>
 
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Crown className="w-5 h-5 text-purple-500" />
-              Unlock Full Access
-            </DialogTitle>
-            <DialogDescription className="pt-2 space-y-3">
-              <p>Start your free trial to access:</p>
-              <ul className="list-disc pl-4 space-y-1">
-                <li>3 mock interviews with AI feedback</li>
-                <li>Personalized improvement suggestions</li>
-                <li>Interview performance analytics</li>
-              </ul>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex gap-2 sm:flex-row flex-col">
-            <Button variant="outline" onClick={() => router.push("/pricing")} className="sm:flex-1">
-              Start Free Trial
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <SubscriptionDialog
+        open={showDialog}
+        onOpenChange={setShowDialog}
+        hasTrialStarted={hasTrialStarted}
+      />
     </>
   );
 }

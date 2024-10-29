@@ -15,6 +15,8 @@ import { ServerFilters } from "./ServerFilters";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { getTagStyles } from "./utils";
+import { PracticeQuestionButton } from "@/components/buttons/PracticeQuestionButton";
+import { useUser } from "@clerk/nextjs";
 
 interface QuestionWithTags extends Question {
   tags: QuestionTag[];
@@ -30,6 +32,7 @@ export function QuestionsList() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const searchParams = useSearchParams();
   const selectedTopics = searchParams.get("topics")?.split(",") || [];
+  const { user } = useUser();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<QuestionsResponse>({
@@ -160,15 +163,10 @@ function QuestionCard({ question }: { question: QuestionWithTags }) {
             </div>
           </div>
         </div>
-        <Link href={`${ROUTES.START_INTERVIEW}?questionId=${question.id}`}>
-          <Button
-            size="sm"
-            className="shrink-0 h-8 px-3 bg-[#635BFF] hover:bg-[#635BFF]/90 rounded-lg"
-          >
-            <Play className="h-3.5 w-3.5 mr-1.5" />
-            Practice
-          </Button>
-        </Link>
+        <PracticeQuestionButton
+          questionId={question.id}
+          className="shrink-0 h-8 px-3 bg-[#635BFF] hover:bg-[#635BFF]/90 rounded-lg"
+        />
       </div>
     </div>
   );

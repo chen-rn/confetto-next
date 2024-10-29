@@ -1,11 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
-import Link from "next/link";
-import { ROUTES } from "@/lib/routes";
 import type { Question, QuestionTag } from "@prisma/client";
+import { PracticeQuestionButton } from "@/components/buttons/PracticeQuestionButton";
 
 interface QuestionWithTags extends Question {
   tags: QuestionTag[];
@@ -81,12 +78,7 @@ function QuestionCard({ question }: { question: QuestionWithTags }) {
             </div>
           </div>
         </div>
-        <Link href={`${ROUTES.START_INTERVIEW}?questionId=${question.id}`}>
-          <Button size="sm" className="shrink-0 h-8 px-3" variant="outline">
-            <Play className="h-3.5 w-3.5 mr-1.5" />
-            Practice
-          </Button>
-        </Link>
+        <PracticeQuestionButton questionId={question.id} className="shrink-0 h-8 px-3" />
       </div>
     </Card>
   );

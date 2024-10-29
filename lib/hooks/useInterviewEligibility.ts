@@ -1,0 +1,51 @@
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentUser } from "@/lib/actions/user";
+import { getInterviewCount } from "@/lib/actions/mock-interviews";
+import type { SubscriptionStatus } from "@prisma/client";
+
+export const MAX_TRIAL_CREDITS = 3;
+
+const ELIGIBLE_STATUSES: SubscriptionStatus[] = ["ACTIVE", "TRIAL"];
+
+export function useInterviewEligibility() {
+  const { data: user } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => getCurrentUser(),
+  });
+
+  const { data: interviewCount = 0 } = useQuery({
+    queryKey: ["interviewCount"],
+    queryFn: () => getInterviewCount(),
+  });
+
+  if (!user) {
+    return {
+      isEligible: false,
+      user: null,
+      hasTrialStarted: false,
+      remainingCredits: 0,
+      subscriptionActive: false,
+    };
+  }
+
+  const subscriptionActive = user.subscriptionStatus === "ACTIVE";
+  const isInTrial = user.subscriptionStatus === "TRIAL";
+
+  const isEligible = subscriptionActive || (isInTrial && user.trialCreditsUsed < MAX_TRIAL_CREDITS);
+
+  const remainingCredits = isInTrial
+    ? Math.max(0, MAX_TRIAL_CREDITS - user.trialCreditsUsed)
+    : subscriptionActive
+    ? Number.POSITIVE_INFINITY
+    : 0;
+
+  const hasTrialStarted = user.trialStartedAt !== null;
+
+  return {
+    isEligible,
+    user,
+    hasTrialStarted,
+    remainingCredits,
+    subscriptionActive,
+  };
+}

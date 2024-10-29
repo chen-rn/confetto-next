@@ -8,7 +8,7 @@ export const ROUTES = {
   SIGN_UP: "/sign-up",
   MOCK_NEW: "/mock/new",
   START_INTERVIEW: "/start-interview",
-  MOCK: (id: string) => `/mock/${id}`,
+  MOCK: "/mock",
   MOCK_RESULT: (id: string) => `/mock/${id}/result`,
   PRICING: "/pricing",
   ONBOARDING: "/onboarding",

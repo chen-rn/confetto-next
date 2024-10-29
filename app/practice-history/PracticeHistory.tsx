@@ -20,6 +20,11 @@ interface MockInterview {
     createdAt: Date;
     updatedAt: Date;
     evaluationCriteria: string | null;
+    tags: {
+      id: string;
+      name: string;
+      type: string;
+    }[];
   };
   recordingUrl: string | null;
   createdAt: Date;
@@ -43,9 +48,9 @@ export function PracticeHistory({ mockInterviews }: PracticeHistoryProps) {
     return (
       <Card className="p-8 text-center">
         <div className="flex flex-col items-center space-y-4">
-          <Calendar className="h-12 w-12 text-gray-400" />
+          <Calendar className="h-12 w-12 text-neutral-400" />
           <h3 className="font-semibold text-xl">No Practice Sessions Yet</h3>
-          <p className="text-gray-500">Start your first mock interview to build your history.</p>
+          <p className="text-neutral-500">Start your first mock interview to build your history.</p>
           <Link href={ROUTES.START_INTERVIEW}>
             <Button>Start Practice</Button>
           </Link>
@@ -76,43 +81,67 @@ function InterviewHeader({ interview }: { interview: MockInterview }) {
     minute: "2-digit",
   });
 
-  function getScoreBadgeVariant(
-    score: number
-  ): "default" | "destructive" | "outline" | "secondary" {
-    if (score >= 80) return "default";
-    if (score >= 60) return "secondary";
-    return "destructive";
+  function getScoreBadgeVariant(score: number) {
+    if (score >= 80) return "bg-emerald-100 text-emerald-700";
+    if (score >= 60) return "bg-amber-100 text-amber-700";
+    return "bg-rose-100 text-rose-700";
   }
 
   return (
-    <Card className="shadow-none duration-200">
+    <div className="group rounded-xl border border-neutral-200 bg-white transition-all duration-200">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center space-x-4 flex-1 min-w-0">
-          <div className="w-20 h-14 rounded bg-gray-100 flex items-center justify-center">
-            <FileText className="h-6 w-6 text-gray-400" />
+          <div className="w-16 h-14 rounded bg-[#635BFF]/5 flex items-center justify-center">
+            <FileText className="h-6 w-6 text-[#635BFF]" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium line-clamp-2 mb-1">{interview.question.content}</h3>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <Clock className="mr-1 h-3 w-3" />
-              <span>{formattedDate}</span>
+            <h3 className="text-sm text-neutral-700 line-clamp-2 mb-2">
+              {interview.question.content}
+            </h3>
+            <div className="flex items-center gap-3 text-xs text-neutral-500">
+              <div className="flex items-center">
+                <Clock className="mr-1.5 h-3 w-3" />
+                <span>{formattedDate}</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {interview.question.tags.map((tag) => (
+                  <Badge
+                    key={tag.id}
+                    variant="secondary"
+                    className={cn(
+                      "border-transparent rounded-lg text-xs py-0.5",
+                      tag.type === "TOPIC" && "bg-blue-100 text-blue-700",
+                      tag.type === "STATE" && "bg-purple-100 text-purple-700",
+                      tag.type === "COUNTRY" && "bg-rose-100 text-rose-700"
+                    )}
+                  >
+                    {tag.name}
+                  </Badge>
+                ))}
+              </div>
             </div>
           </div>
         </div>
         <div className="flex items-center space-x-4 flex-shrink-0">
           {interview.feedback && (
-            <Badge variant={getScoreBadgeVariant(interview.feedback.overallScore)}>
+            <Badge
+              variant="secondary"
+              className={cn(
+                "border-transparent rounded-lg font-medium",
+                getScoreBadgeVariant(interview.feedback.overallScore)
+              )}
+            >
               {interview.feedback.overallScore}%
             </Badge>
           )}
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="sm" className="p-2">
+            <Button variant="ghost" size="icon" className="h-8 w-8">
               <ChevronDown className="h-4 w-4" />
             </Button>
           </CollapsibleTrigger>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -135,7 +164,7 @@ function FeedbackDisplay({ feedback }: { feedback: NonNullable<MockInterview["fe
       </div>
       <div className="mt-4">
         <h4 className="font-medium mb-2">Feedback</h4>
-        <p className="text-sm text-gray-600">{feedback.overallFeedback}</p>
+        <p className="text-sm text-neutral-600">{feedback.overallFeedback}</p>
       </div>
     </div>
   );
@@ -145,26 +174,64 @@ function FeedbackDisplay({ feedback }: { feedback: NonNullable<MockInterview["fe
 function CollapsibleInterviewContent({ interview }: { interview: MockInterview }) {
   return (
     <CollapsibleContent>
-      <div className="mt-2 p-6 bg-gray-50 rounded-xl border">
+      <div className="mt-2 p-6 rounded-xl border border-neutral-100 bg-white">
         {interview.feedback ? (
           <>
-            <FeedbackDisplay feedback={interview.feedback} />
-            <div className="flex justify-end space-x-2 mt-6">
+            <div className="space-y-6">
+              <div>
+                <h4 className="text-sm font-medium text-neutral-700 mb-3">Overall Score</h4>
+                <div className="space-y-2">
+                  <Progress
+                    value={interview.feedback.overallScore}
+                    className="h-2"
+                    indicatorClassName={cn(
+                      "transition-all",
+                      interview.feedback.overallScore >= 80 && "bg-emerald-500",
+                      interview.feedback.overallScore >= 60 &&
+                        interview.feedback.overallScore < 80 &&
+                        "bg-amber-500",
+                      interview.feedback.overallScore < 60 && "bg-rose-500"
+                    )}
+                  />
+                  <span className="text-sm text-neutral-500">
+                    {interview.feedback.overallScore}% Score
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-medium text-neutral-700 mb-3">Feedback</h4>
+                <p className="text-sm text-neutral-600 leading-relaxed">
+                  {interview.feedback.overallFeedback}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-6">
               <Link href={ROUTES.MOCK_RESULT(interview.id)}>
-                <Button>View Detailed Feedback</Button>
+                <Button className="bg-[#635BFF] hover:bg-[#635BFF]/90 rounded-lg">
+                  View Detailed Feedback
+                </Button>
               </Link>
             </div>
           </>
         ) : (
-          <div className="flex flex-col items-center py-8 text-gray-500">
-            <FileText className="h-12 w-12 mb-4 text-gray-400" />
-            <p className="mb-4 text-center">
+          <div className="flex flex-col items-center py-8">
+            <div className="w-14 h-14 rounded-full bg-[#635BFF]/5 flex items-center justify-center mb-4">
+              <FileText className="h-6 w-6 text-[#635BFF]" />
+            </div>
+            <p className="text-neutral-600 text-center mb-4">
               Your feedback is being processed.
               <br />
               Check back soon!
             </p>
             <Link href={ROUTES.MOCK_RESULT(interview.id)}>
-              <Button variant="outline">View Recording</Button>
+              <Button
+                variant="outline"
+                className="border-[#635BFF] text-[#635BFF] hover:bg-[#635BFF]/5"
+              >
+                View Recording
+              </Button>
             </Link>
           </div>
         )}

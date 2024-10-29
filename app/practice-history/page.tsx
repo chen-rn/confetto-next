@@ -51,6 +51,7 @@ export default async function PracticeHistoryPage() {
           createdAt: true,
           updatedAt: true,
           evaluationCriteria: true,
+          tags: true,
         },
       },
       feedback: {

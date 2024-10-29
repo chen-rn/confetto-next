@@ -47,11 +47,7 @@ export default async function SettingsPage() {
           <NotificationSettings />
         </div>
 
-        <SubscriptionSettings
-          subscriptionStatus={user.subscriptionStatus}
-          stripePriceId={user.stripePriceId}
-          currentPeriodEnd={user.currentPeriodEnd}
-        />
+        <SubscriptionSettings />
 
         <div className="flex justify-end">
           <SignOutButton />

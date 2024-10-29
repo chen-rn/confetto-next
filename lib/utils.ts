@@ -21,3 +21,18 @@ export function absoluteUrl(path: string) {
 
   return `http://localhost:${process.env.PORT ?? 3000}${path}`;
 }
+/**
+ * Formats a date into a human-readable string.
+ * Returns 'N/A' if the date is null or undefined.
+ *
+ * @param date - Date to format
+ * @returns Formatted date string or 'N/A'
+ */
+export function formatDate(date: Date | null | undefined) {
+  if (!date) return "N/A";
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}

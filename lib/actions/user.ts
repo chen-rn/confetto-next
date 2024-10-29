@@ -43,3 +43,14 @@ export async function getUserProfile() {
 
   return user;
 }
+
+export async function getCurrentUser() {
+  const { userId } = auth();
+  if (!userId) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  return user;
+}
