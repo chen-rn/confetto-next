@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
-import { Crown, Calendar, CreditCard, Loader2, AlertTriangle } from "lucide-react";
+import { Sparkles, Calendar, CreditCard, Loader2, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,27 +25,27 @@ import { useState } from "react";
 const subscriptionStatusMap = {
   NOT_SUBSCRIBED: {
     label: "No Subscription",
-    color: "text-slate-500",
+    color: "bg-slate-100 text-slate-600",
   },
   TRIAL: {
     label: "Trial",
-    color: "text-blue-500",
+    color: "bg-[#635BFF]/10 text-[#635BFF]",
   },
   ACTIVE: {
     label: "Active",
-    color: "text-green-500",
+    color: "bg-[#635BFF]/10 text-[#635BFF]",
   },
   PAST_DUE: {
     label: "Past Due",
-    color: "text-yellow-500",
+    color: "bg-red-100 text-red-600",
   },
   CANCELED: {
     label: "Canceled",
-    color: "text-red-500",
+    color: "bg-slate-100 text-slate-600",
   },
   EXPIRED: {
     label: "Expired",
-    color: "text-slate-500",
+    color: "bg-slate-100 text-slate-600",
   },
 } as const;
 
@@ -94,7 +94,7 @@ export function SubscriptionSettings() {
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Crown className="w-5 h-5 text-purple-500" />
+          <Sparkles className="w-5 h-5 text-[#635BFF]" />
           Subscription
         </CardTitle>
         <CardDescription>Manage your subscription and billing details</CardDescription>
@@ -105,12 +105,9 @@ export function SubscriptionSettings() {
         <div className="space-y-2">
           <div className="text-sm text-muted-foreground">Status</div>
           <div className="flex items-center gap-3">
-            <Badge
-              variant={isPastDue ? "destructive" : "secondary"}
-              className={`font-medium ${status.color}`}
-            >
+            <span className={`px-2.5 py-0.5 rounded-full text-sm font-medium ${status.color}`}>
               {status.label}
-            </Badge>
+            </span>
             {isPastDue && (
               <span className="text-sm text-red-500 flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4" />
@@ -122,23 +119,24 @@ export function SubscriptionSettings() {
 
         {/* Plan Details */}
         {(isActive || isTrialUser) && (
-          <div>
-            <div className="grid gap-4">
-              {subscription.currentPeriodEnd && (
-                <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    {isTrialUser ? "Trial Ends" : "Next Billing Date"}
-                  </div>
-                  <div className="font-medium">{formatDate(subscription.currentPeriodEnd)}</div>
+          <div className="space-y-4">
+            {subscription.currentPeriodEnd && (
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-[#635BFF]" />
+                  {isTrialUser ? "Trial Ends" : "Next Billing Date"}
                 </div>
-              )}
-            </div>
+                <div className="font-medium">{formatDate(subscription.currentPeriodEnd)}</div>
+              </div>
+            )}
 
             {isTrialUser && (
-              <div className="text-sm text-muted-foreground">
-                <span className="font-medium">{remainingCredits} of 3</span> trial interviews
-                remaining
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <CreditCard className="w-4 h-4 text-[#635BFF]" />
+                <span>
+                  <span className="font-medium">{remainingCredits} of 3</span> trial interviews
+                  remaining
+                </span>
               </div>
             )}
           </div>
@@ -149,7 +147,7 @@ export function SubscriptionSettings() {
         {isActive || isPastDue ? (
           <Button
             variant="outline"
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto hover:bg-[#635BFF]/5"
             onClick={handlePortalRedirect}
             disabled={isRedirecting}
           >
@@ -164,7 +162,9 @@ export function SubscriptionSettings() {
           </Button>
         ) : (
           <Link href="/pricing" className="w-full sm:w-auto" prefetch>
-            <Button className="w-full">{isTrialUser ? "Upgrade to Premium" : "View Plans"}</Button>
+            <Button className="w-full bg-[#635BFF] hover:bg-[#635BFF]/90">
+              {isTrialUser ? "Upgrade to Premium" : "View Plans"}
+            </Button>
           </Link>
         )}
       </CardFooter>

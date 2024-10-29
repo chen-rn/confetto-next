@@ -5,6 +5,7 @@ Libraries that we'll be using include:
 - Prisma for Database(/api/prisma is our client)
 - Firebase for Cloud Storage
 - Server Actions instead of creating /API routes when possible.
+- text-[#635BFF], the color is our primary color
 
 Code Style and Structure
 

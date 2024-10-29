@@ -3,9 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Play, ChevronDown, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { ROUTES } from "@/lib/routes";
+import { ChevronDown, Loader2 } from "lucide-react";
 import type { Question, QuestionTag } from "@prisma/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getQuestions } from "@/lib/actions/questions";
@@ -16,7 +14,6 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { getTagStyles } from "./utils";
 import { PracticeQuestionButton } from "@/components/buttons/PracticeQuestionButton";
-import { useUser } from "@clerk/nextjs";
 
 interface QuestionWithTags extends Question {
   tags: QuestionTag[];
@@ -32,7 +29,6 @@ export function QuestionsList() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const searchParams = useSearchParams();
   const selectedTopics = searchParams.get("topics")?.split(",") || [];
-  const { user } = useUser();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<QuestionsResponse>({

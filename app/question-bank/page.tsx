@@ -1,6 +1,3 @@
-import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
-import { ROUTES } from "@/lib/routes";
 import { AddQuestionForm } from "@/components/AddQuestionForm";
 import { Plus } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -9,14 +6,7 @@ import { QuestionsList } from "./QuestionsList";
 import { PageHeader } from "@/components/PageHeader";
 import { PageContainer } from "@/components/PageContainer";
 
-export default async function QuestionBankPage({
-  searchParams,
-}: {
-  searchParams?: { topics?: string };
-}) {
-  const userId = auth().userId;
-  if (!userId) redirect(ROUTES.SIGN_IN);
-
+export default async function QuestionBankPage() {
   return (
     <PageContainer>
       <PageHeader title="Question Bank" description="Browse and manage your practice questions">

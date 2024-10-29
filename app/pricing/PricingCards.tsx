@@ -67,6 +67,14 @@ export function PricingCards({
 }: PricingCardsProps) {
   const [isPending, startTransition] = useTransition();
 
+  function isActivePlan(priceId: string) {
+    return (
+      currentPriceId === priceId &&
+      subscriptionStatus !== "CANCELED" &&
+      subscriptionStatus !== "EXPIRED"
+    );
+  }
+
   const handleSubscribe = async (priceId: string) => {
     try {
       console.log("Plan priceId:", priceId);
@@ -90,7 +98,7 @@ export function PricingCards({
   return (
     <div className="flex flex-wrap justify-center gap-6 px-4">
       {Object.entries(stripePlans).map(([key, plan], index) => {
-        const isCurrentPlan = currentPriceId === plan.priceId;
+        const isCurrentPlan = isActivePlan(plan.priceId);
         const isRecommended = index === 1;
         const savings =
           plan.interval !== "month" ? calculateSavings(199, plan.price, plan.interval) : null;
@@ -179,6 +187,8 @@ export function PricingCards({
                   <span className="font-medium">
                     {isCurrentPlan
                       ? "Current Plan"
+                      : currentPriceId === plan.priceId && subscriptionStatus === "CANCELED"
+                      ? "Resubscribe"
                       : hasHadTrial
                       ? "Subscribe Now"
                       : "Start Free Trial"}

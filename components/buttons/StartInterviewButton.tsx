@@ -50,7 +50,7 @@ export function StartInterviewButton({ className }: StartInterviewButtonProps) {
 
   return (
     <>
-      <div className={cn("flex flex-col gap-2", className)}>
+      <div className={cn("flex flex-col items-center gap-2", className)}>
         <Button
           onClick={handleStartClick}
           size="default"
@@ -68,20 +68,14 @@ export function StartInterviewButton({ className }: StartInterviewButtonProps) {
         {isTrialUser && (
           <Badge
             variant="secondary"
-            className="w-fit text-xs font-normal bg-transparent border border-slate-200 text-slate-500 shadow-sm"
+            className="text-xs font-normal bg-transparent border border-slate-200 text-slate-500 shadow-sm"
           >
             {remainingCredits} trial {remainingCredits === 1 ? "interview" : "interviews"} remaining
           </Badge>
         )}
 
         {user.subscriptionStatus === "ACTIVE" && (
-          <Badge
-            variant="secondary"
-            className="w-fit bg-gradient-to-r from-[#635BFF] to-[#5a52f0] text-white shadow-sm"
-          >
-            <Crown className="w-4 h-4 mr-1.5" />
-            Premium Member
-          </Badge>
+          <span className="text-xs text-neutral-500">Unlimited interviews</span>
         )}
       </div>
 
