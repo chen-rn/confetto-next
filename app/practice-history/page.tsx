@@ -31,7 +31,7 @@ function InterviewHistorySkeleton() {
 }
 
 export default async function PracticeHistoryPage() {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     redirect(ROUTES.SIGN_IN);

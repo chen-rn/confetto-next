@@ -8,7 +8,7 @@ import { ROUTES } from "@/lib/routes";
 import { Badge } from "@/components/ui/badge";
 
 async function getRecentPractice() {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) return [];
 
   return await prisma.mockInterview.findMany({

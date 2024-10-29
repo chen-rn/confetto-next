@@ -15,12 +15,13 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
 interface ResultPageProps {
-  params: {
+  params: Promise<{
     mockId: string;
-  };
+  }>;
 }
 
-export default async function ResultPage({ params }: ResultPageProps) {
+export default async function ResultPage(props: ResultPageProps) {
+  const params = await props.params;
   const { mockId } = params;
 
   if (!mockId) {

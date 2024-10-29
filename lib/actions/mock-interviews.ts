@@ -21,7 +21,7 @@ export async function startMockInterview({ userId, questionId }: StartMockInterv
 }
 
 export async function getInterviewCount() {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) return 0;
 
   const count = await prisma.mockInterview.count({

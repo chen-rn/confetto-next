@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Confetti } from "@/components/Confetti";
 
 export default async function WelcomePage() {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) redirect("/sign-in");
 
   return (

@@ -9,7 +9,7 @@ interface UpdatePreferencesParams {
 }
 
 export async function updateUserPreferences({ mmiDate, primaryConcern }: UpdatePreferencesParams) {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     throw new Error("Unauthorized");
@@ -25,7 +25,7 @@ export async function updateUserPreferences({ mmiDate, primaryConcern }: UpdateP
 }
 
 export async function getUserProfile() {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return null;
@@ -45,7 +45,7 @@ export async function getUserProfile() {
 }
 
 export async function getCurrentUser() {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) return null;
 
   const user = await prisma.user.findUnique({

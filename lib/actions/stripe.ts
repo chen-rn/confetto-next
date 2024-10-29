@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { SubscriptionStatus } from "@prisma/client";
 
 export async function createCheckoutSession(priceId: string) {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     throw new Error("User not found");
@@ -87,7 +87,7 @@ export async function createCheckoutSession(priceId: string) {
 // Add this new function to the existing file
 
 export async function createCustomerPortalSession() {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     throw new Error("User not found");

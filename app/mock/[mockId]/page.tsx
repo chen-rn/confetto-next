@@ -10,12 +10,13 @@ import { InterviewRoom } from "@/app/mock/[mockId]/InterviewRoom";
 import { getLivekitRoomToken } from "@/lib/actions/getLivekitRoomToken";
 
 interface MMIInterviewInterfaceProps {
-  params: {
+  params: Promise<{
     mockId: string;
-  };
+  }>;
 }
 
-export default async function MMIInterviewInterface({ params }: MMIInterviewInterfaceProps) {
+export default async function MMIInterviewInterface(props: MMIInterviewInterfaceProps) {
+  const params = await props.params;
   const { mockId } = params;
 
   if (!mockId) {

@@ -13,7 +13,7 @@ interface OnboardingData {
 }
 
 export async function updateOnboarding(data: OnboardingData) {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     throw new Error("Unauthorized");

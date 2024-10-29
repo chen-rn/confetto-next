@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import type { School } from "@prisma/client";
 
 export async function addSchool(schoolId: string): Promise<void> {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   await prisma.user.update({
@@ -19,7 +19,7 @@ export async function addSchool(schoolId: string): Promise<void> {
 }
 
 export async function removeSchool(schoolId: string): Promise<void> {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   await prisma.user.update({
@@ -39,7 +39,7 @@ export async function getAllSchools(): Promise<School[]> {
 }
 
 export async function getUserSchools(): Promise<School[]> {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) return [];
 
   const user = await prisma.user.findUnique({

@@ -4,7 +4,7 @@ import { OnboardingFlow } from "@/app/onboarding/OnboardingFlow";
 import { prisma } from "@/lib/prisma";
 
 export default async function OnboardingPage() {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) redirect("/sign-in");
 
   const user = await prisma.user.findUnique({

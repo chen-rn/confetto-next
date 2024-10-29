@@ -52,7 +52,7 @@ export function ServerFilters() {
         const isSelected = localSelectedTopics.includes(topic.name);
 
         return (
-          <button
+          <div
             key={topic.id}
             onClick={() => updateFilters(topic.name)}
             className={cn(
@@ -94,7 +94,7 @@ export function ServerFilters() {
                 {topic._count.questions}
               </Badge>
             </div>
-          </button>
+          </div>
         );
       })}
     </div>

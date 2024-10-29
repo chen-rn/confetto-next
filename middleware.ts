@@ -9,14 +9,14 @@ const isPublicRoute = createRouteMatcher([
   "/api/webhooks/stripe",
 ]);
 
-export default clerkMiddleware((auth, request) => {
+export default clerkMiddleware(async (auth, request) => {
   // Allow public routes
   if (isPublicRoute(request)) {
     return;
   }
 
   // Require authentication for all other routes
-  auth().protect();
+  await auth.protect();
 });
 
 export const config = {

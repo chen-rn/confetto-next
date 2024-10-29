@@ -42,7 +42,7 @@ function getSubscriptionStatus(
 export async function POST(request: Request) {
   try {
     const body = await request.text();
-    const signature = headers().get("Stripe-Signature");
+    const signature = (await headers()).get("Stripe-Signature");
 
     if (!webhookSecret) {
       throw new Error("Missing STRIPE_WEBHOOK_SECRET");

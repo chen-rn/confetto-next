@@ -16,7 +16,7 @@ export default async function PricingPage() {
     throw new Error("Stripe price IDs not configured");
   }
 
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     redirect("/sign-in");

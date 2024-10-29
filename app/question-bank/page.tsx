@@ -14,7 +14,7 @@ export default async function QuestionBankPage({
 }: {
   searchParams?: { topics?: string };
 }) {
-  const userId = auth().userId;
+  const userId = (await auth()).userId;
   if (!userId) redirect(ROUTES.SIGN_IN);
 
   return (

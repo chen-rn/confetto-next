@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
 export async function getRandomQuestion() {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) throw new Error("User not authenticated");
 
   try {
