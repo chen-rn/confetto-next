@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { OnboardingFlow } from "@/app/onboarding/OnboardingFlow";
 import { prisma } from "@/lib/prisma";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function OnboardingPage() {
   const { userId } = auth();
@@ -14,20 +15,20 @@ export default async function OnboardingPage() {
       schools: true,
       mmiDate: true,
       primaryConcern: true,
+      subscriptionStatus: true,
     },
   });
 
-  // if (user?.onboardingStatus === "COMPLETED") {
-  //   redirect("/");
-  // }
+  if (user?.onboardingStatus === "COMPLETED") {
+    if (user.subscriptionStatus === "NOT_SUBSCRIBED") {
+      redirect("/pricing");
+    }
+    redirect("/");
+  }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50/30">
-      <div className="w-full max-w-2xl px-4">
-        <div className="rounded-xl border bg-white p-8 shadow-sm">
-          <OnboardingFlow initialData={user} />
-        </div>
-      </div>
-    </div>
+    <ScrollArea className="min-h-screen bg-neutral-100 flex items-center justify-center">
+      <OnboardingFlow initialData={user} />
+    </ScrollArea>
   );
 }

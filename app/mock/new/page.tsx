@@ -5,7 +5,7 @@ import { InterviewOptionsSkeletons } from "./InterviewOptionsSkeletons";
 
 export default function NewMockInterviewPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50/50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-white to-neutral-100/50 flex flex-col">
       <div className="max-w-7xl mx-auto px-4 py-8 flex-1">
         <BackToDashboard />
 

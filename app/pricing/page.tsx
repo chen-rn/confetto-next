@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { stripePlans } from "@/lib/config/stripe";
 import Link from "next/link";
 import { ArrowLeft, Check, ShieldQuestion } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { BackButton } from "./BackButton";
 
 export default async function PricingPage() {
   // Validate env vars server-side
@@ -37,13 +39,7 @@ export default async function PricingPage() {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-start bg-gradient-to-b from-white to-neutral-100">
       <div className="relative w-full max-w-6xl px-4 py-12">
-        <Link
-          href="/"
-          className="absolute left-4 top-4 text-neutral-600 hover:text-neutral-900 flex items-center gap-2 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </Link>
+        <BackButton />
 
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-[#635BFF] to-purple-600 bg-clip-text text-transparent">

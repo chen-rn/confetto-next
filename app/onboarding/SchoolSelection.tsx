@@ -37,27 +37,43 @@ export function SchoolSelection({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight">Select Your Target Schools</h1>
-        <p className="text-muted-foreground">Choose the medical schools you're applying to</p>
+    <div className="space-y-4">
+      <div className="space-y-1">
+        <h1 className="text-xl font-bold text-gray-900">Select Your Target Schools</h1>
+        <p className="text-sm text-muted-foreground">
+          Choose the medical schools you're applying to
+        </p>
       </div>
 
-      <SchoolSelector
-        selectedSchools={selectedSchools}
-        onSchoolToggle={handleSchoolToggle}
-        onSchoolRemove={handleSchoolRemove}
-      />
+      <div className="h-[320px]">
+        <SchoolSelector
+          selectedSchools={selectedSchools}
+          onSchoolToggle={handleSchoolToggle}
+          onSchoolRemove={handleSchoolRemove}
+        />
+      </div>
 
-      <div className="flex justify-between pt-6">
+      <div className="flex justify-between pt-3">
         <Button variant="outline" onClick={onBack} disabled={isFirstStep}>
           Back
         </Button>
-        <div className="space-x-2">
-          <Button variant="ghost" onClick={() => onNext({ schools: [] })}>
-            Skip
-          </Button>
-          <Button onClick={() => onNext({ schools: selectedSchools })}>Continue</Button>
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-muted-foreground">{selectedSchools.length} selected</span>
+          <div className="space-x-2">
+            <Button
+              variant="ghost"
+              onClick={() => onNext({ schools: [] })}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              Skip
+            </Button>
+            <Button
+              onClick={() => onNext({ schools: selectedSchools })}
+              className="bg-[#635BFF] hover:bg-[#635BFF]/90"
+            >
+              {isLastStep ? "Complete Setup" : "Continue"}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

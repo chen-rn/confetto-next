@@ -1,0 +1,110 @@
+Design System Guidelines for MMI Practice App
+
+# Color System
+- Primary: #635BFF
+  - Main actions and focus states
+  - Hover: 90% opacity (#635BFF/90)
+  - Light backgrounds: 10% opacity (#635BFF/10)
+  - Ultra light: 2% opacity (#635BFF/[0.02])
+- Use text-[#635BFF] for primary colored text
+
+# Typography Patterns
+- Headings:
+  - H1: text-xl font-bold text-gray-900
+  - H2: text-2xl font-bold text-gray-900
+  - H3: text-sm font-medium text-gray-900
+- Body Text:
+  - Primary: text-sm text-gray-900
+  - Secondary: text-sm text-muted-foreground
+  - Small: text-xs text-gray-500
+
+# Component Patterns
+
+## Containers
+- Primary containers:
+  - max-w-3xl mx-auto
+  - bg-white rounded-3xl
+  - border shadow-sm
+  - p-8
+
+- Cards:
+  - rounded-xl border
+  - p-3
+  - transition-all duration-200
+  - hover states: hover:border-gray-200 hover:shadow-sm hover:bg-gray-50/50
+  - selected states: border-[#635BFF] bg-[#635BFF]/[0.02] ring-1 ring-[#635BFF]/10
+
+## Buttons
+- Primary:
+  - bg-[#635BFF] hover:bg-[#635BFF]/90
+  - text-white
+  - rounded-lg
+- CTAs:
+  - Use rounded-full for main call-to-actions
+  - w-full h-12 for large buttons
+- Secondary:
+  - variant="outline"
+  - border-gray-200
+  - text-gray-500 hover:text-gray-700
+
+## Icons
+- Container sizes:
+  - Standard: h-8 w-8
+  - Large: h-10 w-10
+- Always center icons: flex items-center justify-center
+- Use bg-[#635BFF]/10 for icon backgrounds
+- Icon sizes: h-4 w-4 (or h-5 w-5 for emphasis)
+
+# Layout Guidelines
+- Use space-y-4 for vertical stacking
+- Use space-x-2 for horizontal spacing
+- Flex patterns:
+  - flex items-center justify-between for headers
+  - flex items-center justify-center for centered content
+- Grid patterns:
+  - grid grid-cols-2 gap-4 for two-column layouts
+  - Adjust cols- based on content needs
+
+# Interactive Elements
+- Transitions: transition-all duration-200
+- Hover effects:
+  - hover:bg-gray-50/50
+  - hover:border-gray-200
+  - hover:shadow-sm
+- Selected states:
+  - Use primary color with low opacity
+  - Add subtle rings for focus states
+
+# Effects & Decorative Elements
+- Animations:
+  - animate-fade-in for appearing elements
+  - animate-float for floating effects
+  - animate-pulse for loading states
+- Shadows:
+  - shadow-sm for subtle depth
+  - shadow-lg for elevated components
+- Backgrounds:
+  - Use gradients: bg-gradient-to-b from-white to-gray-50
+  - Glass effect: bg-white/50 backdrop-blur-sm
+
+# Form Elements
+- Groups: space-y-2
+- Labels: text-sm font-medium text-gray-700
+- Inputs: 
+  - rounded-lg border-gray-300
+  - focus:border-[#635BFF] focus:ring-[#635BFF]
+
+# Modal Patterns
+- Overlay: fixed inset-0 bg-black/25 backdrop-blur-sm
+- Content:
+  - centered positioning
+  - max-w-md for standard width
+  - rounded-xl with shadow-xl
+  - p-6 padding
+
+Remember:
+- Always maintain consistent spacing and rounded corners
+- Use transitions for interactive elements
+- Maintain hierarchy with typography and spacing
+- Keep components clean and minimal
+- Use primary color sparingly for emphasis 
