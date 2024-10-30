@@ -7,6 +7,8 @@ import Link from "next/link";
 import { ArrowLeft, Check, ShieldQuestion } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "./BackButton";
+import { MAX_TRIAL_CREDITS } from "@/lib/hooks/useInterviewEligibility";
+import { getInterviewCount } from "@/lib/actions/mock-interviews";
 
 export default async function PricingPage() {
   // Validate env vars server-side
@@ -33,6 +35,11 @@ export default async function PricingPage() {
     },
   });
 
+  const interviewCount = await getInterviewCount();
+  const trialExhausted =
+    user?.subscriptionStatus === "TRIAL" && interviewCount >= MAX_TRIAL_CREDITS;
+  const trialActive = user?.subscriptionStatus === "TRIAL" && interviewCount < MAX_TRIAL_CREDITS;
+
   // Verify stripe plans are loaded
   console.log("Stripe plans check:", stripePlans);
 
@@ -43,10 +50,14 @@ export default async function PricingPage() {
 
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-[#635BFF] to-purple-600 bg-clip-text text-transparent">
-            Choose Your Plan
+            {trialExhausted ? "Upgrade Your Account" : "Choose Your Plan"}
           </h1>
           <p className="text-lg text-neutral-700 font-medium max-w-2xl mx-auto">
-            {user?.trialStartedAt
+            {trialExhausted
+              ? "Ready to unlock unlimited interviews? Upgrade your account now."
+              : trialActive
+              ? `You have ${MAX_TRIAL_CREDITS - interviewCount} interviews remaining in your trial.`
+              : user?.trialStartedAt
               ? "Choose a plan to continue your interview preparation journey"
               : "Start with a 7-day free trial. Upgrade, downgrade, or cancel anytime."}
           </p>
@@ -61,6 +72,7 @@ export default async function PricingPage() {
             subscriptionStatus={user?.subscriptionStatus}
             currentPriceId={user?.stripePriceId}
             trialStartedAt={user?.trialStartedAt}
+            interviewCount={interviewCount}
           />
         </div>
 

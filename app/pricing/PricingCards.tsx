@@ -8,6 +8,7 @@ import { useTransition } from "react";
 import { createCheckoutSession } from "@/lib/actions/stripe";
 import { cva } from "class-variance-authority";
 import { motion } from "framer-motion";
+import { MAX_TRIAL_CREDITS } from "@/lib/hooks/useInterviewEligibility";
 
 const cardVariants = cva(
   [
@@ -32,6 +33,7 @@ interface PricingCardsProps {
   subscriptionStatus?: SubscriptionStatus;
   currentPriceId?: string | null;
   trialStartedAt?: Date | null;
+  interviewCount: number;
 }
 
 const features = [
@@ -64,10 +66,15 @@ export function PricingCards({
   subscriptionStatus,
   currentPriceId,
   trialStartedAt,
+  interviewCount,
 }: PricingCardsProps) {
   const [isPending, startTransition] = useTransition();
 
   function isActivePlan(priceId: string) {
+    if (subscriptionStatus === "TRIAL" && interviewCount >= MAX_TRIAL_CREDITS) {
+      return false;
+    }
+
     return (
       currentPriceId === priceId &&
       subscriptionStatus !== "CANCELED" &&
@@ -94,6 +101,42 @@ export function PricingCards({
   };
 
   const hasHadTrial = trialStartedAt !== null;
+  function getButtonText(
+    plan: {
+      priceId: string;
+      price: number;
+      interval: string;
+    },
+    isCurrentPlan: boolean,
+    subscriptionStatus: SubscriptionStatus | undefined,
+    interviewCount: number
+  ) {
+    if (isPending) {
+      return (
+        <div className="flex items-center justify-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Processing...
+        </div>
+      );
+    }
+
+    if (isCurrentPlan) {
+      if (subscriptionStatus === "TRIAL" && interviewCount >= MAX_TRIAL_CREDITS) {
+        return "Upgrade Now";
+      }
+      return "Current Plan";
+    }
+
+    if (currentPriceId === plan.priceId && subscriptionStatus === "CANCELED") {
+      return "Resubscribe";
+    }
+
+    if (subscriptionStatus === "TRIAL" && interviewCount >= MAX_TRIAL_CREDITS) {
+      return "Upgrade Now";
+    }
+
+    return hasHadTrial ? "Subscribe Now" : "Start Free Trial";
+  }
 
   return (
     <div className="flex flex-wrap justify-center gap-6 px-4">
@@ -175,25 +218,14 @@ export function PricingCards({
                     : "border-2 border-[#635BFF] text-[#635BFF] hover:bg-[#635BFF]/5"
                 }`}
                 variant={isRecommended ? "default" : "outline"}
-                disabled={isPending || isCurrentPlan}
+                disabled={
+                  isPending ||
+                  (isCurrentPlan &&
+                    !(subscriptionStatus === "TRIAL" && interviewCount >= MAX_TRIAL_CREDITS))
+                }
                 onClick={() => handleSubscribe(plan.priceId)}
               >
-                {isPending ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Processing...
-                  </div>
-                ) : (
-                  <span className="font-medium">
-                    {isCurrentPlan
-                      ? "Current Plan"
-                      : currentPriceId === plan.priceId && subscriptionStatus === "CANCELED"
-                      ? "Resubscribe"
-                      : hasHadTrial
-                      ? "Subscribe Now"
-                      : "Start Free Trial"}
-                  </span>
-                )}
+                {getButtonText(plan, isCurrentPlan, subscriptionStatus, interviewCount)}
               </Button>
             </div>
           </motion.div>

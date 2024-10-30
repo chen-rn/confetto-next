@@ -10,6 +10,7 @@ import { createMockInterview } from "@/lib/actions/createMockInterview";
 import { ROUTES } from "@/lib/routes";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { useInterviewEligibility } from "@/lib/hooks/useInterviewEligibility";
 
 const OPTIONS = [
   {
@@ -41,6 +42,7 @@ const OPTIONS = [
 export default function InterviewOptions() {
   const router = useRouter();
   const { userId } = useAuth();
+  const { isEligible } = useInterviewEligibility();
   const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
 
@@ -54,6 +56,11 @@ export default function InterviewOptions() {
   async function handleStartMock() {
     if (!userId) {
       router.push("/sign-in");
+      return;
+    }
+
+    if (!isEligible) {
+      router.push("/dashboard?showSubscription=true");
       return;
     }
 
@@ -75,6 +82,11 @@ export default function InterviewOptions() {
   async function handleTopicSelect(tagId: string) {
     if (!userId) {
       router.push("/sign-in");
+      return;
+    }
+
+    if (!isEligible) {
+      router.push("/dashboard?showSubscription=true");
       return;
     }
 

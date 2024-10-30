@@ -21,9 +21,6 @@ export async function createCheckoutSession(priceId: string) {
     throw new Error("User not found");
   }
 
-  // Check if user has already had a trial
-  const hasHadTrial = user.trialStartedAt !== null;
-
   let stripeCustomerId = user.stripeCustomerId;
 
   if (!stripeCustomerId) {
@@ -37,17 +34,13 @@ export async function createCheckoutSession(priceId: string) {
       where: { id: userId },
       data: {
         stripeCustomerId: customer.id,
-        // Update trial and subscription status when starting trial
-        trialStartedAt: new Date(),
-        subscriptionStatus: SubscriptionStatus.TRIAL,
       },
     });
 
     stripeCustomerId = customer.id;
   }
 
-  // Change the return URL based on whether it's a new trial or not
-  const returnUrl = hasHadTrial ? absoluteUrl("/dashboard") : absoluteUrl("/welcome");
+  const returnUrl = absoluteUrl("/dashboard");
 
   const session = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,
@@ -66,8 +59,8 @@ export async function createCheckoutSession(priceId: string) {
     success_url: `${returnUrl}?success=true`,
     cancel_url: `${returnUrl}?canceled=true`,
     subscription_data: {
-      // Only add trial period if user hasn't had one before
-      ...(hasHadTrial ? {} : { trial_period_days: 7 }),
+      // Only add trial period for new users, not for trial upgrades
+      ...(user.trialStartedAt === null ? { trial_period_days: 7 } : {}),
       metadata: {
         userId,
       },
@@ -83,8 +76,6 @@ export async function createCheckoutSession(priceId: string) {
 
   return session.url;
 }
-
-// Add this new function to the existing file
 
 export async function createCustomerPortalSession() {
   const { userId } = auth();

@@ -84,7 +84,6 @@ schools School[] // Many-to-many relation with School
     subscriptionStatus SubscriptionStatus @default(NOT_SUBSCRIBED)
     stripePriceId      String? // Store the active price ID instead of enum
     trialStartedAt     DateTime?
-    trialCreditsUsed   Int                @default(0)
     currentPeriodEnd   DateTime?
 
     onboardingStatus OnboardingStatus @default(NOT_STARTED)

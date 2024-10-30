@@ -17,7 +17,6 @@ export async function getUserSubscription() {
       stripeCustomerId: true,
       currentPeriodEnd: true,
       trialStartedAt: true,
-      trialCreditsUsed: true,
     },
   });
 

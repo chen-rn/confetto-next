@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentUser } from "@/lib/actions/user";
 import { getInterviewCount } from "@/lib/actions/mock-interviews";
-import type { SubscriptionStatus } from "@prisma/client";
 
 export const MAX_TRIAL_CREDITS = 3;
 
