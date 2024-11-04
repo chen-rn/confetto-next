@@ -13,7 +13,7 @@ export default async function StartInterviewPage({
   if (!userId) redirect(ROUTES.SIGN_IN);
 
   const questionId = searchParams.questionId;
-  if (!questionId) redirect(ROUTES.QUESTION_BANK);
+  if (!questionId) redirect(ROUTES.MOCK_NEW);
 
   // Verify the question exists
   const question = await prisma.question.findUnique({

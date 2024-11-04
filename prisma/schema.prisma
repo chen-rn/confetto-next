@@ -9,6 +9,7 @@ datasource db {
 
 model User {
     id             String          @id @default(uuid())
+    email          String?         @unique
     mockInterviews MockInterview[]
     schools        School[] // Many-to-many relation with School
 
@@ -73,13 +74,14 @@ model MockInterview {
 }
 
 model Feedback {
-    id              String        @id @default(uuid())
-    mockInterview   MockInterview @relation(fields: [mockInterviewId], references: [id])
-    mockInterviewId String        @unique
-    overallScore    Int           @default(0)
-    overallFeedback String        @default("")
-    createdAt       DateTime      @default(now())
-    updatedAt       DateTime      @updatedAt
+    id                String        @id @default(uuid())
+    mockInterview     MockInterview @relation(fields: [mockInterviewId], references: [id])
+    mockInterviewId   String        @unique
+    overallScore      Int           @default(0)
+    overallFeedback   String        @default("")
+    processedFeedback String?
+    createdAt         DateTime      @default(now())
+    updatedAt         DateTime      @updatedAt
 }
 
 model FeedbackPrompt {

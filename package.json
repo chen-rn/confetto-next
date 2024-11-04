@@ -12,10 +12,7 @@
     "format": "biome format .",
     "lint": "biome check .",
     "postinstall": "npx prisma generate",
-    "db:seed": "ts-node prisma/seed.ts",
-    "stripe:setup": "bun run scripts/stripe-setup.ts",
-    "stripe:create-trial": "bun run scripts/create-trial-coupon.ts",
-    "migrate:subscription": "bun run scripts/migrate-subscription-status.ts"
+    "seed:state-questions": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-state-questions.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.1",

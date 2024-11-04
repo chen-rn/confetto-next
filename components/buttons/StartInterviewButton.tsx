@@ -18,12 +18,7 @@ export function StartInterviewButton({ className }: StartInterviewButtonProps) {
   const [showDialog, setShowDialog] = useState(false);
   const router = useRouter();
   const { isEligible, user, hasTrialStarted, remainingCredits } = useInterviewEligibility();
-  console.log("User eligibility:", {
-    isEligible,
-    user,
-    hasTrialStarted,
-    remainingCredits,
-  });
+
   if (!user) return null;
 
   const isTrialUser = user.subscriptionStatus === "TRIAL";

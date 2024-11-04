@@ -31,7 +31,7 @@ interface QuestionsResponse {
 export function QuestionsList() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const searchParams = useSearchParams();
-  const selectedTopics = searchParams.get("topics")?.split(",") || [];
+  const selectedTopics = searchParams.get("topics")?.split(",").filter(Boolean) || [];
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<QuestionsResponse>({
