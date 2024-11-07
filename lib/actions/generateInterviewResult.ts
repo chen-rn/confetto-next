@@ -71,7 +71,11 @@ export async function generateInterviewFeedback(mockInterviewId: string) {
         mockInterviewId,
         overallScore: coreFeedback.overallScore,
         overallFeedback: coreFeedback.overallFeedback,
-        componentScores: { create: coreFeedback.componentScores },
+        componentScores: {
+          create: coreFeedback.componentScores.map((score) => ({
+            ...score,
+          })),
+        },
         analysisPoints: { create: analysisPoints },
       },
       include: {

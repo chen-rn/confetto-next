@@ -1,7 +1,8 @@
 "use server";
 
-import type { ScoringCriteria, ComponentScore, AnalysisPoint } from "@prisma/client";
+import type { ScoringCriteria, ComponentScore, AnalysisPoint, AnalysisType } from "@prisma/client";
 import { openrouter } from "../openrouter";
+import { z } from "zod";
 
 interface CoreFeedbackInput {
   question: string;
@@ -12,7 +13,39 @@ interface CoreFeedbackInput {
 interface CoreFeedbackResult {
   overallScore: number;
   overallFeedback: string;
-  componentScores: ComponentScore[];
+  componentScores: {
+    name: string;
+    score: number;
+    totalPoints: number;
+    summary: string;
+  }[];
+}
+
+const coreFeedbackSchema = z.object({
+  overallScore: z.number().min(0).max(100),
+  overallFeedback: z.string().min(1),
+  componentScores: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        score: z.number().min(0),
+        totalPoints: z.number().min(1),
+        summary: z.string().min(1),
+      })
+    )
+    .min(1),
+});
+
+async function retryOnError<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+      console.warn(`Attempt ${i + 1} failed, retrying...`, error);
+    }
+  }
+  throw new Error("Max retries exceeded");
 }
 
 export async function generateCoreFeedback({
@@ -30,9 +63,8 @@ Response Format:
     {
       "name": string,
       "score": number,
-      "feedback": string,
-      "examples": string[],
-      "improvements": string[]
+      "totalPoints": number,
+      "summary": string
     }
   ]
 }
@@ -56,17 +88,18 @@ For each component:
 - Provide actionable improvements
 - Assess both content and metacognition`;
 
-  const completion = await openrouter.chat.completions.create({
-    model: "anthropic/claude-3.5-sonnet:beta",
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      {
-        role: "user",
-        content: `Conduct a thorough evaluation of this MMI response:
+  return retryOnError(async () => {
+    const completion = await openrouter.chat.completions.create({
+      model: "anthropic/claude-3.5-sonnet:beta",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+        {
+          role: "user",
+          content: `Conduct a thorough evaluation of this MMI response:
           
           Question: ${question}
           Transcript: ${transcript}
@@ -79,24 +112,16 @@ For each component:
           2. Compare against best practices in medical interviews
           3. Suggest concrete improvements using medical scenarios
           4. Consider both verbal and metacognitive skills`,
-      },
-    ],
+        },
+      ],
+    });
+
+    const content = completion.choices[0].message.content;
+    if (!content) throw new Error("No content returned from OpenAI");
+
+    const result = JSON.parse(content.trim());
+    return coreFeedbackSchema.parse(result);
   });
-
-  const content = completion.choices[0].message.content;
-  if (!content) throw new Error("No content returned from OpenAI");
-
-  const result = JSON.parse(content) as CoreFeedbackResult;
-
-  // Validate response format
-  if (!result.componentScores?.length) {
-    throw new Error("Invalid response: missing component scores");
-  }
-  if (typeof result.overallScore !== "number" || result.overallScore < 0) {
-    throw new Error("Invalid response: invalid overall score");
-  }
-
-  return result;
 }
 
 export async function generateAnalysisPoints({
@@ -112,12 +137,9 @@ export async function generateAnalysisPoints({
   {
     "points": [
       {
-        "title": string,
-        "description": string,
-        "type": "STRENGTH" | "WEAKNESS" | "NEUTRAL",
-        "evidence": string[],
-        "improvement": string,
-        "competencyLink": string
+        "type": "STRENGTH" | "IMPROVEMENT" | "MISSING",
+        "quote": string | null,
+        "analysis": string
       }
     ]
   }
@@ -144,17 +166,18 @@ export async function generateAnalysisPoints({
   - Connect to clinical practice
   - Provide concrete improvement steps`;
 
-  const completion = await openrouter.chat.completions.create({
-    model: "anthropic/claude-3.5-sonnet:beta",
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      {
-        role: "user",
-        content: `Perform a detailed analysis of this MMI response:
+  return retryOnError(async () => {
+    const completion = await openrouter.chat.completions.create({
+      model: "anthropic/claude-3.5-sonnet:beta",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+        {
+          role: "user",
+          content: `Perform a detailed analysis of this MMI response:
           
           Question: ${question}
           Transcript: ${transcript}
@@ -164,18 +187,18 @@ export async function generateAnalysisPoints({
           2. Connect to medical practice implications
           3. Suggest improvements using real clinical scenarios
           4. Consider both immediate and long-term development areas`,
-      },
-    ],
+        },
+      ],
+    });
+
+    const content = completion.choices[0].message.content;
+    if (!content) throw new Error("No content returned from OpenAI");
+
+    const result = JSON.parse(content);
+    return result.points.map((point: AnalysisPoint) => ({
+      type: point.type,
+      quote: point.quote,
+      analysis: point.analysis,
+    }));
   });
-
-  const content = completion.choices[0].message.content;
-  if (!content) throw new Error("No content returned from OpenAI");
-
-  const result = JSON.parse(content);
-  if (!result.points) throw new Error("Invalid response format: missing points array");
-
-  return result.points.map((point: AnalysisPoint) => ({
-    ...point,
-    type: point.type || "STRENGTH",
-  }));
 }

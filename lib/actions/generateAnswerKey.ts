@@ -184,35 +184,18 @@ async function generateAnswerStructure(answerKeyId: string, modelAnswer: string)
   try {
     const systemPrompt = `You are an MMI interview coach who has trained thousands of successful medical school candidates. Break down model answers into clear structural components.
 
-Requirements:
-- Time each section precisely
-- Include transition phrases
-- Highlight key phrases/words to emphasize
-- Note body language cues
-- Include pausing points for emphasis`;
+IMPORTANT: Keep descriptions simple without special characters or newlines. Use simple punctuation.`;
 
     const userPrompt = `Break this model answer into a realistic 4-5 minute structure:
 
 ${modelAnswer}
 
-Respond with a JSON object like this:
+Return a JSON object with this exact format (no additional fields):
 {
   "structure": [
     {
-      "title": "Initial Framework (60s)",
-      "description": "Acknowledge question, state ethical principles, outline structured approach"
-    },
-    {
-      "title": "Main Analysis (120s)",
-      "description": "Deep dive into 2-3 key considerations with specific examples and evidence"
-    },
-    {
-      "title": "Application/Solution (60s)",
-      "description": "Develop detailed action steps and address potential challenges"
-    },
-    {
-      "title": "Conclusion (45s)",
-      "description": "Summarize key points, reinforce ethical principles, and provide final recommendation"
+      "title": "string (section name with duration)",
+      "description": "string (simple description without special characters)"
     }
   ]
 }`;
@@ -233,23 +216,50 @@ Respond with a JSON object like this:
 
     let response: StructureResponse;
     try {
+      // Simpler parsing approach
       response = JSON.parse(responseContent);
+
+      // Validate and clean the structure
+      if (!response.structure || !Array.isArray(response.structure)) {
+        throw new Error("Invalid response structure");
+      }
+
+      // Clean and validate each item
+      const cleanedStructure = response.structure.map((item) => ({
+        title: String(item.title || "").slice(0, 255), // Ensure string and limit length
+        description: String(item.description || "")
+          .replace(/[\n\r]/g, " ") // Replace newlines with spaces
+          .replace(/\s+/g, " ") // Replace multiple spaces with single space
+          .trim()
+          .slice(0, 1000), // Limit length
+      }));
+
+      // Create the records
+      await prisma.answerStructure.createMany({
+        data: cleanedStructure.map((item) => ({
+          answerKeyId,
+          section: item.title,
+          purpose: item.description,
+        })),
+      });
+
+      return cleanedStructure;
     } catch (parseError) {
-      console.error("JSON parse error:", parseError);
-      return [];
-    }
+      console.error("Parse error details:", parseError);
+      console.error("Raw content:", responseContent);
 
-    if (!Array.isArray(response.structure)) {
-      return [];
+      // Attempt to salvage malformed JSON
+      try {
+        // Try to clean and parse again
+        const cleaned = responseContent
+          .replace(/\n/g, " ")
+          .replace(/\s+/g, " ")
+          .replace(/\\[^"]/g, ""); // Remove invalid escapes
+        response = JSON.parse(cleaned);
+      } catch (e) {
+        throw new Error("Failed to parse AI response after cleanup");
+      }
     }
-
-    await prisma.answerStructure.createMany({
-      data: response.structure.map((item) => ({
-        answerKeyId,
-        section: item.title,
-        purpose: item.description,
-      })),
-    });
   } catch (error) {
     console.error("Error generating answer structure:", error);
     throw new Error("Failed to generate answer structure");
