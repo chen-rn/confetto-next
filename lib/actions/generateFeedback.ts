@@ -1,7 +1,6 @@
 "use server";
 
-import type { ScoringCriteria, ComponentScore, AnalysisPoint, AnswerKey } from "@prisma/client";
-import { openai } from "../openai";
+import type { ScoringCriteria, ComponentScore, AnalysisPoint } from "@prisma/client";
 import { openrouter } from "../openrouter";
 
 interface CoreFeedbackInput {
@@ -21,39 +20,65 @@ export async function generateCoreFeedback({
   transcript,
   criteria,
 }: CoreFeedbackInput): Promise<CoreFeedbackResult> {
+  const systemPrompt = `You are an experienced medical school admissions interviewer and physician evaluating MMI responses.
+
+Response Format:
+{
+  "overallScore": number (0-100),
+  "overallFeedback": string,
+  "componentScores": [
+    {
+      "name": string,
+      "score": number,
+      "feedback": string,
+      "examples": string[],
+      "improvements": string[]
+    }
+  ]
+}
+
+Scoring Guidelines:
+- 90-100: Exceptional (residency-level)
+- 80-89: Strong candidate
+- 70-79: Competent, needs development
+- <70: Significant concerns
+
+Evaluation Framework:
+1. Clinical Reasoning & Ethics
+2. Professional Identity
+3. Cultural Competency
+4. Leadership & Collaboration
+5. Ambiguity Management
+
+For each component:
+- Cite specific examples
+- Link to clinical scenarios
+- Provide actionable improvements
+- Assess both content and metacognition`;
+
   const completion = await openrouter.chat.completions.create({
     model: "anthropic/claude-3.5-sonnet:beta",
     response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
-        content: `You are an expert medical school interviewer providing feedback. 
-        Score each component on a scale of 0-100. 
-        The overall score should be the average of component scores.
-        Return your response as JSON matching this exact structure:
-        {
-          "overallScore": number,
-          "overallFeedback": string,
-          "componentScores": [
-            {
-              "name": string,
-              "score": number,
-              "totalPoints": 100,
-              "summary": string
-            }
-          ]
-        }`,
+        content: systemPrompt,
       },
       {
         role: "user",
-        content: `Analyze this interview response and provide detailed scoring:
+        content: `Conduct a thorough evaluation of this MMI response:
+          
           Question: ${question}
           Transcript: ${transcript}
           
-          Score these specific components:
+          Evaluate these specific components:
           ${criteria.map((c) => `- ${c.name}: ${c.description}`).join("\n")}
           
-          Ensure each component gets a score between 0-100 and specific feedback.`,
+          For each component:
+          1. Identify specific examples from the response
+          2. Compare against best practices in medical interviews
+          3. Suggest concrete improvements using medical scenarios
+          4. Consider both verbal and metacognitive skills`,
       },
     ],
   });
@@ -81,35 +106,64 @@ export async function generateAnalysisPoints({
   question: string;
   transcript: string;
 }): Promise<AnalysisPoint[]> {
+  const systemPrompt = `You are an expert medical school interviewer analyzing MMI responses.
+
+  Response Format:
+  {
+    "points": [
+      {
+        "title": string,
+        "description": string,
+        "type": "STRENGTH" | "WEAKNESS" | "NEUTRAL",
+        "evidence": string[],
+        "improvement": string,
+        "competencyLink": string
+      }
+    ]
+  }
+
+  Analysis Framework:
+  1. Clinical Reasoning
+     - Logic structure
+     - Evidence usage
+     - Problem-solving approach
+
+  2. Ethics & Professionalism
+     - Principle application
+     - Moral reasoning
+     - Self-awareness
+
+  3. Communication
+     - Clarity
+     - Empathy
+     - Cultural sensitivity
+
+  Each point must:
+  - Reference specific transcript quotes
+  - Link to CanMEDS competencies
+  - Connect to clinical practice
+  - Provide concrete improvement steps`;
+
   const completion = await openrouter.chat.completions.create({
     model: "anthropic/claude-3.5-sonnet:beta",
     response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
-        content:
-          "You are an expert medical school interviewer. Analyze the response and return your analysis as JSON array with type, quote, and analysis fields.",
+        content: systemPrompt,
       },
       {
         role: "user",
-        content: `Analyze this interview response and provide analysis points as a JSON object with a 'points' array. Each point should have:
-          - type: "STRENGTH" | "IMPROVEMENT" | "MISSING"
-          - quote: relevant quote from transcript (or null if general point)
-          - analysis: detailed analysis of the point
-          
-          Return format:
-          {
-            "points": [
-              {
-                "type": "STRENGTH" | "IMPROVEMENT" | "MISSING",
-                "quote": string | null,
-                "analysis": string
-              }
-            ]
-          }
+        content: `Perform a detailed analysis of this MMI response:
           
           Question: ${question}
-          Transcript: ${transcript}`,
+          Transcript: ${transcript}
+          
+          For each point identified:
+          1. Ground observations in specific examples
+          2. Connect to medical practice implications
+          3. Suggest improvements using real clinical scenarios
+          4. Consider both immediate and long-term development areas`,
       },
     ],
   });
@@ -124,73 +178,4 @@ export async function generateAnalysisPoints({
     ...point,
     type: point.type || "STRENGTH",
   }));
-}
-
-export async function generateAnswerKey({
-  question,
-}: {
-  question: string;
-}): Promise<Omit<AnswerKey, "id" | "questionId">> {
-  const prompt = `As an expert medical school interviewer, create a comprehensive answer key as JSON for this MMI question:
-Question: ${question}
-
-Return a JSON response matching this exact structure:
-{
-  "modelAnswer": "string", // Detailed model answer text
-  "keyInsights": [
-    {
-      "title": "string",
-      "description": "string"
-    }
-  ],
-  "answerStructure": [
-    {
-      "section": "string", 
-      "purpose": "string"
-    }
-  ],
-  "highlightedPoints": [
-    {
-      "text": "string",
-      "insight": "string", 
-      "explanation": "string"
-    }
-  ]
-}
-
-Make it detailed and specific to medical ethics and professional judgment.`;
-
-  const completion = await openrouter.chat.completions.create({
-    model: "anthropic/claude-3.5-sonnet:beta",
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are an expert medical school interviewer. Return your response as JSON matching the exact schema provided.",
-      },
-      {
-        role: "user",
-        content: prompt,
-      },
-    ],
-    temperature: 0.7,
-    response_format: { type: "json_object" },
-  });
-
-  const content = completion.choices[0].message.content;
-  if (!content) throw new Error("No content returned from OpenAI");
-
-  const result = JSON.parse(content);
-
-  // Validate response matches schema
-  if (
-    !result.modelAnswer ||
-    !Array.isArray(result.keyInsights) ||
-    !Array.isArray(result.answerStructure) ||
-    !Array.isArray(result.highlightedPoints)
-  ) {
-    throw new Error("Invalid response format from OpenAI");
-  }
-
-  return result;
 }

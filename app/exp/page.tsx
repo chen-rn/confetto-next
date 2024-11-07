@@ -1,5 +1,5 @@
 import { InterviewResults } from "@/components/interview-results";
 
 export default function ExpPage() {
-  return <InterviewResults mockInterviewId="8acd66a1-24dc-47d9-9c5c-b39ff6c5c078" />;
+  return <InterviewResults mockInterviewId="82de35c2-156c-45e7-a08e-394de3030954" />;
 }
