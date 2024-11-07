@@ -77,35 +77,9 @@ Return a JSON object in this exact format:
       throw new Error("Empty response from AI");
     }
 
-    console.log("Raw AI response:", responseContent); // Debug log
-
-    let response: ModelAnswerResponse;
-    try {
-      // Parse the JSON directly without cleaning
-      response = JSON.parse(responseContent);
-
-      if (!response.modelAnswer) {
-        throw new Error("Response missing modelAnswer field");
-      }
-    } catch (parseError) {
-      console.error("Parse error details:", parseError);
-      console.error("Raw content:", responseContent);
-
-      // If it's a valid JSON string but just has formatting issues
-      if (responseContent.includes('"modelAnswer"')) {
-        try {
-          // Try to extract just the model answer content
-          const match = responseContent.match(/"modelAnswer"\s*:\s*"([^"]*)"/);
-          if (match?.[1]) {
-            return match[1];
-          }
-        } catch (e) {
-          console.error("Regex extraction failed:", e);
-        }
-      }
-
-      // Last resort: return the raw content
-      return responseContent;
+    const response = JSON.parse(responseContent) as ModelAnswerResponse;
+    if (!response.modelAnswer) {
+      throw new Error("Response missing modelAnswer field");
     }
 
     return response.modelAnswer;
@@ -184,7 +158,12 @@ async function generateAnswerStructure(answerKeyId: string, modelAnswer: string)
   try {
     const systemPrompt = `You are an MMI interview coach who has trained thousands of successful medical school candidates. Break down model answers into clear structural components.
 
-IMPORTANT: Keep descriptions simple without special characters or newlines. Use simple punctuation.`;
+Your response MUST:
+1. Include 4-5 distinct sections
+2. Each section must have a clear title with timing (e.g. "Opening (30 seconds)")
+3. Each description must be a single clear sentence
+4. Avoid any special formatting or characters
+5. Structure should follow: Opening -> Main Arguments -> Implementation -> Conclusion`;
 
     const userPrompt = `Break this model answer into a realistic 4-5 minute structure:
 
@@ -216,25 +195,17 @@ Return a JSON object with this exact format (no additional fields):
 
     let response: StructureResponse;
     try {
-      // Simpler parsing approach
-      response = JSON.parse(responseContent);
+      const response = JSON.parse(responseContent) as StructureResponse;
 
-      // Validate and clean the structure
       if (!response.structure || !Array.isArray(response.structure)) {
-        throw new Error("Invalid response structure");
+        throw new Error("Invalid structure format");
       }
 
-      // Clean and validate each item
       const cleanedStructure = response.structure.map((item) => ({
-        title: String(item.title || "").slice(0, 255), // Ensure string and limit length
-        description: String(item.description || "")
-          .replace(/[\n\r]/g, " ") // Replace newlines with spaces
-          .replace(/\s+/g, " ") // Replace multiple spaces with single space
-          .trim()
-          .slice(0, 1000), // Limit length
+        title: String(item.title).trim(),
+        description: String(item.description).trim(),
       }));
 
-      // Create the records
       await prisma.answerStructure.createMany({
         data: cleanedStructure.map((item) => ({
           answerKeyId,
@@ -244,21 +215,9 @@ Return a JSON object with this exact format (no additional fields):
       });
 
       return cleanedStructure;
-    } catch (parseError) {
-      console.error("Parse error details:", parseError);
-      console.error("Raw content:", responseContent);
-
-      // Attempt to salvage malformed JSON
-      try {
-        // Try to clean and parse again
-        const cleaned = responseContent
-          .replace(/\n/g, " ")
-          .replace(/\s+/g, " ")
-          .replace(/\\[^"]/g, ""); // Remove invalid escapes
-        response = JSON.parse(cleaned);
-      } catch (e) {
-        throw new Error("Failed to parse AI response after cleanup");
-      }
+    } catch (error) {
+      console.error("Error parsing structure:", error);
+      throw new Error("Failed to parse answer structure");
     }
   } catch (error) {
     console.error("Error generating answer structure:", error);
