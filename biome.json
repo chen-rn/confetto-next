@@ -29,7 +29,8 @@
         "useSelfClosingElements": "off",
         "noUselessElse": "off",
         "useImportType": "off",
-        "noInferrableTypes": "off"
+        "noInferrableTypes": "off",
+        "noUnusedTemplateLiteral": "off"
       },
       "suspicious": {
         "noArrayIndexKey": "off"

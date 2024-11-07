@@ -2,6 +2,7 @@
 
 import type { ScoringCriteria, ComponentScore, AnalysisPoint, AnswerKey } from "@prisma/client";
 import { openai } from "../openai";
+import { openrouter } from "../openrouter";
 
 interface CoreFeedbackInput {
   question: string;
@@ -20,8 +21,8 @@ export async function generateCoreFeedback({
   transcript,
   criteria,
 }: CoreFeedbackInput): Promise<CoreFeedbackResult> {
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
+  const completion = await openrouter.chat.completions.create({
+    model: "anthropic/claude-3.5-sonnet:beta",
     response_format: { type: "json_object" },
     messages: [
       {
@@ -80,8 +81,8 @@ export async function generateAnalysisPoints({
   question: string;
   transcript: string;
 }): Promise<AnalysisPoint[]> {
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
+  const completion = await openrouter.chat.completions.create({
+    model: "anthropic/claude-3.5-sonnet:beta",
     response_format: { type: "json_object" },
     messages: [
       {
@@ -159,8 +160,8 @@ Return a JSON response matching this exact structure:
 
 Make it detailed and specific to medical ethics and professional judgment.`;
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
+  const completion = await openrouter.chat.completions.create({
+    model: "anthropic/claude-3.5-sonnet:beta",
     messages: [
       {
         role: "system",
