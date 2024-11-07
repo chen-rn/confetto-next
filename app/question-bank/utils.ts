@@ -25,5 +25,5 @@ export function getTagStyles(tagName: string) {
   }
 
   // Default style for other tags
-  return "bg-gray-100 text-gray-700 hover:bg-gray-200";
+  return "bg-neutral-100 text-neutral-700 hover:bg-neutral-200";
 }

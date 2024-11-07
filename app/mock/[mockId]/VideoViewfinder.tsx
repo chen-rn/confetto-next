@@ -61,8 +61,8 @@ export function VideoViewfinder() {
           className="w-full h-full transform scale-x-[-1] object-cover"
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
-          <Video className="h-12 w-12 text-gray-400" />
+        <div className="absolute inset-0 flex items-center justify-center bg-neutral-900">
+          <Video className="h-12 w-12 text-neutral-400" />
         </div>
       )}
 

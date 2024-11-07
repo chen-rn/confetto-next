@@ -45,7 +45,7 @@ export async function ServerQuestions({ userId, searchParams }: ServerQuestionsP
       <Card className="p-8 text-center">
         <div className="max-w-sm mx-auto space-y-4">
           <h3 className="text-lg font-medium">No questions found</h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-neutral-500">
             Try adjusting your filters or add a new question to get started.
           </p>
         </div>

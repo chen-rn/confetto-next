@@ -58,7 +58,7 @@ export async function RecentInterviewScores() {
   return (
     <Card className="md:col-span-2 bg-white border shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-gray-900">Daily Average Scores</CardTitle>
+        <CardTitle className="text-lg font-semibold text-neutral-900">Daily Average Scores</CardTitle>
       </CardHeader>
       <CardContent className="min-h-[300px] h-full">
         <InterviewScoresChart scores={dailyScores} />

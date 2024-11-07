@@ -150,7 +150,7 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
               </Badge>
             </div>
 
-            <h2 className="text-2xl font-bold text-gray-900">Your Journey Begins Here</h2>
+            <h2 className="text-2xl font-bold text-neutral-900">Your Journey Begins Here</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
               You're all set to start practicing. Begin your free trial to access everything you
               need to ace your MMI interview.
@@ -181,14 +181,14 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
               ].map((feature) => (
                 <div
                   key={feature.title}
-                  className="flex gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex gap-3 p-3 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
                   <div className="h-8 w-8 rounded-full bg-[#635BFF]/10 flex items-center justify-center flex-shrink-0">
                     <feature.icon className="h-4 w-4 text-[#635BFF]" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-sm text-gray-900">{feature.title}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{feature.desc}</p>
+                    <h3 className="font-medium text-sm text-neutral-900">{feature.title}</h3>
+                    <p className="text-xs text-neutral-500 mt-0.5">{feature.desc}</p>
                   </div>
                 </div>
               ))}

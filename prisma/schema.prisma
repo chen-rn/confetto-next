@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql" // or your preferred database
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
@@ -11,12 +11,11 @@ model User {
     id             String          @id @default(uuid())
     email          String?         @unique
     mockInterviews MockInterview[]
-    schools        School[] // Many-to-many relation with School
+    schools        School[]
 
-    // Subscription related fields
     stripeCustomerId   String?            @unique
     subscriptionStatus SubscriptionStatus @default(NOT_SUBSCRIBED)
-    stripePriceId      String? // Store the active price ID instead of enum
+    stripePriceId      String?
     trialStartedAt     DateTime?
     currentPeriodEnd   DateTime?
 
@@ -28,16 +27,17 @@ model User {
 model School {
     id      String @id @default(uuid())
     name    String
-    state   String // or province 
+    state   String
     country String
-    users   User[] // Many-to-many relation with User
+    users   User[]
 }
 
 model Question {
-    id                 String        @id @default(uuid())
-    content            String
-    evaluationCriteria String?
-    tags               QuestionTag[] // Now handles both topics and other tags
+    id              String            @id @default(uuid())
+    content         String
+    tags            QuestionTag[]
+    answerKey       AnswerKey?
+    scoringCriteria ScoringCriteria[]
 
     mockInterviews MockInterview[]
     createdAt      DateTime        @default(now())
@@ -47,16 +47,10 @@ model Question {
 model QuestionTag {
     id        String     @id @default(uuid())
     name      String     @unique
-    type      TagType // Updated enum below to include TOPIC type
+    type      TagType
     questions Question[]
 
     @@index([name])
-}
-
-enum TagType {
-    TOPIC // New type for former TopicName items
-    STATE
-    COUNTRY
 }
 
 model MockInterview {
@@ -65,8 +59,8 @@ model MockInterview {
     userId                 String
     question               Question  @relation(fields: [questionId], references: [id])
     questionId             String
-    recordingUrl           String? // This will store the audio URL
-    videoUrl               String? // This will store the video URL
+    recordingUrl           String?
+    videoUrl               String?
     recordingTranscription String?
     feedback               Feedback?
     createdAt              DateTime  @default(now())
@@ -74,14 +68,69 @@ model MockInterview {
 }
 
 model Feedback {
-    id                String        @id @default(uuid())
-    mockInterview     MockInterview @relation(fields: [mockInterviewId], references: [id])
-    mockInterviewId   String        @unique
-    overallScore      Int           @default(0)
-    overallFeedback   String        @default("")
-    processedFeedback String?
-    createdAt         DateTime      @default(now())
-    updatedAt         DateTime      @updatedAt
+    id              String           @id @default(uuid())
+    mockInterview   MockInterview    @relation(fields: [mockInterviewId], references: [id])
+    mockInterviewId String           @unique
+    overallScore    Int              @default(0)
+    overallFeedback String           @default("")
+    componentScores ComponentScore[]
+    analysisPoints  AnalysisPoint[]
+    createdAt       DateTime         @default(now())
+    updatedAt       DateTime         @updatedAt
+}
+
+model ComponentScore {
+    id          String   @id @default(uuid())
+    feedback    Feedback @relation(fields: [feedbackId], references: [id])
+    feedbackId  String
+    name        String
+    score       Int
+    totalPoints Int      @default(100)
+    summary     String
+}
+
+model AnalysisPoint {
+    id         String       @id @default(cuid())
+    type       AnalysisType
+    quote      String?
+    analysis   String
+    feedback   Feedback     @relation(fields: [feedbackId], references: [id])
+    feedbackId String
+}
+
+model AnswerKey {
+    id                String             @id @default(uuid())
+    question          Question           @relation(fields: [questionId], references: [id])
+    questionId        String             @unique
+    keyInsights       KeyInsight[]
+    answerStructure   AnswerStructure[]
+    modelAnswer       String             @db.Text
+    highlightedPoints HighlightedPoint[]
+}
+
+model KeyInsight {
+    id          String    @id @default(uuid())
+    answerKey   AnswerKey @relation(fields: [answerKeyId], references: [id])
+    answerKeyId String
+    title       String
+    description String
+}
+
+model AnswerStructure {
+    id          String    @id @default(uuid())
+    answerKey   AnswerKey @relation(fields: [answerKeyId], references: [id])
+    answerKeyId String
+    section     String
+    purpose     String
+}
+
+model HighlightedPoint {
+    id          String    @id @default(uuid())
+    answerKey   AnswerKey @relation(fields: [answerKeyId], references: [id])
+    answerKeyId String
+    text        String
+    insight     String
+    explanation String
 }
 
 model FeedbackPrompt {
@@ -90,6 +139,15 @@ model FeedbackPrompt {
     prompt    String   @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model ScoringCriteria {
+    id          String    @id @default(uuid())
+    name        String
+    description String
+    maxPoints   Int
+    Question    Question? @relation(fields: [questionId], references: [id])
+    questionId  String?
 }
 
 enum SubscriptionStatus {
@@ -105,4 +163,16 @@ enum OnboardingStatus {
     NOT_STARTED
     IN_PROGRESS
     COMPLETED
+}
+
+enum TagType {
+    TOPIC
+    STATE
+    COUNTRY
+}
+
+enum AnalysisType {
+    STRENGTH
+    IMPROVEMENT
+    MISSING
 }

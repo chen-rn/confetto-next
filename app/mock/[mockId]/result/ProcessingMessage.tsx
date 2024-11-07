@@ -25,5 +25,5 @@ export function ProcessingMessage() {
     return () => clearInterval(interval);
   }, []);
 
-  return <p className="mt-4 text-lg font-medium text-gray-600">{message}</p>;
+  return <p className="mt-4 text-lg font-medium text-neutral-600">{message}</p>;
 }

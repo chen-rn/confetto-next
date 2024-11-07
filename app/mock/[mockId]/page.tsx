@@ -49,7 +49,7 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
   const { accessToken } = await getLivekitRoomToken(question.content);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 font-sans">
+    <div className="flex flex-col h-screen bg-neutral-50 font-sans">
       <main className="flex-1 overflow-hidden">
         <InterviewRoom
           token={accessToken}

@@ -11,7 +11,7 @@ export default async function WelcomePage() {
   if (!userId) redirect("/sign-in");
 
   return (
-    <ScrollArea className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <ScrollArea className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
       <div className="min-h-screen flex items-center justify-center p-4">
         <Confetti />
         <div className="w-full max-w-2xl mx-auto">
@@ -35,10 +35,10 @@ function WelcomeHeader() {
         </div>
       </div>
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold text-gray-900">
+        <h1 className="text-2xl font-semibold text-neutral-900">
           You're All Set! <span className="inline-block animate-bounce">🎉</span>
         </h1>
-        <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
+        <p className="text-sm text-neutral-500 max-w-md mx-auto leading-relaxed">
           Your profile is complete and you're ready to start practicing for your MMI interviews.
           Let's begin your journey to success.
         </p>

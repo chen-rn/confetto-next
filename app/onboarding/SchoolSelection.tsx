@@ -39,7 +39,7 @@ export function SchoolSelection({
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <h1 className="text-xl font-bold text-gray-900">Select Your Target Schools</h1>
+        <h1 className="text-xl font-bold text-neutral-900">Select Your Target Schools</h1>
         <p className="text-sm text-muted-foreground">
           Choose the medical schools you're applying to
         </p>
@@ -63,7 +63,7 @@ export function SchoolSelection({
             <Button
               variant="ghost"
               onClick={() => onNext({ schools: [] })}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-neutral-500 hover:text-neutral-700"
             >
               Skip
             </Button>

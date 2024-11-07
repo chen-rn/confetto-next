@@ -43,7 +43,7 @@ export async function RecentPractice() {
   return (
     <Card className="bg-white border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-lg font-semibold text-gray-900">Recent Practice</CardTitle>
+        <CardTitle className="text-lg font-semibold text-neutral-900">Recent Practice</CardTitle>
         <Link href={ROUTES.MOCK_HISTORY}>
           <Button variant="ghost" size="sm" className="text-[#635BFF]">
             View all
@@ -53,7 +53,7 @@ export async function RecentPractice() {
       </CardHeader>
       <CardContent>
         {recentPractice.length === 0 ? (
-          <div className="text-center py-6 text-gray-500">
+          <div className="text-center py-6 text-neutral-500">
             <p className="mb-2">No practice sessions yet</p>
             <Link href={ROUTES.START_INTERVIEW}>
               <Button variant="outline" size="sm">
@@ -65,12 +65,12 @@ export async function RecentPractice() {
           <ul className="space-y-4 max-h-[500px] overflow-y-auto">
             {recentPractice.map((practice) => (
               <Link href={ROUTES.MOCK_RESULT(practice.id)} key={practice.id}>
-                <li className="flex items-center justify-between group hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                <li className="flex items-center justify-between group hover:bg-neutral-50 p-2 rounded-lg transition-colors">
                   <div className="flex-1 min-w-0 mr-4">
-                    <p className="font-medium text-sm text-gray-900 truncate">
+                    <p className="font-medium text-sm text-neutral-900 truncate">
                       {practice.question.content}
                     </p>
-                    <div className="flex items-center text-xs text-gray-500 mt-1">
+                    <div className="flex items-center text-xs text-neutral-500 mt-1">
                       <Clock className="mr-1 h-3 w-3" />
                       <span>
                         {new Date(practice.createdAt).toLocaleDateString("en-US", {

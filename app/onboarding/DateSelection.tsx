@@ -33,7 +33,7 @@ export function DateSelection({
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <h1 className="text-xl font-bold text-gray-900">When is your MMI interview?</h1>
+        <h1 className="text-xl font-bold text-neutral-900">When is your MMI interview?</h1>
         <p className="text-sm text-muted-foreground">
           We'll help you prepare with a personalized schedule
         </p>
@@ -58,7 +58,7 @@ export function DateSelection({
           id="no-date"
           checked={noDate}
           onChange={(e) => setNoDate(e.target.checked)}
-          className="rounded border-gray-300 text-[#635BFF] focus:ring-[#635BFF]"
+          className="rounded border-neutral-300 text-[#635BFF] focus:ring-[#635BFF]"
         />
         <label htmlFor="no-date" className="text-sm text-muted-foreground">
           I don't have a date yet

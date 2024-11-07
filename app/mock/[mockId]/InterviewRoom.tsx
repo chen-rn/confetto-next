@@ -169,7 +169,7 @@ export function InterviewRoom({
         className="min-h-screen bg-neutral-100"
       >
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 py-4">
+        <header className="bg-white border-b border-neutral-200 py-4">
           <div className="container max-w-5xl mx-auto px-4">
             <div className="flex items-center justify-center gap-4">
               <Link href={ROUTES.HOME} className="absolute left-4">
@@ -179,7 +179,7 @@ export function InterviewRoom({
                 </Button>
               </Link>
               <div className="flex items-center gap-3">
-                <h1 className="text-xl font-semibold text-gray-900">MMI Station</h1>
+                <h1 className="text-xl font-semibold text-neutral-900">MMI Station</h1>
                 <div className="flex gap-2">
                   {tags.map((tag) => (
                     <span
@@ -263,12 +263,12 @@ export function InterviewRoom({
             >
               <Card className="bg-white/50 border-dashed hover:bg-white/80 transition-colors duration-200">
                 <CardContent className="p-4">
-                  <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center justify-between text-sm text-neutral-500">
                     <div className="flex items-center gap-2">
                       <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
                       <span>System Ready</span>
                     </div>
-                    <span className="text-gray-400">Recording will start automatically</span>
+                    <span className="text-neutral-400">Recording will start automatically</span>
                   </div>
                 </CardContent>
               </Card>

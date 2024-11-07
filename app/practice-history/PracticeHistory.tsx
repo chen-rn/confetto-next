@@ -10,49 +10,36 @@ import { ROUTES } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-// Update the interfaces to match Prisma types
-interface MockInterview {
-  id: string;
-  question: {
-    id: string;
-    content: string;
-    createdAt: Date;
-    updatedAt: Date;
-    evaluationCriteria: string | null;
-    tags: {
-      id: string;
-      name: string;
-      type: string;
-    }[];
-  };
-  recordingUrl: string | null;
-  createdAt: Date;
-  feedback: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    overallScore: number;
-    mockInterviewId: string;
-    overallFeedback: string;
-  } | null;
-}
+import type { MockInterview, Question, QuestionTag, Feedback } from "@prisma/client";
 
 interface PracticeHistoryProps {
-  mockInterviews: MockInterview[];
+  mockInterviews: (MockInterview & {
+    question: Question & {
+      tags: QuestionTag[];
+    };
+    feedback: Feedback | null;
+  })[];
 }
 
 // Main component
 export function PracticeHistory({ mockInterviews }: PracticeHistoryProps) {
   if (!mockInterviews.length) {
     return (
-      <Card className="p-8 text-center">
-        <div className="flex flex-col items-center space-y-4">
-          <Calendar className="h-12 w-12 text-neutral-400" />
-          <h3 className="font-semibold text-xl">No Practice Sessions Yet</h3>
-          <p className="text-neutral-500">Start your first mock interview to build your history.</p>
+      <Card className="py-10 text-center bg-white border shadow-sm rounded-3xl">
+        <div className="flex flex-col items-center space-y-6">
+          <div className="w-20 h-20 rounded-full bg-[#635BFF]/5 flex items-center justify-center">
+            <Calendar className="h-10 w-10 text-[#635BFF]" />
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-semibold text-xl text-neutral-900">No Practice Sessions Yet</h3>
+            <p className="text-neutral-500 text-sm">
+              Start your first mock interview to build your history and track your progress.
+            </p>
+          </div>
           <Link href={ROUTES.START_INTERVIEW}>
-            <Button>Start Practice</Button>
+            <Button className="bg-[#635BFF] hover:bg-[#635BFF]/90 rounded-lg">
+              Start Practice
+            </Button>
           </Link>
         </div>
       </Card>
@@ -71,8 +58,15 @@ export function PracticeHistory({ mockInterviews }: PracticeHistoryProps) {
   );
 }
 
+type InterviewWithRelations = MockInterview & {
+  question: Question & {
+    tags: QuestionTag[];
+  };
+  feedback: Feedback | null;
+};
+
 // Separate component for the interview header
-function InterviewHeader({ interview }: { interview: MockInterview }) {
+function InterviewHeader({ interview }: { interview: InterviewWithRelations }) {
   const formattedDate = new Date(interview.createdAt).toLocaleString("en-US", {
     year: "numeric",
     month: "short",
@@ -146,7 +140,7 @@ function InterviewHeader({ interview }: { interview: MockInterview }) {
 }
 
 // Separate component for feedback display
-function FeedbackDisplay({ feedback }: { feedback: NonNullable<MockInterview["feedback"]> }) {
+function FeedbackDisplay({ feedback }: { feedback: Feedback }) {
   return (
     <div className="p-4">
       <div className="mb-4">
@@ -171,7 +165,7 @@ function FeedbackDisplay({ feedback }: { feedback: NonNullable<MockInterview["fe
 }
 
 // Separate component for the collapsible content
-function CollapsibleInterviewContent({ interview }: { interview: MockInterview }) {
+function CollapsibleInterviewContent({ interview }: { interview: InterviewWithRelations }) {
   return (
     <CollapsibleContent>
       <div className="mt-2 p-6 rounded-xl border border-neutral-100 bg-white">

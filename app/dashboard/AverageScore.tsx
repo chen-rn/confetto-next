@@ -8,11 +8,11 @@ export async function AverageScore() {
   return (
     <Card className="bg-white border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-1">
-        <CardTitle className="text-sm font-medium text-gray-500">Average Score</CardTitle>
+        <CardTitle className="text-sm font-medium text-neutral-500">Average Score</CardTitle>
         <TrendingUp className="h-5 w-5 text-[#635BFF]" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-semibold text-gray-900">{average}%</div>
+        <div className="text-2xl font-semibold text-neutral-900">{average}%</div>
         <div className="flex items-center mt-1 text-sm text-[#635BFF]">
           <ChevronUp className="h-4 w-4 mr-1" />
           <span>{difference}% from last week</span>

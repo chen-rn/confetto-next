@@ -11,7 +11,7 @@ import { PageContainer } from "@/components/PageContainer";
 
 function StatCardSkeleton() {
   return (
-    <div className="p-6 rounded-lg bg-white border border-gray-100 shadow-sm h-[140px]">
+    <div className="p-6 rounded-lg bg-white border border-neutral-100 shadow-sm h-[140px]">
       <div className="space-y-4">
         <Skeleton className="h-5 w-32" />
         <Skeleton className="h-10 w-24" />
@@ -23,7 +23,7 @@ function StatCardSkeleton() {
 
 function ChartCardSkeleton() {
   return (
-    <div className="p-6 rounded-lg bg-white border border-gray-100 shadow-sm h-full min-h-[400px]">
+    <div className="p-6 rounded-lg bg-white border border-neutral-100 shadow-sm h-full min-h-[400px]">
       <div className="space-y-6">
         <div className="space-y-2">
           <Skeleton className="h-6 w-48" />

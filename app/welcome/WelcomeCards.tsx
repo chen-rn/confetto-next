@@ -17,7 +17,7 @@ function LinkCard({ href, icon, title, description, duration, isPrimary = false 
       className={`group relative rounded-2xl transition-all duration-300 ${
         isPrimary
           ? "bg-gradient-to-br from-[#635BFF] to-[#635BFF]/90 hover:to-[#635BFF] text-white shadow-lg hover:shadow-xl hover:shadow-[#635BFF]/10"
-          : "bg-white hover:bg-gray-50/80 border border-gray-200/60 hover:border-[#635BFF]/20 shadow-sm hover:shadow-md"
+          : "bg-white hover:bg-neutral-50/80 border border-neutral-200/60 hover:border-[#635BFF]/20 shadow-sm hover:shadow-md"
       }`}
     >
       <div className="p-6 space-y-4">
@@ -35,7 +35,7 @@ function LinkCard({ href, icon, title, description, duration, isPrimary = false 
             <div className="flex items-center justify-between gap-2">
               <h3
                 className={`text-lg font-medium truncate ${
-                  isPrimary ? "text-white" : "text-gray-700"
+                  isPrimary ? "text-white" : "text-neutral-700"
                 }`}
               >
                 {title}
@@ -52,13 +52,13 @@ function LinkCard({ href, icon, title, description, duration, isPrimary = false 
         </div>
 
         <div className="space-y-2">
-          <p className={`text-sm leading-relaxed ${isPrimary ? "text-white/80" : "text-gray-500"}`}>
+          <p className={`text-sm leading-relaxed ${isPrimary ? "text-white/80" : "text-neutral-500"}`}>
             {description}
           </p>
           {duration && (
             <div
               className={`text-xs ${
-                isPrimary ? "text-white/70" : "text-gray-400"
+                isPrimary ? "text-white/70" : "text-neutral-400"
               } flex items-center gap-1.5`}
             >
               <Timer className="h-3.5 w-3.5" />

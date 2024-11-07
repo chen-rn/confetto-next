@@ -34,7 +34,7 @@ export function OnboardingProgress({ currentStep }: OnboardingProgressProps) {
               <div
                 className={cn(
                   "w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-all",
-                  index <= currentStep ? "bg-[#635BFF] text-white" : "bg-gray-100 text-gray-400"
+                  index <= currentStep ? "bg-[#635BFF] text-white" : "bg-neutral-100 text-neutral-400"
                 )}
               >
                 <Icon className="h-5 w-5" />
@@ -42,7 +42,7 @@ export function OnboardingProgress({ currentStep }: OnboardingProgressProps) {
               <span
                 className={cn(
                   "text-xs font-medium",
-                  index <= currentStep ? "text-[#635BFF]" : "text-gray-400"
+                  index <= currentStep ? "text-[#635BFF]" : "text-neutral-400"
                 )}
               >
                 {step.label}
@@ -52,7 +52,7 @@ export function OnboardingProgress({ currentStep }: OnboardingProgressProps) {
         })}
 
         {/* Progress line */}
-        <div className="absolute top-5 left-0 w-full h-[2px] bg-gray-100 -z-0">
+        <div className="absolute top-5 left-0 w-full h-[2px] bg-neutral-100 -z-0">
           <div
             className="h-full bg-[#635BFF] transition-all duration-300"
             style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}

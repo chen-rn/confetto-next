@@ -53,7 +53,7 @@ export function SidebarNav() {
           "w-full justify-start relative px-4 py-6 transition-all duration-200 rounded-none",
           isActive
             ? "bg-gradient-to-r from-[#635BFF]/10 to-transparent text-[#4b45cc] border-l-4 border-[#635BFF] font-medium"
-            : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+            : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800"
         )}
         asChild
       >

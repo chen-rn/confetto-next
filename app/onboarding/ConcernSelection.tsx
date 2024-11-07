@@ -68,7 +68,7 @@ export function ConcernSelection({
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <h1 className="text-xl font-bold text-gray-900">What are your biggest concerns?</h1>
+        <h1 className="text-xl font-bold text-neutral-900">What are your biggest concerns?</h1>
         <p className="text-sm text-muted-foreground">
           Select all that apply to personalize your experience
         </p>
@@ -87,7 +87,7 @@ export function ConcernSelection({
                   "group flex items-start space-x-3 rounded-xl border p-3 transition-all duration-200 cursor-pointer",
                   isSelected
                     ? "border-[#635BFF] bg-[#635BFF]/[0.02] shadow-sm ring-1 ring-[#635BFF]/10"
-                    : "border-gray-100 hover:border-gray-200 hover:shadow-sm hover:bg-gray-50/50 bg-white"
+                    : "border-neutral-100 hover:border-neutral-200 hover:shadow-sm hover:bg-neutral-50/50 bg-white"
                 )}
               >
                 <div className="flex-shrink-0">
@@ -97,7 +97,7 @@ export function ConcernSelection({
                     className={cn(
                       "mt-0.5 transition-all duration-200",
                       "data-[state=checked]:bg-[#635BFF] data-[state=checked]:border-[#635BFF]",
-                      "border-gray-200",
+                      "border-neutral-200",
                       "group-hover:border-[#635BFF]",
                       "focus-visible:ring-1 focus-visible:ring-[#635BFF]"
                     )}
@@ -108,26 +108,26 @@ export function ConcernSelection({
                     <div
                       className={cn(
                         "p-0.5 rounded-md transition-colors",
-                        isSelected ? "bg-[#635BFF]/10" : "group-hover:bg-gray-100"
+                        isSelected ? "bg-[#635BFF]/10" : "group-hover:bg-neutral-100"
                       )}
                     >
                       <Icon
                         className={cn(
                           "h-3.5 w-3.5 flex-shrink-0 transition-colors duration-200",
-                          isSelected ? "text-[#635BFF]" : "text-gray-400 group-hover:text-[#635BFF]"
+                          isSelected ? "text-[#635BFF]" : "text-neutral-400 group-hover:text-[#635BFF]"
                         )}
                       />
                     </div>
                     <span
                       className={cn(
                         "font-medium truncate transition-colors duration-200 text-sm",
-                        isSelected ? "text-[#635BFF]" : "text-gray-900 group-hover:text-[#635BFF]"
+                        isSelected ? "text-[#635BFF]" : "text-neutral-900 group-hover:text-[#635BFF]"
                       )}
                     >
                       {concern.label}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 leading-relaxed pl-6">
+                  <p className="text-xs text-neutral-500 leading-relaxed pl-6">
                     {concern.description}
                   </p>
                 </div>

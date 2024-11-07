@@ -8,11 +8,11 @@ export async function CurrentStreak() {
   return (
     <Card className="bg-white border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-1">
-        <CardTitle className="text-sm font-medium text-gray-500">Current Streak</CardTitle>
+        <CardTitle className="text-sm font-medium text-neutral-500">Current Streak</CardTitle>
         <Flame className="h-5 w-5 text-[#635BFF]" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-semibold text-gray-900">
+        <div className="text-2xl font-semibold text-neutral-900">
           {streak} {streak === 1 ? "day" : "days"}
         </div>
         <div className="flex items-center mt-1 text-sm text-[#635BFF]">

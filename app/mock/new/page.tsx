@@ -26,8 +26,8 @@ export default async function NewMockInterviewPage() {
           <div className="bg-yellow-50 rounded-full p-3 w-fit mx-auto">
             <Zap className="w-6 h-6 text-yellow-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Trial Interviews Complete</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-neutral-900">Trial Interviews Complete</h1>
+          <p className="text-neutral-600">
             You've used all {MAX_TRIAL_CREDITS} interviews in your trial. Ready to take your
             interview prep to the next level?
           </p>
@@ -58,7 +58,7 @@ export default async function NewMockInterviewPage() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary/80 to-primary bg-clip-text text-transparent">
               Start Interview
             </h1>
-            <p className="text-gray-600 text-lg">Choose your preferred practice mode to begin</p>
+            <p className="text-neutral-600 text-lg">Choose your preferred practice mode to begin</p>
           </div>
 
           {/* Cards Grid */}

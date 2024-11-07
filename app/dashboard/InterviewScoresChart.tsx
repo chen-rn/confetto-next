@@ -22,7 +22,7 @@ interface Props {
 export function InterviewScoresChart({ scores }: Props) {
   if (scores.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[300px] text-gray-500">
+      <div className="flex items-center justify-center h-[300px] text-neutral-500">
         No scores available yet
       </div>
     );
@@ -66,7 +66,7 @@ export function InterviewScoresChart({ scores }: Props) {
                         year: "numeric",
                       })}
                     </p>
-                    <p className="text-sm text-gray-500">Average: {payload[0].value}%</p>
+                    <p className="text-sm text-neutral-500">Average: {payload[0].value}%</p>
                   </div>
                 );
               }

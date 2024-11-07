@@ -56,7 +56,7 @@ export function QuestionsList() {
       >
         <div className="px-6 py-4 flex items-center justify-between bg-[#635BFF]/5">
           <div className="flex items-center gap-4">
-            <h3 className="text-sm font-medium text-gray-700">Filters</h3>
+            <h3 className="text-sm font-medium text-neutral-700">Filters</h3>
             {selectedTopics.length > 0 && (
               <Badge
                 variant="secondary"
@@ -129,7 +129,7 @@ function EmptyState() {
     <div className="text-center py-12">
       <div className="max-w-sm mx-auto space-y-4">
         <h3 className="text-lg font-medium">No questions found</h3>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-neutral-500">
           Try adjusting your filters or add a new question to get started.
         </p>
       </div>
@@ -139,11 +139,11 @@ function EmptyState() {
 
 function QuestionCard({ question }: { question: QuestionWithTags }) {
   return (
-    <div className="group rounded-xl border border-gray-100 bg-white transition-all duration-200 hover:shadow-md hover:border-[#635BFF]/20">
+    <div className="group rounded-xl border border-neutral-100 bg-white transition-all duration-200 hover:shadow-md hover:border-[#635BFF]/20">
       <div className="p-4 flex items-start gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex flex-col gap-2.5">
-            <h3 className="text-base font-medium leading-tight text-gray-900">
+            <h3 className="text-base font-medium leading-tight text-neutral-900">
               {question.content}
             </h3>
             <div className="flex flex-wrap gap-1.5">
@@ -177,10 +177,10 @@ function QuestionsListSkeleton() {
       {[...Array(3)].map((_, i) => (
         <Card key={i} className="p-4">
           <div className="space-y-4 animate-pulse">
-            <div className="h-5 bg-gray-200 rounded w-3/4" />
+            <div className="h-5 bg-neutral-200 rounded w-3/4" />
             <div className="flex gap-2">
-              <div className="h-4 bg-gray-200 rounded w-16" />
-              <div className="h-4 bg-gray-200 rounded w-16" />
+              <div className="h-4 bg-neutral-200 rounded w-16" />
+              <div className="h-4 bg-neutral-200 rounded w-16" />
             </div>
           </div>
         </Card>

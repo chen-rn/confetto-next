@@ -75,7 +75,7 @@ export function ServerFilters() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-sm font-normal leading-tight text-gray-700 truncate">
+                    <span className="text-sm font-normal leading-tight text-neutral-700 truncate">
                       {topic.name}
                     </span>
                   </TooltipTrigger>

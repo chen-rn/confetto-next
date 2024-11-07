@@ -23,7 +23,6 @@ export async function MockInterviewsList() {
           content: true,
           createdAt: true,
           updatedAt: true,
-          evaluationCriteria: true,
           tags: true,
         },
       },
