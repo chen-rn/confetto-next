@@ -1,18 +1,16 @@
-"use client";
-
 import { Video, Mic, FileText, PlayCircle } from "lucide-react";
 import { SectionCard } from "./shared/section-card";
-import { useQuery } from "@tanstack/react-query";
-import { getMockInterview } from "@/lib/actions/getMockInterview";
+import { prisma } from "@/lib/prisma";
+import { CollapsibleTranscript } from "./collapsible-transcript";
 
 interface HeaderCardProps {
   mockInterviewId: string;
 }
 
-export function HeaderCard({ mockInterviewId }: HeaderCardProps) {
-  const { data: interview } = useQuery({
-    queryKey: ["mockInterview", mockInterviewId],
-    queryFn: () => getMockInterview(mockInterviewId),
+export async function HeaderCard({ mockInterviewId }: HeaderCardProps) {
+  const interview = await prisma.mockInterview.findUnique({
+    where: { id: mockInterviewId },
+    include: { question: true },
   });
 
   if (!interview) return null;
@@ -51,15 +49,7 @@ export function HeaderCard({ mockInterviewId }: HeaderCardProps) {
 
         {/* Transcript */}
         {interview.recordingTranscription && (
-          <div className="rounded-xl border border-[#635BFF]/10 bg-white p-4">
-            <div className="mb-3 flex items-center gap-2">
-              <FileText className="h-5 w-5 text-[#635BFF]" />
-              <h3 className="font-semibold">Response Transcript</h3>
-            </div>
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-600">
-              {interview.recordingTranscription}
-            </p>
-          </div>
+          <CollapsibleTranscript transcript={interview.recordingTranscription} />
         )}
       </div>
     </SectionCard>

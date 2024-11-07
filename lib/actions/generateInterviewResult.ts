@@ -49,7 +49,7 @@ async function prepareInterviewData(mockInterviewId: string) {
   return { question: updatedQuestion, transcript };
 }
 
-export async function generateInterviewFeedback(mockInterviewId: string) {
+export async function generateInterviewResult(mockInterviewId: string) {
   try {
     const { question, transcript } = await prepareInterviewData(mockInterviewId);
 

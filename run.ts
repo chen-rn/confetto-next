@@ -1,5 +1,5 @@
 import { prisma } from "./lib/prisma";
-import { generateInterviewFeedback } from "./lib/actions/generateInterviewResult";
+import { generateInterviewResult } from "./lib/actions/generateInterviewResult";
 
 async function createMockInterview() {
   const question = await prisma.question.create({
@@ -47,7 +47,7 @@ While this mistake is unfortunate, I believe handling it with honesty and profes
 
   // Generate feedback
   console.log("Generating feedback...");
-  const feedback = await generateInterviewFeedback(mockInterview.id);
+  const feedback = await generateInterviewResult(mockInterview.id);
   console.log("Generated feedback:", feedback);
 }
 

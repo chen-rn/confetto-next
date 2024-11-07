@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "../prisma";
 import { transcribeAudio } from "./transcribeAudio";
-import { generateFeedback } from "./generateFeedback";
 import { ROUTES } from "@/lib/routes";
+import { generateInterviewResult } from "./generateInterviewResult";
 
 /**
  * Processes the audio submission by transcribing the audio and generating feedback.
@@ -57,11 +57,7 @@ export async function processAudioSubmission(mockId: string) {
 
     // Generate feedback using LLM
     console.log("🤖 Generating feedback using LLM...");
-    await generateFeedback({
-      mockInterviewId: mockId,
-      questionId: mockInterview.questionId,
-      answer: transcription,
-    });
+    await generateInterviewResult(mockId);
 
     // Revalidate the mock interview page to display the latest data
     revalidatePath(ROUTES.MOCK_RESULT(mockId));
