@@ -4,6 +4,7 @@ import { ResponseAnalysis } from "./response-analysis";
 import { AnswerKey } from "./answer-key";
 import { ProcessingState } from "./processing-state";
 import { prisma } from "@/lib/prisma";
+import { ReEvaluateButton } from "./re-evaluate-button";
 
 export async function InterviewResults({ mockInterviewId }: { mockInterviewId: string }) {
   const interview = await prisma.mockInterview.findUnique({
@@ -33,6 +34,7 @@ export async function InterviewResults({ mockInterviewId }: { mockInterviewId: s
         <PerformanceAnalysis mockInterviewId={mockInterviewId} />
         <ResponseAnalysis mockInterviewId={mockInterviewId} />
         <AnswerKey mockInterviewId={mockInterviewId} />
+        <ReEvaluateButton mockInterviewId={mockInterviewId} />
       </div>
     </div>
   );
