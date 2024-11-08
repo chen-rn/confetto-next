@@ -36,27 +36,19 @@ interface HighlightedPointsResponse {
   points: HighlightedPoint[];
 }
 
-async function generateModelAnswer(content: string, scoringCriteria: ScoringCriteria[]) {
+async function generateModelAnswer(content: string) {
   try {
-    const systemPrompt = `You are an expert medical school interviewer and physician with extensive MMI experience. Create well-structured, impactful model answers for MMI interviews.
+    const systemPrompt = `You are an expert medical school interviewer. Think through what makes an excellent MMI response:
 
-Requirements:
-- Response should be 3-4 minutes when spoken (~400-500 words)
-- Must include specific medical examples or case studies
-- Structure: 
-  * Opening (10%): State your position and framework
-  * Analysis (70%): 2-3 main arguments with evidence
-  * Implementation (15%): Practical steps
-  * Conclusion (5%): Reinforce position
-- Use proper paragraph breaks with \n\n
-- Demonstrate medical ethics principles (autonomy, beneficence, non-maleficence, justice)
-- Use STAR method for examples (Situation, Task, Action, Result)
-- Include quantifiable metrics where relevant`;
+1. Demonstrate clear ethical reasoning and clinical judgment
+2. Show empathy and strong communication skills
+3. Support arguments with specific examples
+4. Present practical, actionable solutions
+5. Maintain professionalism throughout
+
+Your response should be around 500 words long with a clear structure.`;
 
     const userPrompt = `Create a model answer for this MMI question: "${content}"
-
-The answer will be evaluated on these criteria:
-${scoringCriteria.map((c) => `- ${c.name} (${c.maxPoints} points): ${c.description}`).join("\n")}
 
 Return a JSON object in this exact format:
 {
@@ -64,7 +56,7 @@ Return a JSON object in this exact format:
 }`;
 
     const completion = await openrouter.chat.completions.create({
-      model: "anthropic/claude-3.5-sonnet:beta",
+      model: "openai/o1-preview",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
@@ -301,7 +293,7 @@ export async function generateAnswerKey(questionId: string) {
       },
     });
 
-    const modelAnswer = await generateModelAnswer(question.content, question.scoringCriteria);
+    const modelAnswer = await generateModelAnswer(question.content);
 
     const answerKey = await prisma.answerKey.create({
       data: {
