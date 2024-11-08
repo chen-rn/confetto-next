@@ -70,10 +70,11 @@ Response Format:
 }
 
 Scoring Guidelines:
-- 90-100: Exceptional (residency-level)
-- 80-89: Strong candidate
-- 70-79: Competent, needs development
-- <70: Significant concerns
+- 90-100: Exceptional (residency-level) - rare
+- 75-89: Strong candidate with minor improvements needed
+- 60-74: Competent but requires significant development
+- 50-59: Multiple areas of concern, needs major improvement
+- <50: Unacceptable performance, fundamental issues present
 
 Evaluation Framework:
 1. Clinical Reasoning & Ethics
@@ -91,7 +92,6 @@ For each component:
   return retryOnError(async () => {
     const completion = await openrouter.chat.completions.create({
       model: "anthropic/claude-3.5-sonnet:beta",
-      response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
