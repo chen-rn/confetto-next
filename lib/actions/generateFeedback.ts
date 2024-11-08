@@ -68,14 +68,18 @@ Response Format:
     }
   ]
 }
-
 Scoring Guidelines:
-- 95-100: Exceptional (residency-level) - extremely rare
-- 85-94: Very strong candidate, minor polish needed
-- 70-84: Good foundation but needs development
-- 55-69: Multiple significant gaps to address
-- 40-54: Major concerns, extensive work needed
-- <40: Unacceptable performance
+- 95-100: Exceptional (residency-level) - demonstrates mastery beyond expectations
+- 90-94: Outstanding - exemplary performance with minimal improvements needed
+- 85-89: Excellent - very strong showing with room for minor refinement
+- 80-84: Very Good - solid performance with some areas for enhancement
+- 75-79: Good - competent response with clear development opportunities
+- 70-74: Satisfactory - meets basic requirements but needs significant growth
+- 65-69: Fair - multiple areas requiring substantial improvement
+- 60-64: Below Average - fundamental gaps in multiple competencies
+- 55-59: Poor - serious deficiencies requiring extensive remediation
+- 50-54: Very Poor - major concerns across most evaluation criteria
+- <50: Unacceptable - fails to demonstrate basic interview competencies
 
 Evaluation Framework:
 1. Clinical Reasoning & Ethics
