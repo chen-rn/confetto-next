@@ -70,11 +70,12 @@ Response Format:
 }
 
 Scoring Guidelines:
-- 90-100: Exceptional (residency-level) - rare
-- 75-89: Strong candidate with minor improvements needed
-- 60-74: Competent but requires significant development
-- 50-59: Multiple areas of concern, needs major improvement
-- <50: Unacceptable performance, fundamental issues present
+- 95-100: Exceptional (residency-level) - extremely rare
+- 85-94: Very strong candidate, minor polish needed
+- 70-84: Good foundation but needs development
+- 55-69: Multiple significant gaps to address
+- 40-54: Major concerns, extensive work needed
+- <40: Unacceptable performance
 
 Evaluation Framework:
 1. Clinical Reasoning & Ethics
