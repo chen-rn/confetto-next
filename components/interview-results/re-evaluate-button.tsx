@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { useState } from "react";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 
 export function ReEvaluateButton({ mockInterviewId }: { mockInterviewId: string }) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const { toast } = useToast();
 
   async function handleReEvaluate() {
     try {
@@ -14,12 +15,21 @@ export function ReEvaluateButton({ mockInterviewId }: { mockInterviewId: string 
       const result = await processAudioSubmission(mockInterviewId);
 
       if (result.success) {
-        toast.success("Re-evaluation started");
+        toast({
+          title: "Re-evaluation started",
+          variant: "default",
+        });
       } else {
-        toast.error(result.message);
+        toast({
+          title: result.message,
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      toast.error("Failed to start re-evaluation");
+      toast({
+        title: "Failed to start re-evaluation",
+        variant: "destructive",
+      });
     } finally {
       setIsProcessing(false);
     }
