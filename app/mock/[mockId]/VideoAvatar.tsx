@@ -6,86 +6,119 @@ import { useVoiceAssistant } from "@livekit/components-react";
 export function VideoAvatar() {
   const talkingVideoRef = useRef<HTMLVideoElement>(null);
   const idleVideoRef = useRef<HTMLVideoElement>(null);
+  const initialVideoRef = useRef<HTMLVideoElement>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [hasPlayedInitial, setHasPlayedInitial] = useState(false);
+  const [videosLoaded, setVideosLoaded] = useState(false);
 
-  // Get the voice assistant state
   const { state } = useVoiceAssistant();
   const isSpeaking = state === "speaking";
-  // Fix the isDisconnected logic
   const isDisconnected =
     state === "disconnected" || state === "initializing" || state === "connecting";
 
+  // Preload videos
   useEffect(() => {
-    if (isDisconnected) return;
+    const loadVideos = async () => {
+      const videos = [initialVideoRef.current, talkingVideoRef.current, idleVideoRef.current];
 
+      if (!videos.every(Boolean)) return;
+
+      await Promise.all(
+        videos.map((video) => {
+          if (!video) return Promise.resolve();
+          return new Promise((resolve) => {
+            video.load();
+            video.onloadeddata = resolve;
+          });
+        })
+      );
+
+      setVideosLoaded(true);
+    };
+
+    loadVideos();
+  }, []);
+
+  useEffect(() => {
+    if (isDisconnected || !videosLoaded) return;
+
+    const initialVideo = initialVideoRef.current;
     const talkingVideo = talkingVideoRef.current;
     const idleVideo = idleVideoRef.current;
 
-    if (!talkingVideo || !idleVideo) return;
+    if (!talkingVideo || !idleVideo || !initialVideo) return;
 
-    // Set idle video playback rate to 50%
-    idleVideo.playbackRate = 0.5;
+    // Handle initial video playback
+    if (!hasPlayedInitial) {
+      const playInitial = async () => {
+        try {
+          idleVideo.style.opacity = "0";
+          await initialVideo.play();
+          initialVideo.onended = () => {
+            initialVideo.style.opacity = "0";
+            idleVideo.style.opacity = "1";
+            idleVideo.play();
+            setTimeout(() => {
+              setHasPlayedInitial(true);
+              initialVideo.style.display = "none";
+            }, 300);
+          };
+        } catch (error) {
+          console.error("Error playing initial video:", error);
+          setHasPlayedInitial(true);
+        }
+      };
+      playInitial();
+      return;
+    }
 
-    // Set initial states and handle video switching
+    // Regular talking/idle logic
     if (isSpeaking) {
       const playTalking = async () => {
         try {
-          setIsTransitioning(true);
-          // Start playing the new video
           await talkingVideo.play();
-          // Small delay to ensure the new video has started playing
-          setTimeout(() => {
-            idleVideo.pause();
-            setIsTransitioning(false);
-          }, 300);
+          talkingVideo.style.opacity = "1";
+          idleVideo.style.opacity = "0";
+          setTimeout(() => idleVideo.pause(), 300);
         } catch (error) {
           console.error("Error playing talking video:", error);
-          setIsTransitioning(false);
         }
       };
       playTalking();
     } else {
       const playIdle = async () => {
         try {
-          setIsTransitioning(true);
-          // Start playing the new video
           await idleVideo.play();
-          // Small delay to ensure the new video has started playing
-          setTimeout(() => {
-            talkingVideo.pause();
-            setIsTransitioning(false);
-          }, 300);
+          idleVideo.style.opacity = "1";
+          talkingVideo.style.opacity = "0";
+          setTimeout(() => talkingVideo.pause(), 300);
         } catch (error) {
           console.error("Error playing idle video:", error);
-          setIsTransitioning(false);
         }
       };
       playIdle();
     }
-  }, [isSpeaking, isDisconnected]);
-
-  if (isDisconnected) {
-    return (
-      <div className="relative w-full h-full bg-black flex items-center justify-center">
-        <div className="text-center space-y-2">
-          <p className="text-white/80 text-lg">Your interviewer is connecting...</p>
-          <p className="text-white/60 text-sm">Please wait...</p>
-        </div>
-      </div>
-    );
-  }
+  }, [isSpeaking, isDisconnected, hasPlayedInitial, videosLoaded]);
 
   return (
-    <div className="relative w-full h-full z-0">
+    <div className="relative w-full h-full bg-black z-0">
+      <video
+        ref={initialVideoRef}
+        src="/videos/initial.mp4"
+        muted
+        playsInline
+        className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-300 ${
+          hasPlayedInitial ? "hidden" : ""
+        }`}
+      />
       <video
         ref={talkingVideoRef}
         src="/videos/talking.mp4"
         muted
         playsInline
         loop
-        className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-300 ${
-          isSpeaking ? "opacity-100" : "opacity-0"
-        } ${isTransitioning ? "z-[1]" : "z-0"}`}
+        className="w-full h-full object-cover absolute inset-0 transition-opacity duration-300"
+        style={{ opacity: 0 }}
       />
       <video
         ref={idleVideoRef}
@@ -93,9 +126,8 @@ export function VideoAvatar() {
         muted
         playsInline
         loop
-        className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-300 ${
-          isSpeaking ? "opacity-0" : "opacity-100"
-        } ${isTransitioning ? "z-0" : "z-[1]"}`}
+        className="w-full h-full object-cover absolute inset-0 transition-opacity duration-300"
+        style={{ opacity: 0 }}
       />
     </div>
   );
