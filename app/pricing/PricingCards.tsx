@@ -13,7 +13,7 @@ import { MAX_TRIAL_CREDITS } from "@/lib/hooks/useInterviewEligibility";
 const cardVariants = cva(
   [
     `flex h-[440px] w-[300px] shrink-0 grow-0
-    flex-col rounded-2xl px-6 py-6
+    flex-col rounded-3xl px-6 py-6
     transition-all duration-200 hover:shadow-lg`,
   ],
   {

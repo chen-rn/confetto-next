@@ -5,7 +5,7 @@ import { LiveKitRoom, RoomAudioRenderer } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { Button } from "@/components/ui/button";
 import { useRecording } from "@/hooks/useRecording";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useAtom } from "jotai";
 import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interview";
 import { VideoViewfinder } from "@/app/mock/[mockId]/VideoViewfinder";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,16 +18,19 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Mic, Video } from "lucide-react";
 import { EndInterviewModal } from "@/app/mock/[mockId]/components/EndInterviewModal";
-import { TagType } from "@prisma/client";
 import { DevicePermissionsCheck } from "./components/DevicePermissionsCheck";
+import { atomWithStorage } from "jotai/utils";
+import { devicePermissionsAtom } from "@/lib/atoms/permissions";
 
 interface InterviewRoomProps {
   token: string;
   question: string;
   mockId: string;
   questionType?: string;
-  tags: { id: string; name: string; type: TagType }[];
+  tags: { id: string; name: string; type: string }[];
 }
+
+const PERMISSIONS_CACHE_DURATION = 1000 * 60 * 60; // 1 hour
 
 export function InterviewRoom({
   token,
@@ -43,26 +46,40 @@ export function InterviewRoom({
   const isProcessing = useAtomValue(isProcessingAtom);
   const { startRecording, stopRecording } = useRecording(mockId);
   const [showEndModal, setShowEndModal] = useState(false);
-  const [hasDevicePermissions, setHasDevicePermissions] = useState<boolean | null>(null);
+  const [permissionsState, setPermissionsState] = useAtom(devicePermissionsAtom);
 
   // All useEffects need to be here, before any conditional returns
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     async function checkInitialPermissions() {
+      const now = Date.now();
+
+      // Move the cache check outside the effect
+      const currentState = permissionsState;
+      if (
+        currentState.hasPermissions !== null &&
+        currentState.lastChecked &&
+        now - currentState.lastChecked < PERMISSIONS_CACHE_DURATION
+      ) {
+        if (currentState.hasPermissions) {
+          setTimeLeft(60);
+        }
+        return;
+      }
+
       try {
         const permissions = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         permissions.getTracks().forEach((track) => track.stop());
-        setHasDevicePermissions(true);
+        setPermissionsState({
+          hasPermissions: true,
+          lastChecked: now,
+        });
         setTimeLeft(60);
       } catch (error) {
-        if (
-          (error as Error).name === "NotAllowedError" ||
-          (error as Error).name === "NotFoundError"
-        ) {
-          setHasDevicePermissions(false);
-        } else {
-          console.error("Error checking device permissions:", error);
-          setHasDevicePermissions(false);
-        }
+        setPermissionsState({
+          hasPermissions: false,
+          lastChecked: now,
+        });
       }
     }
 
@@ -135,7 +152,7 @@ export function InterviewRoom({
     return <div>Loading...</div>;
   }
 
-  if (hasDevicePermissions === null) {
+  if (permissionsState.hasPermissions === null) {
     return (
       <div className="min-h-screen bg-neutral-100 flex items-center justify-center">
         <motion.div
@@ -150,11 +167,14 @@ export function InterviewRoom({
     );
   }
 
-  if (hasDevicePermissions === false) {
+  if (permissionsState.hasPermissions === false) {
     return (
       <DevicePermissionsCheck
         onPermissionsGranted={() => {
-          setHasDevicePermissions(true);
+          setPermissionsState({
+            hasPermissions: true,
+            lastChecked: Date.now(),
+          });
           setTimeLeft(60);
         }}
       />

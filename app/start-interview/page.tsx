@@ -15,19 +15,16 @@ export default async function StartInterviewPage({
   const questionId = searchParams.questionId;
   if (!questionId) redirect(ROUTES.MOCK_NEW);
 
-  // Verify the question exists
   const question = await prisma.question.findUnique({
     where: { id: questionId },
   });
 
   if (!question) redirect(ROUTES.QUESTION_BANK);
 
-  // Create a new mock interview session
   const mockInterview = await startMockInterview({
-    userId,
-    questionId,
+    userId: userId,
+    questionId: questionId,
   });
 
-  // Redirect to the interview room
   redirect(`${ROUTES.MOCK}/${mockInterview.id}`);
 }

@@ -13,7 +13,10 @@
     "test": "jest",
     "lint": "biome check .",
     "postinstall": "npx prisma generate",
-    "seed:state-questions": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-state-questions.ts"
+    "seed:state-questions": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-state-questions.ts",
+    "seed:schools": "tsx scripts/seed-schools.ts",
+    "seed:tags": "tsx scripts/seed-tags.ts",
+    "seed:questions": "tsx scripts/seed-questions.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.1",

@@ -139,7 +139,7 @@ function EmptyState() {
 
 function QuestionCard({ question }: { question: QuestionWithTags }) {
   return (
-    <div className="group rounded-xl border border-neutral-100 bg-white transition-all duration-200 hover:shadow-md hover:border-[#635BFF]/20">
+    <div className="group rounded-2xl border border-neutral-100 bg-white transition-all duration-200 hover:shadow-md hover:border-[#635BFF]/20">
       <div className="p-4 flex items-start gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex flex-col gap-2.5">

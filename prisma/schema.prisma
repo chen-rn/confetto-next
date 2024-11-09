@@ -47,7 +47,7 @@ model Question {
 model QuestionTag {
     id        String     @id @default(uuid())
     name      String     @unique
-    type      TagType
+    type      String
     questions Question[]
 
     @@index([name])
@@ -163,12 +163,6 @@ enum OnboardingStatus {
     NOT_STARTED
     IN_PROGRESS
     COMPLETED
-}
-
-enum TagType {
-    TOPIC
-    STATE
-    COUNTRY
 }
 
 enum AnalysisType {
