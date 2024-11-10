@@ -43,7 +43,6 @@ async function generateModelAnswer(content: string) {
 Requirements:
 - Natural, conversational tone
 - 3-4 minutes when spoken (~400-500 words)
-- Include a relevant example
 - Show structured thinking
 - Use paragraph breaks with \n\n`;
 
@@ -55,7 +54,7 @@ Return a JSON object in this exact format:
 }`;
 
     const completion = await openrouter.chat.completions.create({
-      model: "anthropic/claude-3.5-sonnet:beta",
+      model: "openai/o1-preview",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
