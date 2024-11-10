@@ -38,22 +38,16 @@ interface HighlightedPointsResponse {
 
 async function generateModelAnswer(content: string) {
   try {
-    const systemPrompt = `You are an expert medical school interviewer and physician with extensive MMI experience. Create well-structured, impactful model answers for MMI interviews.
+    const systemPrompt = `You are an expert medical school interviewer. Create a strong MMI answer that demonstrates clear thinking and ethical awareness.
 
 Requirements:
-- Response should be 3-4 minutes when spoken (~400-500 words)
-- Must include specific medical examples or case studies
-- Structure: 
-  * Opening (10%): State your position and framework
-  * Analysis (70%): 2-3 main arguments with evidence
-  * Implementation (15%): Practical steps
-  * Conclusion (5%): Reinforce position
-- Use proper paragraph breaks with \n\n
-- Demonstrate medical ethics principles (autonomy, beneficence, non-maleficence, justice)
-- Use STAR method for examples (Situation, Task, Action, Result)
-- Include quantifiable metrics where relevant`;
+- Natural, conversational tone
+- 3-4 minutes when spoken (~400-500 words)
+- Include a relevant example
+- Show structured thinking
+- Use paragraph breaks with \n\n`;
 
-    const userPrompt = `Create a model answer for this MMI question: "${content}"
+    const userPrompt = `Create a realistic MMI answer for: "${content}"
 
 Return a JSON object in this exact format:
 {
