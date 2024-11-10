@@ -42,7 +42,7 @@ async function generateModelAnswer(content: string) {
 
 Requirements:
 - Natural, conversational tone
-- 3-4 minutes when spoken (~400-500 words)
+- 3-4 minutes when spoken (~300 words)
 - Show structured thinking
 - Use paragraph breaks with \n\n`;
 

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { LiveKitRoom, RoomAudioRenderer } from "@livekit/components-react";
+import { LiveKitRoom, RoomAudioRenderer, useDataChannel } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { Button } from "@/components/ui/button";
 import { useRecording } from "@/hooks/useRecording";
 import { useAtomValue, useAtom } from "jotai";
-import { isRecordingAtom, isProcessingAtom } from "@/lib/atoms/interview";
+import { isRecordingAtom, isProcessingAtom, isUploadingAtom } from "@/lib/atoms/interview";
 import { VideoViewfinder } from "@/app/mock/[mockId]/VideoViewfinder";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { VideoAvatar } from "@/app/mock/[mockId]/VideoAvatar";
@@ -21,6 +21,7 @@ import { EndInterviewModal } from "@/app/mock/[mockId]/components/EndInterviewMo
 import { DevicePermissionsCheck } from "./components/DevicePermissionsCheck";
 import { atomWithStorage } from "jotai/utils";
 import { devicePermissionsAtom } from "@/lib/atoms/permissions";
+import { useRouter } from "next/navigation";
 
 interface InterviewRoomProps {
   token: string;
@@ -44,9 +45,18 @@ export function InterviewRoom({
   const [interviewTimeLeft, setInterviewTimeLeft] = useState(8 * 60);
   const isRecording = useAtomValue(isRecordingAtom);
   const isProcessing = useAtomValue(isProcessingAtom);
+  const isUploading = useAtomValue(isUploadingAtom);
   const { startRecording, stopRecording } = useRecording(mockId);
   const [showEndModal, setShowEndModal] = useState(false);
   const [permissionsState, setPermissionsState] = useAtom(devicePermissionsAtom);
+  const router = useRouter();
+
+  // Move endInterviewDirectly before the effects that use it
+  const endInterviewDirectly = useCallback(async () => {
+    if (isRecording && !isProcessing) {
+      stopRecording();
+    }
+  }, [isRecording, isProcessing, stopRecording]);
 
   // All useEffects need to be here, before any conditional returns
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -102,7 +112,7 @@ export function InterviewRoom({
         setInterviewTimeLeft((prevTime) => {
           if (prevTime <= 1) {
             clearInterval(timer);
-            handleEndInterview();
+            endInterviewDirectly();
             return 0;
           }
           return prevTime - 1;
@@ -110,7 +120,7 @@ export function InterviewRoom({
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [showQuestion]);
+  }, [showQuestion, endInterviewDirectly]);
 
   useEffect(() => {
     if (!showQuestion && !isRecording && !isProcessing) {
@@ -299,6 +309,42 @@ export function InterviewRoom({
     );
   }
 
+  if (isUploading) {
+    return (
+      <div className="fixed inset-0 bg-neutral-900/80 backdrop-blur-sm z-50 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center shadow-xl"
+        >
+          <Loader2 className="h-8 w-8 animate-spin text-[#635BFF] mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-neutral-900 mb-2">Processing Your Interview</h3>
+          <p className="text-neutral-600">
+            Please keep this tab open while we upload and process your interview recording.
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  function DataChannelHandler() {
+    useDataChannel((message) => {
+      try {
+        const textDecoder = new TextDecoder();
+        const messageString = textDecoder.decode(message.payload);
+        const data = JSON.parse(messageString);
+
+        if (data.type === "INTERVIEW_END") {
+          endInterviewDirectly();
+        }
+      } catch (error) {
+        console.error("Failed to parse data channel message:", error);
+      }
+    });
+
+    return null;
+  }
+
   return (
     <div className="h-screen flex flex-col bg-neutral-100">
       <LiveKitRoom
@@ -308,6 +354,7 @@ export function InterviewRoom({
         data-lk-theme="light"
         className="flex flex-col h-full"
       >
+        <DataChannelHandler />
         {/* Header with interview info */}
         <div className="bg-white border-b border-neutral-200 py-3">
           <div className="container mx-auto px-4">
