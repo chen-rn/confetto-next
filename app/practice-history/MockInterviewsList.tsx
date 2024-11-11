@@ -40,5 +40,16 @@ export async function MockInterviewsList() {
     orderBy: { createdAt: "desc" },
   });
 
-  return <PracticeHistory mockInterviews={mockInterviews} />;
+  // Add status field to feedback objects
+  const mockInterviewsWithStatus = mockInterviews.map((interview) => ({
+    ...interview,
+    feedback: interview.feedback
+      ? {
+          ...interview.feedback,
+          status: "COMPLETED" as const, // Or whatever default status is appropriate
+        }
+      : null,
+  }));
+
+  return <PracticeHistory mockInterviews={mockInterviewsWithStatus} />;
 }

@@ -82,19 +82,25 @@ const highlightedPointsSchema = z.object({
 
 async function generateModelAnswer(content: string) {
   try {
-    const systemPrompt = `You are an expert medical school interviewer. Create a strong MMI answer that demonstrates clear thinking and ethical awareness.
+    const systemPrompt = `You are an experienced medical resident giving an MMI answer. Create a response that feels authentic and shows real-world judgment.
 
-Requirements:
-- Natural, conversational tone
-- 3-4 minutes when spoken (~300 words)
-- Show structured thinking
-- Use paragraph breaks with \n\n`;
+Key requirements:
+- Use active, present-tense language ("I tell the attending..." not "I would tell")
+- Include a specific, realistic scenario detail in your answer
+- Show your thought process naturally, not in formal steps
+- Balance confidence with appropriate humility
+- Keep medical language conversational
+- Use emotion appropriately (concern, empathy, determination)
+- Break into natural paragraphs that flow logically
+- ~300 words total`;
 
-    const userPrompt = `Create a realistic MMI answer for: "${content}"
+    const userPrompt = `Give a realistic MMI answer for this scenario: "${content}"
 
-Return a JSON object in this exact format:
+Imagine you're actually in this situation. What's your gut reaction? What specific actions do you take? What matters most?
+
+Return a JSON response with natural paragraph breaks:
 {
-  "modelAnswer": "Your answer here in a single line with escaped quotes"
+  "modelAnswer": "First paragraph...\n\nSecond paragraph...\n\nFinal paragraph..."
 }`;
 
     const completion = await openrouter.chat.completions.create({
@@ -119,25 +125,29 @@ Return a JSON object in this exact format:
 
 async function generateKeyInsights(answerKeyId: string, modelAnswer: string) {
   try {
-    const systemPrompt = `You are an expert medical school interview evaluator with experience training successful candidates. Extract key insights that demonstrate mastery of medical ethics and clinical reasoning.
+    const systemPrompt = `You are an MMI expert who trains medical school candidates. Extract key insights that would help other candidates improve their answers.
 
-Focus on:
-- Ethical frameworks and principles applied
-- Clinical reasoning patterns
-- Communication strategies
-- Professional considerations
-- Evidence-based approaches`;
+Identify insights that show:
+- Practical application of ethical reasoning
+- Clear decision-making process
+- Effective communication strategies
+- Professional judgment
+- Consideration of multiple perspectives`;
 
-    const userPrompt = `Analyze this model answer and identify 3 key insights:
+    const userPrompt = `Analyze this model answer and identify 3 specific, actionable insights:
 
 ${modelAnswer}
 
-Respond with a JSON object like this:
+For each insight:
+- Title should be a concrete tip (e.g., "Lead with immediate safety concerns")
+- Description should explain HOW to implement the insight
+
+Return JSON like:
 {
   "insights": [
     {
-      "title": "Brief, actionable insight title",
-      "description": "2-3 sentence practical explanation"
+      "title": "Actionable tip",
+      "description": "How to implement this in your own answer"
     }
   ]
 }`;
