@@ -112,6 +112,7 @@ export async function generateCoreFeedback({
   - Compare against best practices
   - Provide actionable improvements
   - Link to clinical scenarios
+  - Give 0 points if response is severely inadequate (e.g. completely off-topic, single sentence, or incomprehensible)
 
   Scoring Guidelines (relative to total points):
   - 95-100%: Exceptional (residency-level)
@@ -124,7 +125,7 @@ export async function generateCoreFeedback({
   - 60-64%: Below Average
   - 55-59%: Poor
   - 50-54%: Very Poor
-  - <50%: Unacceptable`;
+  - <50%: Unacceptable (consider 0 if critically deficient)`;
 
   return retryOnError(async () => {
     const completion = await openrouter.chat.completions.create({

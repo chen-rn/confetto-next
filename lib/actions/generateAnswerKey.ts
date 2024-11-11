@@ -2,43 +2,9 @@
 
 import { openrouter } from "../openrouter";
 import { prisma } from "../prisma";
-import type { ScoringCriteria } from "@prisma/client";
 import { z } from "zod";
 import { validateAIResponse } from "../utils/ai-validation";
 
-interface ModelAnswerResponse {
-  modelAnswer: string;
-}
-
-interface KeyInsight {
-  title: string;
-  description: string;
-}
-
-interface KeyInsightsResponse {
-  insights: KeyInsight[];
-}
-
-interface StructureItem {
-  title: string;
-  description: string;
-}
-
-interface StructureResponse {
-  structure: StructureItem[];
-}
-
-interface HighlightedPoint {
-  text: string;
-  insight: string;
-  explanation: string;
-}
-
-interface HighlightedPointsResponse {
-  points: HighlightedPoint[];
-}
-
-// Define schemas
 const modelAnswerSchema = z.object({
   modelAnswer: z.string().min(1),
 });
@@ -98,10 +64,7 @@ Key requirements:
 
 Imagine you're actually in this situation. What's your gut reaction? What specific actions do you take? What matters most?
 
-Return a JSON response with natural paragraph breaks:
-{
-  "modelAnswer": "First paragraph...\n\nSecond paragraph...\n\nFinal paragraph..."
-}`;
+Provide just the answer with natural paragraph breaks, no additional formatting.`;
 
     const completion = await openrouter.chat.completions.create({
       model: "anthropic/claude-3.5-sonnet:beta",
@@ -109,14 +72,11 @@ Return a JSON response with natural paragraph breaks:
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      response_format: { type: "json_object" },
     });
 
-    return validateAIResponse({
-      schema: modelAnswerSchema,
-      content: completion.choices[0]?.message?.content,
-      fallback: { modelAnswer: "Failed to generate model answer" },
-    });
+    const modelAnswer =
+      completion.choices[0]?.message?.content || "Failed to generate model answer";
+    return { modelAnswer };
   } catch (error) {
     console.error("Error in generateModelAnswer:", error);
     throw new Error("Failed to generate model answer");
@@ -138,11 +98,7 @@ Identify insights that show:
 
 ${modelAnswer}
 
-For each insight:
-- Title should be a concrete tip (e.g., "Lead with immediate safety concerns")
-- Description should explain HOW to implement the insight
-
-Return JSON like:
+You must respond with valid JSON in this exact format:
 {
   "insights": [
     {
@@ -251,17 +207,17 @@ Focus on moments that show:
 - Cultural competency
 - Systems-level understanding`;
 
-    const userPrompt = `Identify 2-3 key moments that demonstrate the main requirements of the question. Focus only on the most important points that directly address the core of what's being asked:
+    const userPrompt = `Identify 2-3 key moments that demonstrate the main requirements of the question:
 
 ${modelAnswer}
 
-Respond with a JSON object like this:
+You must respond with valid JSON in this exact format:
 {
   "points": [
     {
-      "text": "Direct quote from answer that demonstrates a core requirement",
-      "insight": "Which main aspect of the question this addresses",
-      "explanation": "How this demonstrates understanding of the core requirement"
+      "text": "Direct quote from answer",
+      "insight": "Main aspect addressed",
+      "explanation": "How this demonstrates understanding"
     }
   ]
 }`;

@@ -38,9 +38,8 @@ async function prepareInterviewData(mockInterviewId: string) {
   }
 
   if (promises.length) {
-    console.log(`⏳ Generating ${promises.length} missing components...`);
     await Promise.all(promises);
-    console.log("✅ Successfully generated missing components");
+    console.log("✅ Successfully generated criteria and answer key");
   }
 
   // Refetch question with new data
