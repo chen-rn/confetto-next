@@ -3,6 +3,8 @@
 import { openrouter } from "../openrouter";
 import { prisma } from "../prisma";
 import type { ScoringCriteria } from "@prisma/client";
+import { z } from "zod";
+import { validateAIResponse } from "../utils/ai-validation";
 
 interface ModelAnswerResponse {
   modelAnswer: string;
@@ -36,6 +38,48 @@ interface HighlightedPointsResponse {
   points: HighlightedPoint[];
 }
 
+// Define schemas
+const modelAnswerSchema = z.object({
+  modelAnswer: z.string().min(1),
+});
+
+const keyInsightsSchema = z.object({
+  insights: z
+    .array(
+      z.object({
+        title: z.string().min(1),
+        description: z.string().min(1),
+      })
+    )
+    .min(1)
+    .max(5),
+});
+
+const answerStructureSchema = z.object({
+  structure: z
+    .array(
+      z.object({
+        title: z.string().min(1),
+        description: z.string().min(1),
+      })
+    )
+    .min(3)
+    .max(6),
+});
+
+const highlightedPointsSchema = z.object({
+  points: z
+    .array(
+      z.object({
+        text: z.string().min(1),
+        insight: z.string().min(1),
+        explanation: z.string().min(1),
+      })
+    )
+    .min(2)
+    .max(4),
+});
+
 async function generateModelAnswer(content: string) {
   try {
     const systemPrompt = `You are an expert medical school interviewer. Create a strong MMI answer that demonstrates clear thinking and ethical awareness.
@@ -54,7 +98,7 @@ Return a JSON object in this exact format:
 }`;
 
     const completion = await openrouter.chat.completions.create({
-      model: "openai/o1-preview",
+      model: "anthropic/claude-3.5-sonnet:beta",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
@@ -62,20 +106,14 @@ Return a JSON object in this exact format:
       response_format: { type: "json_object" },
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
-    if (!responseContent) {
-      throw new Error("Empty response from AI");
-    }
-
-    const response = JSON.parse(responseContent) as ModelAnswerResponse;
-    if (!response.modelAnswer) {
-      throw new Error("Response missing modelAnswer field");
-    }
-
-    return response.modelAnswer;
+    return validateAIResponse({
+      schema: modelAnswerSchema,
+      content: completion.choices[0]?.message?.content,
+      fallback: { modelAnswer: "Failed to generate model answer" },
+    });
   } catch (error) {
     console.error("Error in generateModelAnswer:", error);
-    throw error;
+    throw new Error("Failed to generate model answer");
   }
 }
 
@@ -113,32 +151,19 @@ Respond with a JSON object like this:
       response_format: { type: "json_object" },
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
-    if (!responseContent) {
-      throw new Error("Empty response from AI");
-    }
+    const validatedResponse = await validateAIResponse({
+      schema: keyInsightsSchema,
+      content: completion.choices[0]?.message?.content,
+      fallback: { insights: [] },
+    });
 
-    let response: KeyInsightsResponse;
-    try {
-      response = JSON.parse(responseContent);
-      if (
-        !response.insights ||
-        !Array.isArray(response.insights) ||
-        response.insights.length === 0
-      ) {
-        throw new Error("Invalid insights format");
-      }
-      await prisma.keyInsight.createMany({
-        data: response.insights.map((insight) => ({
-          answerKeyId,
-          title: insight.title,
-          description: insight.description,
-        })),
-      });
-    } catch (parseError) {
-      console.error("Invalid response format:", parseError);
-      return [];
-    }
+    await prisma.keyInsight.createMany({
+      data: validatedResponse.insights.map((insight) => ({
+        answerKeyId,
+        title: insight.title,
+        description: insight.description,
+      })),
+    });
   } catch (error) {
     console.error("Error generating key insights:", error);
   }
@@ -178,37 +203,26 @@ Return a JSON object with this exact format (no additional fields):
       response_format: { type: "json_object" },
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
-    if (!responseContent) {
-      throw new Error("Empty response from AI");
-    }
+    const validatedResponse = await validateAIResponse({
+      schema: answerStructureSchema,
+      content: completion.choices[0]?.message?.content,
+      fallback: { structure: [] },
+    });
 
-    let response: StructureResponse;
-    try {
-      const response = JSON.parse(responseContent) as StructureResponse;
+    const cleanedStructure = validatedResponse.structure.map((item) => ({
+      title: String(item.title).trim(),
+      description: String(item.description).trim(),
+    }));
 
-      if (!response.structure || !Array.isArray(response.structure)) {
-        throw new Error("Invalid structure format");
-      }
+    await prisma.answerStructure.createMany({
+      data: cleanedStructure.map((item) => ({
+        answerKeyId,
+        section: item.title,
+        purpose: item.description,
+      })),
+    });
 
-      const cleanedStructure = response.structure.map((item) => ({
-        title: String(item.title).trim(),
-        description: String(item.description).trim(),
-      }));
-
-      await prisma.answerStructure.createMany({
-        data: cleanedStructure.map((item) => ({
-          answerKeyId,
-          section: item.title,
-          purpose: item.description,
-        })),
-      });
-
-      return cleanedStructure;
-    } catch (error) {
-      console.error("Error parsing structure:", error);
-      throw new Error("Failed to parse answer structure");
-    }
+    return cleanedStructure;
   } catch (error) {
     console.error("Error generating answer structure:", error);
     throw new Error("Failed to generate answer structure");
@@ -251,25 +265,14 @@ Respond with a JSON object like this:
       response_format: { type: "json_object" },
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
-    if (!responseContent) {
-      throw new Error("Empty response from AI");
-    }
-
-    let response: HighlightedPointsResponse;
-    try {
-      response = JSON.parse(responseContent);
-    } catch (parseError) {
-      console.error("JSON parse error:", parseError);
-      return [];
-    }
-
-    if (!Array.isArray(response.points)) {
-      return [];
-    }
+    const validatedResponse = await validateAIResponse({
+      schema: highlightedPointsSchema,
+      content: completion.choices[0]?.message?.content,
+      fallback: { points: [] },
+    });
 
     await prisma.highlightedPoint.createMany({
-      data: response.points.map((point) => ({
+      data: validatedResponse.points.map((point) => ({
         answerKeyId,
         text: point.text,
         insight: point.insight,
@@ -291,12 +294,12 @@ export async function generateAnswerKey(questionId: string) {
       },
     });
 
-    const modelAnswer = await generateModelAnswer(question.content);
+    const modelAnswerResponse = await generateModelAnswer(question.content);
 
     const answerKey = await prisma.answerKey.create({
       data: {
         questionId,
-        modelAnswer,
+        modelAnswer: modelAnswerResponse.modelAnswer,
         keyInsights: { create: [] },
         answerStructure: { create: [] },
         highlightedPoints: { create: [] },
@@ -305,9 +308,9 @@ export async function generateAnswerKey(questionId: string) {
 
     // Run parallel tasks but catch errors individually
     const results = await Promise.allSettled([
-      generateKeyInsights(answerKey.id, modelAnswer),
-      generateAnswerStructure(answerKey.id, modelAnswer),
-      generateHighlightedPoints(answerKey.id, modelAnswer),
+      generateKeyInsights(answerKey.id, modelAnswerResponse.modelAnswer),
+      generateAnswerStructure(answerKey.id, modelAnswerResponse.modelAnswer),
+      generateHighlightedPoints(answerKey.id, modelAnswerResponse.modelAnswer),
     ]);
 
     // Log any errors from parallel tasks

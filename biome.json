@@ -30,7 +30,8 @@
         "noUselessElse": "off",
         "useImportType": "off",
         "noInferrableTypes": "off",
-        "noUnusedTemplateLiteral": "off"
+        "noUnusedTemplateLiteral": "off",
+        "useTemplate": "off"
       },
       "suspicious": {
         "noArrayIndexKey": "off"

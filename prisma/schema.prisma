@@ -71,6 +71,7 @@ model Feedback {
     id              String           @id @default(uuid())
     mockInterview   MockInterview    @relation(fields: [mockInterviewId], references: [id])
     mockInterviewId String           @unique
+    status          FeedbackStatus   @default(PENDING)
     overallScore    Int              @default(0)
     overallFeedback String           @default("")
     componentScores ComponentScore[]
@@ -80,13 +81,13 @@ model Feedback {
 }
 
 model ComponentScore {
-    id          String   @id @default(uuid())
-    feedback    Feedback @relation(fields: [feedbackId], references: [id])
-    feedbackId  String
-    name        String
-    score       Int
-    totalPoints Int      @default(100)
-    summary     String
+    id         String   @id @default(uuid())
+    feedback   Feedback @relation(fields: [feedbackId], references: [id])
+    feedbackId String
+    name       String
+    score      Int
+    maxPoints  Int
+    summary    String
 }
 
 model AnalysisPoint {
@@ -169,4 +170,11 @@ enum AnalysisType {
     STRENGTH
     IMPROVEMENT
     MISSING
+}
+
+enum FeedbackStatus {
+    PENDING
+    PROCESSING
+    COMPLETED
+    FAILED
 }

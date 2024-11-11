@@ -49,7 +49,6 @@ export function InterviewRoom({
   const { startRecording, stopRecording } = useRecording(mockId);
   const [showEndModal, setShowEndModal] = useState(false);
   const [permissionsState, setPermissionsState] = useAtom(devicePermissionsAtom);
-  const router = useRouter();
 
   // Move endInterviewDirectly before the effects that use it
   const endInterviewDirectly = useCallback(async () => {

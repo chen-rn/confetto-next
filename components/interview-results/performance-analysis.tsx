@@ -69,7 +69,7 @@ export async function PerformanceAnalysis({ mockInterviewId }: PerformanceAnalys
   const components = feedback.componentScores.map((component) => ({
     name: component.name,
     score: component.score,
-    total: component.totalPoints,
+    total: component.maxPoints,
     summary: component.summary,
   }));
 

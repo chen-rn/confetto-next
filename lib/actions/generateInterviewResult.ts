@@ -7,6 +7,8 @@ import { OpenAIError } from "openai";
 import { generateAnalysisPoints, generateCoreFeedback } from "./generateFeedback";
 
 async function prepareInterviewData(mockInterviewId: string) {
+  console.log("🔍 Preparing interview data and checking required components...");
+
   const mockInterview = await prisma.mockInterview.findUniqueOrThrow({
     where: { id: mockInterviewId },
     include: {
@@ -26,15 +28,19 @@ async function prepareInterviewData(mockInterviewId: string) {
   const promises = [];
 
   if (!question.scoringCriteria.length) {
+    console.log("📋 No scoring criteria found - generating...");
     promises.push(generateCriteria(question.id));
   }
 
   if (!question.answerKey) {
+    console.log("🔑 No answer key found - generating...");
     promises.push(generateAnswerKey(question.id));
   }
 
   if (promises.length) {
+    console.log(`⏳ Generating ${promises.length} missing components...`);
     await Promise.all(promises);
+    console.log("✅ Successfully generated missing components");
   }
 
   // Refetch question with new data
@@ -53,6 +59,7 @@ export async function generateInterviewResult(mockInterviewId: string) {
   try {
     const { question, transcript } = await prepareInterviewData(mockInterviewId);
 
+    console.log("🤖 Starting feedback generation with AI models...");
     // Generate feedback components in parallel
     const [coreFeedback, analysisPoints] = await Promise.all([
       generateCoreFeedback({
@@ -66,17 +73,38 @@ export async function generateInterviewResult(mockInterviewId: string) {
       }),
     ]);
 
-    return prisma.feedback.create({
-      data: {
+    console.log(`📊 Generated feedback with score: ${coreFeedback.overallScore}/100`);
+    console.log(`📝 Analysis points generated: ${analysisPoints.length}`);
+
+    // Update existing feedback or create new one
+    return prisma.feedback.upsert({
+      where: { mockInterviewId },
+      create: {
         mockInterviewId,
         overallScore: coreFeedback.overallScore,
         overallFeedback: coreFeedback.overallFeedback,
+        status: "COMPLETED",
         componentScores: {
           create: coreFeedback.componentScores.map((score) => ({
             ...score,
           })),
         },
         analysisPoints: { create: analysisPoints },
+      },
+      update: {
+        overallScore: coreFeedback.overallScore,
+        overallFeedback: coreFeedback.overallFeedback,
+        status: "COMPLETED",
+        componentScores: {
+          deleteMany: {},
+          create: coreFeedback.componentScores.map((score) => ({
+            ...score,
+          })),
+        },
+        analysisPoints: {
+          deleteMany: {},
+          create: analysisPoints,
+        },
       },
       include: {
         componentScores: true,
@@ -85,9 +113,10 @@ export async function generateInterviewResult(mockInterviewId: string) {
     });
   } catch (error) {
     if (error instanceof OpenAIError) {
-      console.error("OpenAI API error:", error);
+      console.error("❌ OpenAI API error:", error);
       throw new Error("Failed to generate interview feedback. Please try again.");
     }
+    console.error("❌ Unexpected error during feedback generation:", error);
     throw error;
   }
 }

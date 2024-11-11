@@ -2,28 +2,45 @@
 
 import { openrouter } from "../openrouter";
 import { prisma } from "../prisma";
+import { z } from "zod";
+import { validateAIResponse } from "../utils/ai-validation";
 
-interface Criterion {
-  name: string;
-  description: string;
-  maxScore: number;
-}
+const criteriaSchema = z.object({
+  criteria: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        description: z.string().min(1),
+        maxScore: z.number().min(10).max(100),
+      })
+    )
+    .min(4)
+    .max(5)
+    .refine(
+      (data) => {
+        const total = data.reduce((sum, criterion) => sum + criterion.maxScore, 0);
+        return total === 100;
+      },
+      { message: "Total score must equal 100" }
+    ),
+});
 
 export async function generateCriteria(questionId: string) {
-  const question = await prisma.question.findUniqueOrThrow({
-    where: { id: questionId },
-  });
-  const completion = await openrouter.chat.completions.create({
-    model: "anthropic/claude-3.5-sonnet:beta",
-    messages: [
-      {
-        role: "system",
-        content: `You are an expert medical school interviewer and evaluator with extensive experience in MMI (Multiple Mini Interview) assessments.
+  try {
+    const question = await prisma.question.findUniqueOrThrow({
+      where: { id: questionId },
+    });
+    const completion = await openrouter.chat.completions.create({
+      model: "anthropic/claude-3.5-sonnet:beta",
+      messages: [
+        {
+          role: "system",
+          content: `You are an expert medical school interviewer and evaluator with extensive experience in MMI (Multiple Mini Interview) assessments.
 Your role is to create detailed, objective scoring rubrics that any interviewer can use consistently.`,
-      },
-      {
-        role: "user",
-        content: `Generate 4-5 scoring criteria for the following medical school interview question: "${question.content}"
+        },
+        {
+          role: "user",
+          content: `Generate 4-5 scoring criteria for the following medical school interview question: "${question.content}"
 
 For each criterion, provide:
 1. name: A concise, descriptive title (3-5 words)
@@ -56,24 +73,23 @@ Return as a JSON array with format:
     }
   ]
 }`,
-      },
-    ],
-    response_format: { type: "json_object" },
-  });
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
 
-  const content = completion.choices[0].message.content;
-  if (!content) {
-    throw new Error("No content in API response");
-  }
+    const validatedResponse = await validateAIResponse({
+      schema: criteriaSchema,
+      content: completion.choices[0]?.message?.content,
+      fallback: { criteria: [] },
+    });
 
-  try {
-    const response = JSON.parse(content);
-    if (!response.criteria || !Array.isArray(response.criteria)) {
-      throw new Error("Invalid response format");
+    if (validatedResponse.criteria.length === 0) {
+      throw new Error("Failed to generate valid criteria");
     }
 
     return prisma.scoringCriteria.createMany({
-      data: response.criteria.map((criterion: Criterion) => ({
+      data: validatedResponse.criteria.map((criterion) => ({
         questionId,
         name: criterion.name,
         description: criterion.description,
@@ -81,7 +97,7 @@ Return as a JSON array with format:
       })),
     });
   } catch (error) {
-    console.error("Failed to parse criteria:", content);
+    console.error("Failed to generate criteria:", error);
     throw error;
   }
 }

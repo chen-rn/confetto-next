@@ -1,19 +1,30 @@
-"use client";
-
+import { prisma } from "@/lib/prisma";
 import { InterviewResults } from "@/components/interview-results";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
-export default function ResultPage({ params }: { params: { mockId: string } }) {
-  const router = useRouter();
+export default async function ResultPage({ params }: { params: { mockId: string } }) {
+  const interview = await prisma.mockInterview.findUnique({
+    where: { id: params.mockId },
+    select: {
+      recordingUrl: true,
+      videoUrl: true,
+      recordingTranscription: true,
+      feedback: {
+        select: {
+          id: true,
+          status: true,
+        },
+      },
+    },
+  });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      router.refresh();
-    }, 5000);
+  const hasNoFeedback = !interview?.feedback;
+  const hasNoTranscription = !interview?.recordingTranscription;
+  const isProcessing =
+    !interview ||
+    hasNoFeedback ||
+    hasNoTranscription ||
+    interview.feedback?.status === "PROCESSING" ||
+    interview.feedback?.status === "PENDING";
 
-    return () => clearInterval(interval);
-  }, [router]);
-
-  return <InterviewResults mockInterviewId={params.mockId} />;
+  return <InterviewResults isProcessing={isProcessing} mockInterviewId={params.mockId} />;
 }

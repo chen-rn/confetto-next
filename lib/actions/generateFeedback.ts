@@ -36,6 +36,19 @@ const coreFeedbackSchema = z.object({
     .min(1),
 });
 
+// Add validation schema for input transcript
+const feedbackInputSchema = z.object({
+  question: z.string().min(1),
+  transcript: z.string().min(1),
+  criteria: z.array(
+    z.object({
+      name: z.string(),
+      maxPoints: z.number(),
+      description: z.string(),
+    })
+  ),
+});
+
 async function retryOnError<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
   for (let i = 0; i < maxRetries; i++) {
     try {
@@ -53,107 +66,106 @@ export async function generateCoreFeedback({
   transcript,
   criteria,
 }: CoreFeedbackInput): Promise<CoreFeedbackResult> {
+  // Validate inputs
+  try {
+    feedbackInputSchema.parse({ question, transcript, criteria });
+  } catch (error) {
+    return {
+      overallScore: 0,
+      overallFeedback:
+        "Invalid or empty response provided. Please provide a complete answer to receive feedback.",
+      componentScores: criteria.map((c) => ({
+        name: c.name,
+        score: 0,
+        maxPoints: c.maxPoints,
+        summary: "No valid response to evaluate.",
+      })),
+    };
+  }
+
   const systemPrompt = `You are an experienced medical school admissions interviewer and physician evaluating MMI responses.
+  
+  Important: If the response is empty, invalid, or in the wrong language, return a standardized "invalid response" JSON with 0 scores.
+  
+  Evaluation Process:
+  1. First, evaluate each component individually
+  2. Then, synthesize overall feedback based on component analysis
+  3. Finally, calculate overall score as weighted average of component scores
 
-Evaluation Process:
-1. First, evaluate each component individually
-2. Then, synthesize overall feedback based on component analysis
-3. Finally, calculate overall score as weighted average of component scores
+  Response Format:
+  {
+    "componentScores": [
+      {
+        "name": string (component name),
+        "score": number (earned points),
+        "maxPoints": number (max points from criteria),
+        "summary": string (2-3 sentences of specific feedback)
+      }
+    ],
+    "overallFeedback": string (synthesis of key points),
+    "overallScore": number (weighted average, 0-100)
+  }
 
-Response Format:
-{
-  "componentScores": [
-    {
-      "name": string (component name),
-      "score": number (earned points),
-      "totalPoints": number (max points from criteria),
-      "summary": string (2-3 sentences of specific feedback)
-    }
-  ],
-  "overallFeedback": string (synthesis of key points),
-  "overallScore": number (weighted average, 0-100)
-}
+  For each component score:
+  - Score should be between 0 and the component's total points
+  - Start with specific examples from the response
+  - Compare against best practices
+  - Provide actionable improvements
+  - Link to clinical scenarios
 
-For each component score:
-- Score should be between 0 and the component's total points
-- Start with specific examples from the response
-- Compare against best practices
-- Provide actionable improvements
-- Link to clinical scenarios
-
-Scoring Guidelines (relative to total points):
-- 95-100%: Exceptional (residency-level)
-- 90-94%: Outstanding
-- 85-89%: Excellent
-- 80-84%: Very Good
-- 75-79%: Good
-- 70-74%: Satisfactory
-- 65-69%: Fair
-- 60-64%: Below Average
-- 55-59%: Poor
-- 50-54%: Very Poor
-- <50%: Unacceptable`;
+  Scoring Guidelines (relative to total points):
+  - 95-100%: Exceptional (residency-level)
+  - 90-94%: Outstanding
+  - 85-89%: Excellent
+  - 80-84%: Very Good
+  - 75-79%: Good
+  - 70-74%: Satisfactory
+  - 65-69%: Fair
+  - 60-64%: Below Average
+  - 55-59%: Poor
+  - 50-54%: Very Poor
+  - <50%: Unacceptable`;
 
   return retryOnError(async () => {
     const completion = await openrouter.chat.completions.create({
       model: "anthropic/claude-3.5-sonnet:beta",
       response_format: { type: "json_object" },
       messages: [
-        {
-          role: "system",
-          content: systemPrompt,
-        },
+        { role: "system", content: systemPrompt },
         {
           role: "user",
-          content: `Evaluate this MMI response following the 3-step process:
+          content: `Evaluate this MMI response. If the response is empty or invalid, return standardized "invalid response" scores:
 
 Question: ${question}
-Transcript: ${transcript}
+Transcript: ${transcript || "[Empty Response]"}
 
 Components to evaluate (with max points):
 ${criteria.map((c) => `- ${c.name} (${c.maxPoints} points): ${c.description}`).join("\n")}
-
-1. First, evaluate each component with:
-   - Score out of its total points
-   - Specific examples from transcript
-   - Comparison to best practices
-   - Actionable improvements
-   - Clinical scenario links
-
-2. Then, synthesize overall feedback highlighting:
-   - Key strengths
-   - Primary areas for improvement
-   - Development priorities
-
-3. Finally, calculate overall score as:
-   - Weighted average based on component points
-   - Convert to 0-100 scale
-   - Consider performance progression
-   - Account for critical thinking demonstrated`,
+`,
         },
       ],
     });
 
     const content = completion.choices[0].message.content;
-    if (!content) throw new Error("No content returned from OpenAI");
+    if (!content) {
+      throw new Error("No content returned from AI");
+    }
 
     try {
       const result = JSON.parse(content.trim());
-      const validated = coreFeedbackSchema.parse(result);
-
-      // Validate that scores don't exceed total points
-      validated.componentScores.forEach((score, index) => {
-        const criterion = criteria[index];
-        if (score.score > criterion.maxPoints) {
-          throw new Error(`Score for ${score.name} exceeds maximum points`);
-        }
-      });
-
-      return validated;
+      return coreFeedbackSchema.parse(result);
     } catch (error) {
-      console.error("Raw API response:", content);
-      console.error("JSON parsing error:", error);
-      throw new Error("Failed to parse LLM response as valid JSON");
+      // Fallback response for parsing errors
+      return {
+        overallScore: 0,
+        overallFeedback: "Unable to generate feedback due to technical error. Please try again.",
+        componentScores: criteria.map((c) => ({
+          name: c.name,
+          score: 0,
+          maxPoints: c.maxPoints,
+          summary: "Feedback generation failed.",
+        })),
+      };
     }
   });
 }
