@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { useVoiceAssistant } from "@livekit/components-react";
+import { Loader2 } from "lucide-react";
 
 export function VideoAvatar() {
   const talkingVideoRef = useRef<HTMLVideoElement>(null);
@@ -102,6 +103,14 @@ export function VideoAvatar() {
 
   return (
     <div className="relative w-full h-full bg-black z-0">
+      {isDisconnected && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-white">
+          <div className="flex flex-col items-center gap-2">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <p className="text-sm">Initializing interview...</p>
+          </div>
+        </div>
+      )}
       <video
         ref={initialVideoRef}
         src="/videos/initial.mp4"

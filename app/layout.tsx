@@ -28,7 +28,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <NuqsAdapter>
               <ClerkProvider>
                 <UserInitializer />
-
                 <AuthRedirect />
                 <Toaster />
                 <DynamicSidebar>{children}</DynamicSidebar>

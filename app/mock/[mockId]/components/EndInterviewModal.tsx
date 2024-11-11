@@ -1,13 +1,11 @@
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -27,13 +25,13 @@ export function EndInterviewModal({
   isProcessing,
 }: EndInterviewModalProps) {
   return (
-    <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="sm:max-w-[425px] p-6">
-        <AlertDialogHeader className="space-y-4">
-          <AlertDialogTitle className="text-2xl font-semibold text-neutral-900">
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="p-6 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+        <DialogHeader className="space-y-4">
+          <DialogTitle className="text-2xl font-semibold text-neutral-900">
             End Interview Early?
-          </AlertDialogTitle>
-          <AlertDialogDescription className="text-base leading-relaxed text-neutral-600">
+          </DialogTitle>
+          <DialogDescription className="text-base leading-relaxed text-neutral-600">
             You still have time remaining in your interview. Are you sure you want to end early?
             <div className="mt-4 space-y-4">
               <div className="flex items-center gap-2 text-sm text-neutral-500">
@@ -48,33 +46,33 @@ export function EndInterviewModal({
                 Return home without submitting →
               </Link>
             </div>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+          </DialogDescription>
+        </DialogHeader>
 
-        <AlertDialogFooter className="flex-col sm:flex-row gap-3 mt-6">
-          <AlertDialogCancel asChild>
-            <Button variant="ghost" className="sm:w-auto w-full hover:bg-neutral-50">
-              Continue Interview
-            </Button>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button
-              onClick={onSubmit}
-              disabled={isProcessing}
-              className="sm:w-auto w-full bg-primary hover:bg-primary/90 text-white font-medium"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing Submission...
-                </>
-              ) : (
-                "Submit Interview"
-              )}
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+        <DialogFooter className="flex-col sm:flex-row gap-3 mt-6">
+          <Button
+            variant="ghost"
+            className="sm:w-auto w-full hover:bg-neutral-50"
+            onClick={() => onOpenChange(false)}
+          >
+            Continue Interview
+          </Button>
+          <Button
+            onClick={onSubmit}
+            disabled={isProcessing}
+            className="sm:w-auto w-full bg-primary hover:bg-primary/90 text-white font-medium"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing Submission...
+              </>
+            ) : (
+              "Submit Interview"
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
