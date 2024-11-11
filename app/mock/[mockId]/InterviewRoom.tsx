@@ -315,7 +315,7 @@ export function InterviewRoom({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center shadow-xl"
+          className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center shadow-xl"
         >
           <Loader2 className="h-8 w-8 animate-spin text-[#635BFF] mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-neutral-900 mb-2">Processing Your Interview</h3>

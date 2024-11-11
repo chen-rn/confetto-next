@@ -16,7 +16,7 @@ interface CoreFeedbackResult {
   componentScores: {
     name: string;
     score: number;
-    totalPoints: number;
+    maxPoints: number;
     summary: string;
   }[];
 }
@@ -29,7 +29,7 @@ const coreFeedbackSchema = z.object({
       z.object({
         name: z.string().min(1),
         score: z.number().min(0),
-        totalPoints: z.number().min(1),
+        maxPoints: z.number().min(1),
         summary: z.string().min(1),
       })
     )
@@ -55,48 +55,49 @@ export async function generateCoreFeedback({
 }: CoreFeedbackInput): Promise<CoreFeedbackResult> {
   const systemPrompt = `You are an experienced medical school admissions interviewer and physician evaluating MMI responses.
 
+Evaluation Process:
+1. First, evaluate each component individually
+2. Then, synthesize overall feedback based on component analysis
+3. Finally, calculate overall score as weighted average of component scores
+
 Response Format:
 {
-  "overallScore": number (0-100),
-  "overallFeedback": string,
   "componentScores": [
     {
-      "name": string,
-      "score": number,
-      "totalPoints": number,
-      "summary": string
+      "name": string (component name),
+      "score": number (earned points),
+      "totalPoints": number (max points from criteria),
+      "summary": string (2-3 sentences of specific feedback)
     }
-  ]
+  ],
+  "overallFeedback": string (synthesis of key points),
+  "overallScore": number (weighted average, 0-100)
 }
-Scoring Guidelines:
-- 95-100: Exceptional (residency-level) - demonstrates mastery beyond expectations
-- 90-94: Outstanding - exemplary performance with minimal improvements needed
-- 85-89: Excellent - very strong showing with room for minor refinement
-- 80-84: Very Good - solid performance with some areas for enhancement
-- 75-79: Good - competent response with clear development opportunities
-- 70-74: Satisfactory - meets basic requirements but needs significant growth
-- 65-69: Fair - multiple areas requiring substantial improvement
-- 60-64: Below Average - fundamental gaps in multiple competencies
-- 55-59: Poor - serious deficiencies requiring extensive remediation
-- 50-54: Very Poor - major concerns across most evaluation criteria
-- <50: Unacceptable - fails to demonstrate basic interview competencies
 
-Evaluation Framework:
-1. Clinical Reasoning & Ethics
-2. Professional Identity
-3. Cultural Competency
-4. Leadership & Collaboration
-5. Ambiguity Management
-
-For each component:
-- Cite specific examples
-- Link to clinical scenarios
+For each component score:
+- Score should be between 0 and the component's total points
+- Start with specific examples from the response
+- Compare against best practices
 - Provide actionable improvements
-- Assess both content and metacognition`;
+- Link to clinical scenarios
+
+Scoring Guidelines (relative to total points):
+- 95-100%: Exceptional (residency-level)
+- 90-94%: Outstanding
+- 85-89%: Excellent
+- 80-84%: Very Good
+- 75-79%: Good
+- 70-74%: Satisfactory
+- 65-69%: Fair
+- 60-64%: Below Average
+- 55-59%: Poor
+- 50-54%: Very Poor
+- <50%: Unacceptable`;
 
   return retryOnError(async () => {
     const completion = await openrouter.chat.completions.create({
       model: "anthropic/claude-3.5-sonnet:beta",
+      response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
@@ -104,19 +105,31 @@ For each component:
         },
         {
           role: "user",
-          content: `Conduct a thorough evaluation of this MMI response:
-          
-          Question: ${question}
-          Transcript: ${transcript}
-          
-          Evaluate these specific components:
-          ${criteria.map((c) => `- ${c.name}: ${c.description}`).join("\n")}
-          
-          For each component:
-          1. Identify specific examples from the response
-          2. Compare against best practices in medical interviews
-          3. Suggest concrete improvements using medical scenarios
-          4. Consider both verbal and metacognitive skills`,
+          content: `Evaluate this MMI response following the 3-step process:
+
+Question: ${question}
+Transcript: ${transcript}
+
+Components to evaluate (with max points):
+${criteria.map((c) => `- ${c.name} (${c.maxPoints} points): ${c.description}`).join("\n")}
+
+1. First, evaluate each component with:
+   - Score out of its total points
+   - Specific examples from transcript
+   - Comparison to best practices
+   - Actionable improvements
+   - Clinical scenario links
+
+2. Then, synthesize overall feedback highlighting:
+   - Key strengths
+   - Primary areas for improvement
+   - Development priorities
+
+3. Finally, calculate overall score as:
+   - Weighted average based on component points
+   - Convert to 0-100 scale
+   - Consider performance progression
+   - Account for critical thinking demonstrated`,
         },
       ],
     });
@@ -124,8 +137,24 @@ For each component:
     const content = completion.choices[0].message.content;
     if (!content) throw new Error("No content returned from OpenAI");
 
-    const result = JSON.parse(content.trim());
-    return coreFeedbackSchema.parse(result);
+    try {
+      const result = JSON.parse(content.trim());
+      const validated = coreFeedbackSchema.parse(result);
+
+      // Validate that scores don't exceed total points
+      validated.componentScores.forEach((score, index) => {
+        const criterion = criteria[index];
+        if (score.score > criterion.maxPoints) {
+          throw new Error(`Score for ${score.name} exceeds maximum points`);
+        }
+      });
+
+      return validated;
+    } catch (error) {
+      console.error("Raw API response:", content);
+      console.error("JSON parsing error:", error);
+      throw new Error("Failed to parse LLM response as valid JSON");
+    }
   });
 }
 

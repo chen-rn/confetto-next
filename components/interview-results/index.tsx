@@ -22,7 +22,6 @@ export async function InterviewResults({ mockInterviewId }: { mockInterviewId: s
     },
   });
 
-  const hasRecording = Boolean(interview?.recordingUrl || interview?.videoUrl);
   const hasNoFeedback = !interview?.feedback;
   const hasNoTranscription = !interview?.recordingTranscription;
   const isProcessing = !interview || hasNoFeedback || hasNoTranscription;
