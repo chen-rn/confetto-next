@@ -18,19 +18,28 @@ export function VideoViewfinder() {
   const [isCountingDown] = useAtom(isCountingDownAtom);
   const [countdownTime] = useAtom(countdownTimeAtom);
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   const participants = useParticipants();
   const localParticipant = participants.find((p) => p.isLocal);
   const isUserSpeaking = useIsSpeaking(localParticipant);
 
+  // Handle mount state
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
+
+  // Setup video stream after mount
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    if (!isMounted) return;
+
     async function setupVideoStream() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setVideoStream(stream);
         if (videoRef.current) {
-          // Ensure videoRef is available
           videoRef.current.srcObject = stream;
         }
       } catch (error) {
@@ -45,7 +54,8 @@ export function VideoViewfinder() {
         videoStream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [videoRef.current]); // Added videoRef.current to dependencies
+  }, [isMounted]); // Only depend on mount state
+
   return (
     <div
       className={`relative rounded-xl overflow-hidden border-2 w-1/3 lg:w-full bg-neutral-900 shadow-md min-h-[240px] ${
