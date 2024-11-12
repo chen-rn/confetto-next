@@ -5,7 +5,6 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
-import { Badge } from "@/components/ui/badge";
 
 async function getRecentPractice() {
   const { userId } = auth();
@@ -32,9 +31,10 @@ async function getRecentPractice() {
 }
 
 function getScoreBadgeVariant(score: number) {
-  if (score >= 80) return "default";
-  if (score >= 60) return "secondary";
-  return "destructive";
+  if (score >= 85) return "bg-green-100 text-green-800 hover:bg-green-200";
+  if (score >= 75) return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
+  if (score >= 40) return "bg-red-100 text-red-800 hover:bg-red-200";
+  return "bg-gray-100 text-gray-800 hover:bg-gray-200";
 }
 
 export async function RecentPractice() {
@@ -81,12 +81,13 @@ export async function RecentPractice() {
                     </div>
                   </div>
                   {practice.feedback && (
-                    <Badge
-                      variant={getScoreBadgeVariant(practice.feedback.overallScore)}
-                      className="flex-shrink-0"
+                    <div
+                      className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getScoreBadgeVariant(
+                        practice.feedback.overallScore
+                      )}`}
                     >
                       {practice.feedback.overallScore}%
-                    </Badge>
+                    </div>
                   )}
                 </li>
               </Link>

@@ -66,10 +66,14 @@ export async function generateCoreFeedback({
   transcript,
   criteria,
 }: CoreFeedbackInput): Promise<CoreFeedbackResult> {
+  // Add logging
+  console.log("Input:", { question, transcript, criteria });
+
   // Validate inputs
   try {
     feedbackInputSchema.parse({ question, transcript, criteria });
   } catch (error) {
+    console.error("Validation error:", error);
     return {
       overallScore: 0,
       overallFeedback:
@@ -128,14 +132,15 @@ export async function generateCoreFeedback({
   - <50%: Unacceptable (consider 0 if critically deficient)`;
 
   return retryOnError(async () => {
-    const completion = await openrouter.chat.completions.create({
-      model: "anthropic/claude-3.5-sonnet:beta",
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: `Evaluate this MMI response. If the response is empty or invalid, return standardized "invalid response" scores:
+    try {
+      const completion = await openrouter.chat.completions.create({
+        model: "anthropic/claude-3.5-sonnet:beta",
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: systemPrompt },
+          {
+            role: "user",
+            content: `Evaluate this MMI response. If the response is empty or invalid, return standardized "invalid response" scores:
 
 Question: ${question}
 Transcript: ${transcript || "[Empty Response]"}
@@ -143,30 +148,28 @@ Transcript: ${transcript || "[Empty Response]"}
 Components to evaluate (with max points):
 ${criteria.map((c) => `- ${c.name} (${c.maxPoints} points): ${c.description}`).join("\n")}
 `,
-        },
-      ],
-    });
+          },
+        ],
+      });
 
-    const content = completion.choices[0].message.content;
-    if (!content) {
-      throw new Error("No content returned from AI");
-    }
+      const content = completion.choices[0].message.content;
+      if (!content) {
+        console.error("No content returned from AI");
+        throw new Error("No content returned from AI");
+      }
 
-    try {
-      const result = JSON.parse(content.trim());
-      return coreFeedbackSchema.parse(result);
+      console.log("AI Response:", content);
+
+      try {
+        const result = JSON.parse(content.trim());
+        return coreFeedbackSchema.parse(result);
+      } catch (error) {
+        console.error("Parsing error:", error, "Raw content:", content);
+        throw error;
+      }
     } catch (error) {
-      // Fallback response for parsing errors
-      return {
-        overallScore: 0,
-        overallFeedback: "Unable to generate feedback due to technical error. Please try again.",
-        componentScores: criteria.map((c) => ({
-          name: c.name,
-          score: 0,
-          maxPoints: c.maxPoints,
-          summary: "Feedback generation failed.",
-        })),
-      };
+      console.error("OpenRouter error:", error);
+      throw error;
     }
   });
 }

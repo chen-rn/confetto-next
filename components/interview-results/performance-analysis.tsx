@@ -51,12 +51,16 @@ function getFeedbackVariant(score: number): "default" | "blue" | "purple" | "suc
 }
 
 export async function PerformanceAnalysis({ mockInterviewId }: PerformanceAnalysisProps) {
+  console.log("Fetching feedback for mockInterviewId:", mockInterviewId);
+
   const feedback = await prisma.feedback.findUnique({
     where: { mockInterviewId },
     include: {
       componentScores: true,
     },
   });
+
+  console.log("Retrieved feedback:", feedback);
 
   if (!feedback) {
     return null;
@@ -85,7 +89,7 @@ export async function PerformanceAnalysis({ mockInterviewId }: PerformanceAnalys
 
   return (
     <SectionCard
-      title="Performance Analysis"
+      title="Your Score"
       subtitle="Detailed breakdown of your interview performance"
       icon={BarChart2}
       badge={{

@@ -47,25 +47,26 @@ const highlightedPointsSchema = z.object({
 });
 
 async function generateModelAnswer(content: string) {
-  try {
-    const systemPrompt = `You are an experienced medical resident giving an MMI answer. Create a response that feels authentic and shows real-world judgment.
+  const systemPrompt = `You are a medical school applicant preparing for an MMI. Craft an authentic answer demonstrating genuine reasoning.
 
 Key requirements:
-- Use active, present-tense language ("I tell the attending..." not "I would tell")
-- Include a specific, realistic scenario detail in your answer
-- Show your thought process naturally, not in formal steps
-- Balance confidence with appropriate humility
-- Keep medical language conversational
-- Use emotion appropriately (concern, empathy, determination)
-- Break into natural paragraphs that flow logically
-- ~300 words total`;
+- Use active first-person language ("I believe..." not "I would believe")
+- Include specific, realistic details related to the scenario
+- Naturally reveal your thought process
+- Balance confidence with humility
+- Maintain a conversational yet professional tone
+- Use appropriate emotions (concern, empathy)
+- Organize into logically flowing paragraphs
+- Aim for approximately 300 words`;
 
-    const userPrompt = `Give a realistic MMI answer for this scenario: "${content}"
+  const userPrompt = `Provide a realistic MMI answer for the following scenario:
 
-Imagine you're actually in this situation. What's your gut reaction? What specific actions do you take? What matters most?
+"${content}"
 
-Provide just the answer with natural paragraph breaks, no additional formatting.`;
+Imagine you're in this situation. What are your immediate thoughts? What specific actions would you take? What matters most?
 
+Please provide only the answer with natural paragraph breaks, no additional formatting.`;
+  try {
     const completion = await openrouter.chat.completions.create({
       model: "anthropic/claude-3.5-sonnet:beta",
       messages: [
