@@ -31,8 +31,8 @@ async function getRecentPractice() {
 }
 
 function getScoreBadgeVariant(score: number) {
-  if (score >= 85) return "bg-green-100 text-green-800 hover:bg-green-200";
-  if (score >= 75) return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
+  if (score >= 80) return "bg-green-100 text-green-800 hover:bg-green-200";
+  if (score >= 60) return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
   if (score >= 40) return "bg-red-100 text-red-800 hover:bg-red-200";
   return "bg-gray-100 text-gray-800 hover:bg-gray-200";
 }
