@@ -9,12 +9,17 @@ export async function UserInitializer() {
     const user = await currentUser();
     const email = user?.emailAddresses[0]?.emailAddress;
 
-    const dbUser = await prisma.user.findUnique({
+    let dbUser = await prisma.user.findUnique({
       where: { id: userId },
     });
 
+    if (!dbUser && email) {
+      dbUser = await prisma.user.findUnique({
+        where: { email },
+      });
+    }
+
     if (!dbUser) {
-      // New user - create their record
       await prisma.user.create({
         data: {
           id: userId,
@@ -22,13 +27,12 @@ export async function UserInitializer() {
         },
       });
       console.log(`Created new user: ${userId}`);
-    } else if (dbUser.email !== email) {
-      // Existing user with updated email - update their record
+    } else if (dbUser.id !== userId || dbUser.email !== email) {
       await prisma.user.update({
-        where: { id: userId },
-        data: { email },
+        where: { id: dbUser.id },
+        data: { id: userId, email },
       });
-      console.log(`Updated email for user: ${userId}`);
+      console.log(`Updated user: ${userId}`);
     }
   } catch (error) {
     console.error("Error in UserInitializer:", error);
