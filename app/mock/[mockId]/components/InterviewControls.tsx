@@ -1,8 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface InterviewControlsProps {
@@ -20,7 +18,6 @@ export function InterviewControls({
   isProcessing,
   formatTime,
 }: InterviewControlsProps) {
-  console.log("hihi");
   return (
     <Card className="flex-1">
       <CardHeader className="pb-3">

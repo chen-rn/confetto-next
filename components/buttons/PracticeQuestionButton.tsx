@@ -16,7 +16,9 @@ interface PracticeQuestionButtonProps {
 export function PracticeQuestionButton({ questionId, className }: PracticeQuestionButtonProps) {
   const [showDialog, setShowDialog] = useState(false);
   const router = useRouter();
-  const { isEligible, hasTrialStarted } = useInterviewEligibility();
+  const { isEligible, hasTrialStarted, user } = useInterviewEligibility();
+
+  if (!user) return null;
 
   function handleStartClick() {
     if (isEligible) {

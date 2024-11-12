@@ -2,13 +2,13 @@ import { AddQuestionForm } from "@/components/AddQuestionForm";
 import { Plus } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { QuestionsList } from "./QuestionsList";
+import { QuestionsList } from "../question-bank/QuestionsList";
 import { PageHeader } from "@/components/PageHeader";
 import { PageContainer } from "@/components/PageContainer";
 import { Suspense } from "react";
-import { QuestionsLoading } from "./QuestionsLoading";
+import { QuestionsLoading } from "../question-bank/QuestionsLoading";
 
-export default function QuestionBankPage() {
+export default function TopQuestionsPage() {
   return (
     <PageContainer>
       <PageHeader title="Question Bank" description="Browse and manage your practice questions">
