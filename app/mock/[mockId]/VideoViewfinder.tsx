@@ -48,6 +48,7 @@ export function VideoViewfinder() {
       }
     };
   }, [videoRef.current]); // Added videoRef.current to dependencies
+
   return (
     <div
       className={`relative rounded-xl overflow-hidden border-2 w-1/3 lg:w-full bg-neutral-900 shadow-md min-h-[240px] ${

@@ -5,6 +5,7 @@ import { ROUTES } from "@/lib/routes";
 import { InterviewRoom } from "@/app/mock/[mockId]/InterviewRoom";
 
 import { getLivekitRoomToken } from "@/lib/actions/getLivekitRoomToken";
+import type { Metadata } from "next";
 
 interface MMIInterviewInterfaceProps {
   params: {
@@ -60,4 +61,15 @@ export default async function MMIInterviewInterface({ params }: MMIInterviewInte
       </main>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { mockId: string };
+}): Promise<Metadata> {
+  return {
+    title: `Mock Interview #${params.mockId} - Confetto`,
+    description: "Practice your MMI interview skills with real-time feedback",
+  };
 }
