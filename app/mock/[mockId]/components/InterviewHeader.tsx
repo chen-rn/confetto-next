@@ -38,9 +38,9 @@ export function InterviewHeader({ questionType, tags, showQuestion }: InterviewH
             </div>
           ) : (
             <>
-              {/*   <h1 className="text-lg font-semibold text-neutral-900">{questionType} Interview</h1>
+              <h1 className="text-lg font-semibold text-neutral-900">{questionType} Interview</h1>
               <div className="flex items-center gap-4">
-                <Button
+                {/*     <Button
                   variant="ghost"
                   size="sm"
                   className="text-neutral-600 hover:text-neutral-900"
@@ -53,8 +53,8 @@ export function InterviewHeader({ questionType, tags, showQuestion }: InterviewH
                   className="text-neutral-600 hover:text-neutral-900"
                 >
                   <Video className="h-4 w-4" />
-                </Button>
-              </div> */}
+                </Button> */}
+              </div>
             </>
           )}
         </div>
