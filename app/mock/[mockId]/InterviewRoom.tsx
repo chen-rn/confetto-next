@@ -200,7 +200,7 @@ export function InterviewRoom({
   }
 
   return (
-    <div className="h-screen flex flex-col bg-neutral-100">
+    <div className="h-screen flex flex-col bg-neutral-100 ">
       <LiveKitRoom
         audio={true}
         token={token}
@@ -222,7 +222,7 @@ export function InterviewRoom({
               </div>
             </div>
 
-            <div className="lg:w-72 w-full flex flex-row lg:flex-col gap-4">
+            <div className="lg:w-80 w-full flex flex-col lg:flex-col gap-4 min-h-0">
               <VideoViewfinder />
               <InterviewControls
                 interviewTimeLeft={interviewTimeLeft}

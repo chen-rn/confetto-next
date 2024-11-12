@@ -1,6 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface InterviewControlsProps {
   interviewTimeLeft: number;
@@ -38,8 +41,16 @@ export function InterviewControls({
 
       <CardContent className="space-y-4">
         <div className="space-y-2 hidden sm:block">
-          <div className="font-medium text-sm text-neutral-600">Question</div>
-          <p className="text-sm text-neutral-900">{question}</p>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <p className="text-sm text-neutral-900 line-clamp-3 cursor-help">{question}</p>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-[300px] whitespace-pre-wrap">
+                {question}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
         <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
