@@ -1,45 +1,37 @@
-import { useEffect } from "react";
-import { useAtom } from "jotai";
-import { devicePermissionsAtom } from "@/lib/atoms/permissions";
+import { useState, useCallback } from "react";
 
-const PERMISSIONS_CACHE_DURATION = 1000 * 60 * 60; // 1 hour
+interface PermissionsState {
+  hasPermissions: boolean | null;
+  lastChecked?: number;
+}
 
 export function useDevicePermissions() {
-  const [permissionsState, setPermissionsState] = useAtom(devicePermissionsAtom);
+  const [permissionsState, setPermissionsState] = useState<PermissionsState>({
+    hasPermissions: null,
+  });
 
-  const checkPermissions = async () => {
-    const now = Date.now();
-    const currentState = permissionsState;
-
-    if (
-      currentState.hasPermissions !== null &&
-      currentState.lastChecked &&
-      now - currentState.lastChecked < PERMISSIONS_CACHE_DURATION
-    ) {
-      return currentState.hasPermissions;
-    }
-
+  const checkPermissions = useCallback(async () => {
     try {
-      const permissions = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      permissions.getTracks().forEach((track) => track.stop());
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      stream.getTracks().forEach((track) => track.stop());
 
       setPermissionsState({
         hasPermissions: true,
-        lastChecked: now,
+        lastChecked: Date.now(),
       });
       return true;
     } catch (error) {
       setPermissionsState({
         hasPermissions: false,
-        lastChecked: now,
+        lastChecked: Date.now(),
       });
       return false;
     }
-  };
+  }, []);
 
   return {
     permissionsState,
-    checkPermissions,
     setPermissionsState,
+    checkPermissions,
   };
 }

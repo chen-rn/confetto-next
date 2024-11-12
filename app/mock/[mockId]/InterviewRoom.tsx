@@ -43,6 +43,14 @@ export function InterviewRoom({
   const [showEndModal, setShowEndModal] = useState(false);
   const { permissionsState, checkPermissions, setPermissionsState } = useDevicePermissions();
 
+  // Add this useEffect at the top of the component with other effects
+  useEffect(() => {
+    // Trigger permission check on component mount
+    if (permissionsState.hasPermissions === null) {
+      checkPermissions();
+    }
+  }, [checkPermissions, permissionsState.hasPermissions]);
+
   // Move timer logic to useEffect
   useEffect(() => {
     if (permissionsState.hasPermissions) {
