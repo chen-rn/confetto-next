@@ -20,6 +20,7 @@ export function InterviewControls({
   isProcessing,
   formatTime,
 }: InterviewControlsProps) {
+  console.log("hihi");
   return (
     <Card className="flex-1">
       <CardHeader className="pb-3">
