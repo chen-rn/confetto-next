@@ -215,9 +215,6 @@ export function InterviewRoom({
             <div className="flex-1 relative">
               <div className="w-full h-full rounded-2xl overflow-hidden bg-neutral-900 shadow-lg">
                 <VideoAvatar />
-                <div className="absolute top-4 left-4 bg-black/50 px-3 py-1.5 rounded-full">
-                  <span className="text-white text-sm font-medium">Interviewer</span>
-                </div>
               </div>
             </div>
 

@@ -1,22 +1,27 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
-import { useVoiceAssistant } from "@livekit/components-react";
-import { Loader2 } from "lucide-react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
+import { useIsSpeaking, useParticipants, useVoiceAssistant } from "@livekit/components-react";
+import { Loader2, CircleDashed, Sparkles, Hourglass } from "lucide-react";
 
 export function VideoAvatar() {
   const talkingVideoRef = useRef<HTMLVideoElement>(null);
   const idleVideoRef = useRef<HTMLVideoElement>(null);
   const initialVideoRef = useRef<HTMLVideoElement>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [hasPlayedInitial, setHasPlayedInitial] = useState(false);
   const [videosLoaded, setVideosLoaded] = useState(false);
+  const [userSilent, setUserSilent] = useState(false);
+  const [hasSpokenOnce, setHasSpokenOnce] = useState(false);
 
   const { state } = useVoiceAssistant();
   const isSpeaking = state === "speaking";
+  const isThinking = state === "thinking";
   const isDisconnected =
     state === "disconnected" || state === "initializing" || state === "connecting";
 
+  const participants = useParticipants();
+  const localParticipant = participants.find((p) => p.isLocal);
+  const isUserSpeaking = useIsSpeaking(localParticipant);
   // Preload videos
   useEffect(() => {
     const loadVideos = async () => {
@@ -101,6 +106,34 @@ export function VideoAvatar() {
     }
   }, [isSpeaking, isDisconnected, hasPlayedInitial, videosLoaded]);
 
+  // Reset both flags when AI speaks
+  useEffect(() => {
+    if (isSpeaking) {
+      setHasSpokenOnce(false);
+      setUserSilent(false);
+    }
+  }, [isSpeaking]);
+
+  // Track if user has spoken at least once
+  useEffect(() => {
+    if (isUserSpeaking && !hasSpokenOnce) {
+      setHasSpokenOnce(true);
+    }
+  }, [isUserSpeaking]);
+
+  // Modify silence detection to check hasSpokenOnce
+  useEffect(() => {
+    if (!isUserSpeaking && hasSpokenOnce) {
+      const timer = setTimeout(() => {
+        setUserSilent(true);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setUserSilent(false);
+    }
+  }, [isUserSpeaking, hasSpokenOnce]);
+
   return (
     <div className="relative w-full h-full bg-black z-0">
       {isDisconnected && (
@@ -111,6 +144,19 @@ export function VideoAvatar() {
           </div>
         </div>
       )}
+      {userSilent && hasSpokenOnce && !isSpeaking && !isDisconnected && (
+        <div className="absolute top-4 right-4 z-10">
+          <div className="bg-black/30 backdrop-blur-sm rounded-full p-2 flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-white animate-spin" />
+            <span className="text-white text-sm">Generating response...</span>
+          </div>
+        </div>
+      )}
+      <div className="absolute top-4 left-4 z-10">
+        <div className="bg-black/30 backdrop-blur-sm rounded-full px-3 py-1.5">
+          <span className="text-white text-sm font-medium">Interviewer</span>
+        </div>
+      </div>
       <video
         ref={initialVideoRef}
         src="/videos/initial.mp4"
