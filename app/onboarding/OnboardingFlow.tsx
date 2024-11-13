@@ -118,11 +118,12 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
       // Invalidate paths that depend on user data
       revalidatePath("/", "layout");
     } catch (error) {
-      toast({
+      console.log("Error starting trial", error);
+      /*   toast({
         title: "Error",
         description: "Something went wrong. Please try again.",
         variant: "destructive",
-      });
+      }); */
     } finally {
       setIsTrialLoading(false);
     }
