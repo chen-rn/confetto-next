@@ -63,32 +63,35 @@ export function useRecording(mockId: string) {
     }
   }, []);
 
-  const startRecording = useCallback(
-    (stream: MediaStream) => {
-      console.log("startRecording called");
+  const startRecording = useCallback(async () => {
+    console.log("startRecording called");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+
+      streamRef.current = stream;
       initializeRecording(stream);
 
-      try {
-        if (!recorderRef.current) {
-          throw new Error("MediaRecorder not initialized");
-        }
-
-        recorderRef.current.start(1000);
-        console.log("MediaRecorder started");
-
-        setIsRecording(true);
-      } catch (error) {
-        console.error("Error starting recording:", error);
-        toast({
-          title: "Recording Error",
-          description: "Failed to start recording. Please try again.",
-          variant: "destructive",
-        });
-        throw error;
+      if (!recorderRef.current) {
+        throw new Error("MediaRecorder not initialized");
       }
-    },
-    [initializeRecording, setIsRecording, toast]
-  );
+
+      recorderRef.current.start(1000);
+      console.log("MediaRecorder started");
+
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      toast({
+        title: "Recording Error",
+        description: "Failed to start recording. Please try again.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  }, [initializeRecording, setIsRecording, toast]);
 
   const stopRecording = useCallback(async () => {
     if (isUploading) {

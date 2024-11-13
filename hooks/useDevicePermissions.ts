@@ -1,13 +1,14 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 interface PermissionsState {
   hasPermissions: boolean | null;
-  lastChecked?: number;
+  lastChecked?: number | null;
 }
 
 export function useDevicePermissions() {
   const [permissionsState, setPermissionsState] = useState<PermissionsState>({
     hasPermissions: null,
+    lastChecked: null,
   });
 
   const checkPermissions = useCallback(async () => {
@@ -28,6 +29,12 @@ export function useDevicePermissions() {
       return false;
     }
   }, []);
+
+  useEffect(() => {
+    if (permissionsState.hasPermissions === null) {
+      checkPermissions();
+    }
+  }, [checkPermissions, permissionsState.hasPermissions]);
 
   return {
     permissionsState,

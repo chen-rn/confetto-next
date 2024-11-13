@@ -35,27 +35,19 @@ export function InterviewRoom({
   tags,
 }: InterviewRoomProps) {
   const [showQuestion, setShowQuestion] = useState(true);
-  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [timeLeftToReadQuestion, setTimeLeftToReadQuestion] = useState<number>(60);
   const [interviewTimeLeft, setInterviewTimeLeft] = useState(8 * 60);
   const isRecording = useAtomValue(isRecordingAtom);
   const isProcessing = useAtomValue(isProcessingAtom);
   const isUploading = useAtomValue(isUploadingAtom);
   const { startRecording, stopRecording } = useRecording(mockId);
   const [showEndModal, setShowEndModal] = useState(false);
-  const { permissionsState, checkPermissions, setPermissionsState } = useDevicePermissions();
-
-  // Add this useEffect at the top of the component with other effects
-  useEffect(() => {
-    // Trigger permission check on component mount
-    if (permissionsState.hasPermissions === null) {
-      checkPermissions();
-    }
-  }, [checkPermissions, permissionsState.hasPermissions]);
+  const { permissionsState, setPermissionsState } = useDevicePermissions();
 
   // Move timer logic to useEffect
   useEffect(() => {
     if (permissionsState.hasPermissions) {
-      setTimeLeft(60);
+      setTimeLeftToReadQuestion(60);
     }
   }, [permissionsState.hasPermissions]);
 
@@ -66,16 +58,15 @@ export function InterviewRoom({
     }
   }, [isRecording, isProcessing, stopRecording]);
 
-  // All useEffects need to be here, before any conditional returns
   useEffect(() => {
-    if (timeLeft !== null && timeLeft > 0 && showQuestion) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    if (timeLeftToReadQuestion !== null && timeLeftToReadQuestion > 0 && showQuestion) {
+      const timer = setTimeout(() => setTimeLeftToReadQuestion(timeLeftToReadQuestion - 1), 1000);
       return () => clearTimeout(timer);
     }
-    if (timeLeft === 0) {
+    if (timeLeftToReadQuestion === 0) {
       setShowQuestion(false);
     }
-  }, [timeLeft, showQuestion]);
+  }, [timeLeftToReadQuestion, showQuestion]);
 
   useEffect(() => {
     if (!showQuestion) {
@@ -95,11 +86,7 @@ export function InterviewRoom({
 
   useEffect(() => {
     if (!showQuestion && !isRecording && !isProcessing) {
-      const startInterviewRecording = async () => {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        startRecording(stream);
-      };
-      startInterviewRecording();
+      startRecording();
     }
   }, [showQuestion, isRecording, isProcessing, startRecording]);
 
@@ -145,7 +132,7 @@ export function InterviewRoom({
             hasPermissions: true,
             lastChecked: Date.now(),
           });
-          setTimeLeft(60);
+          setTimeLeftToReadQuestion(60);
         }}
       />
     );
@@ -162,8 +149,10 @@ export function InterviewRoom({
         <div className="flex-1 container max-w-5xl mx-auto px-4 flex items-center justify-center min-h-[calc(100vh-5rem)]">
           <QuestionPreview
             question={question}
-            timeLeft={timeLeft}
-            progress={timeLeft != null ? ((60 - timeLeft) / 60) * 100 : 0}
+            timeLeft={timeLeftToReadQuestion}
+            progress={
+              timeLeftToReadQuestion != null ? ((60 - timeLeftToReadQuestion) / 60) * 100 : 0
+            }
             onEnterEarly={() => setShowQuestion(false)}
             tags={tags}
           />
