@@ -108,6 +108,12 @@ export function useRecording(mockId: string) {
       recorderRef.current.stop();
     }
 
+    // Add this: Stop all tracks in the stream
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+
     await new Promise<void>((resolve) => {
       if (recorderRef.current) {
         recorderRef.current.onstop = () => resolve();
