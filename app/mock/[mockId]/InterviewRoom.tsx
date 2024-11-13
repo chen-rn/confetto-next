@@ -17,6 +17,7 @@ import { QuestionPreview } from "./components/QuestionPreview";
 import { InterviewHeader } from "./components/InterviewHeader";
 import { useDevicePermissions } from "@/hooks/useDevicePermissions";
 import { InterviewControls } from "./components/InterviewControls";
+import { TranscriptionHandler } from "./components/TranscriptionHandler";
 
 interface InterviewRoomProps {
   token: string;
@@ -217,6 +218,7 @@ export function InterviewRoom({
         className="flex flex-col h-full"
       >
         <DataChannelHandler />
+        <TranscriptionHandler />
         <InterviewHeader questionType={questionType} tags={tags} />
 
         <div className="flex-1 container mx-auto p-4 bg-transparent">

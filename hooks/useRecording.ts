@@ -6,13 +6,19 @@ import { updateMockInterviewMedia } from "@/lib/actions/updateMockInterviewMedia
 import { processAudioSubmission } from "@/lib/actions/processAudioSubmission";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
-import { isRecordingAtom, isProcessingAtom, isUploadingAtom } from "@/lib/atoms/interview";
+import {
+  isRecordingAtom,
+  isProcessingAtom,
+  isUploadingAtom,
+  transcriptionAtom,
+} from "@/lib/atoms/interview";
 import { useToast } from "@/hooks/use-toast";
 
 export function useRecording(mockId: string) {
   const setIsRecording = useSetAtom(isRecordingAtom);
   const setIsProcessing = useSetAtom(isProcessingAtom);
   const [isUploading, setIsUploading] = useAtom(isUploadingAtom);
+  const [transcription] = useAtom(transcriptionAtom);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -125,7 +131,9 @@ export function useRecording(mockId: string) {
           uploadVideo(file),
           uploadAudioToFirebase(blob, `audio_${mockId}_${Date.now()}.webm`),
         ]);
-        await updateMockInterviewMedia(mockId, videoUrl, audioUrl);
+
+        // Update the mock interview with both media URLs and transcription
+        await updateMockInterviewMedia(mockId, videoUrl, audioUrl, transcription);
         await processAudioSubmission(mockId);
 
         setIsUploading(false);
@@ -144,7 +152,16 @@ export function useRecording(mockId: string) {
 
     // Start background processing without awaiting it
     processInBackground();
-  }, [mockId, router, setIsRecording, setIsProcessing, setIsUploading, isUploading, toast]);
+  }, [
+    mockId,
+    router,
+    setIsRecording,
+    setIsProcessing,
+    setIsUploading,
+    isUploading,
+    toast,
+    transcription,
+  ]);
 
   return {
     startRecording,
