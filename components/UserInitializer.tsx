@@ -1,41 +1,28 @@
-import { prisma } from "@/lib/prisma";
-import { auth, currentUser } from "@clerk/nextjs/server";
+"use client";
 
-export async function UserInitializer() {
-  try {
-    const { userId } = auth();
-    if (!userId) return null;
+import { useAuth } from "@clerk/nextjs";
+import { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getUserProfile } from "@/lib/actions/user";
 
-    const user = await currentUser();
-    const email = user?.emailAddresses[0]?.emailAddress;
+export function UserInitializer() {
+  const { isSignedIn, isLoaded } = useAuth();
+  const queryClient = useQueryClient();
 
-    let dbUser = await prisma.user.findUnique({
-      where: { id: userId },
-    });
+  // Prefetch user profile
+  useQuery({
+    queryKey: ["userProfile"],
+    queryFn: () => getUserProfile(),
+    enabled: isSignedIn,
+    staleTime: 30000,
+  });
 
-    if (!dbUser && email) {
-      dbUser = await prisma.user.findUnique({
-        where: { email },
-      });
+  // Invalidate cache when auth state changes
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
     }
+  }, [isSignedIn, isLoaded, queryClient]);
 
-    if (!dbUser) {
-      await prisma.user.create({
-        data: {
-          id: userId,
-          email,
-        },
-      });
-      console.log(`Created new user: ${userId}`);
-    } else if (dbUser.id !== userId || dbUser.email !== email) {
-      await prisma.user.update({
-        where: { id: dbUser.id },
-        data: { id: userId, email },
-      });
-      console.log(`Updated user: ${userId}`);
-    }
-  } catch (error) {
-    console.error("Error in UserInitializer:", error);
-  }
   return null;
 }

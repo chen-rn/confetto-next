@@ -4,19 +4,22 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "@/lib/actions/user";
+import { useAuth } from "@clerk/nextjs";
 
 export function AuthRedirect() {
   const router = useRouter();
+  const { isSignedIn, isLoaded } = useAuth();
 
   const { data: userProfile } = useQuery({
     queryKey: ["userProfile"],
-    queryFn: () => {
-      return getUserProfile();
-    },
+    queryFn: () => getUserProfile(),
+    enabled: isSignedIn,
+    staleTime: 30000,
   });
 
   useEffect(() => {
-    // Only redirect to onboarding if the status is NOT_STARTED or IN_PROGRESS
+    if (!isLoaded || !isSignedIn) return;
+
     if (
       userProfile &&
       (userProfile.onboardingStatus === "NOT_STARTED" ||
@@ -24,7 +27,7 @@ export function AuthRedirect() {
     ) {
       router.push("/onboarding");
     }
-  }, [userProfile, router]);
+  }, [userProfile, router, isSignedIn, isLoaded]);
 
   return null;
 }
