@@ -23,6 +23,10 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { startTrial } from "@/lib/actions/subscription";
+import { ROUTES } from "@/lib/routes";
+import { useQueryClient } from "@tanstack/react-query";
+import { revalidatePath } from "next/cache";
 
 interface OnboardingFlowProps {
   initialData: {
@@ -64,6 +68,7 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
     schools: initialData?.schools || [],
     primaryConcern: initialData?.primaryConcern || null,
   });
+  const queryClient = useQueryClient();
   const [isTrialLoading, setIsTrialLoading] = useState(false);
 
   const steps = {
@@ -101,12 +106,17 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
   const handleStartTrial = async () => {
     setIsTrialLoading(true);
     try {
-      // Save all the data when they click the trial button
+      // Save onboarding data and start trial
       await updateOnboarding({
         ...formData,
         onboardingStatus: OnboardingStatus.COMPLETED,
       });
-      router.push("/pricing");
+
+      await startTrial();
+      router.push(ROUTES.WELCOME);
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      // Invalidate paths that depend on user data
+      revalidatePath("/", "layout");
     } catch (error) {
       toast({
         title: "Error",

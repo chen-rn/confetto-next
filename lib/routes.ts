@@ -12,6 +12,7 @@ export const ROUTES = {
   MOCK_RESULT: (id: string) => `/mock/${id}/result`,
   PRICING: "/pricing",
   ONBOARDING: "/onboarding",
+  WELCOME: "/welcome",
 } as const;
 
 // Routes that should show the sidebar

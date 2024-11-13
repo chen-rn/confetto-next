@@ -11,18 +11,24 @@ import {
 } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
 import { Sparkles, Calendar, CreditCard, Loader2, AlertTriangle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getUserSubscription } from "@/lib/actions/subscription";
-import type { User } from "@prisma/client";
 import Link from "next/link";
 import { getInterviewCount } from "@/lib/actions/mock-interviews";
 import { createCustomerPortalSession } from "@/lib/actions/stripe";
 import { useState } from "react";
+import type { SubscriptionStatus } from "@prisma/client";
+import type { UserSubscription } from "@/lib/actions/subscription";
 
-const subscriptionStatusMap = {
+const subscriptionStatusMap: Record<
+  SubscriptionStatus,
+  {
+    label: string;
+    color: string;
+  }
+> = {
   NOT_SUBSCRIBED: {
     label: "No Subscription",
     color: "bg-slate-100 text-slate-600",
@@ -53,7 +59,7 @@ export function SubscriptionSettings() {
   const { user: clerkUser } = useUser();
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const { data: subscription, isLoading } = useQuery({
+  const { data: subscription, isLoading } = useQuery<UserSubscription | null>({
     queryKey: ["subscription"],
     queryFn: () => getUserSubscription(),
   });
@@ -77,6 +83,7 @@ export function SubscriptionSettings() {
   const isActive = subscription.subscriptionStatus === "ACTIVE";
 
   const remainingCredits = Math.max(0, 3 - interviewCount);
+  const trialEnded = isTrialUser && remainingCredits === 0;
 
   async function handlePortalRedirect() {
     try {
@@ -108,29 +115,29 @@ export function SubscriptionSettings() {
             <span className={`px-2.5 py-0.5 rounded-full text-sm font-medium ${status.color}`}>
               {status.label}
             </span>
-            {isPastDue && (
+            {(isPastDue || trialEnded) && (
               <span className="text-sm text-red-500 flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4" />
-                Action required
+                {trialEnded ? "Trial ended" : "Action required"}
               </span>
             )}
           </div>
         </div>
 
         {/* Plan Details */}
-        {(isActive || isTrialUser) && (
-          <div className="space-y-4">
-            {subscription.currentPeriodEnd && (
-              <div className="space-y-2">
-                <div className="text-sm text-muted-foreground flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#635BFF]" />
-                  {isTrialUser ? "Trial Ends" : "Next Billing Date"}
-                </div>
-                <div className="font-medium">{formatDate(subscription.currentPeriodEnd)}</div>
+        <div className="space-y-4">
+          {subscription.currentPeriodEnd && (
+            <div className="space-y-2">
+              <div className="text-sm text-muted-foreground flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-[#635BFF]" />
+                {isTrialUser ? "Trial Ends" : "Next Billing Date"}
               </div>
-            )}
+              <div className="font-medium">{formatDate(subscription.currentPeriodEnd)}</div>
+            </div>
+          )}
 
-            {isTrialUser && (
+          {isTrialUser && (
+            <div className="space-y-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <CreditCard className="w-4 h-4 text-[#635BFF]" />
                 <span>
@@ -138,9 +145,14 @@ export function SubscriptionSettings() {
                   remaining
                 </span>
               </div>
-            )}
-          </div>
-        )}
+              {remainingCredits === 0 && (
+                <div className="text-sm text-muted-foreground bg-neutral-50 p-3 rounded-lg">
+                  You've used all your trial interviews. Upgrade to continue practicing!
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </CardContent>
 
       <CardFooter>
@@ -163,7 +175,14 @@ export function SubscriptionSettings() {
         ) : (
           <Link href="/pricing" className="w-full sm:w-auto" prefetch>
             <Button className="w-full bg-[#635BFF] hover:bg-[#635BFF]/90">
-              {isTrialUser ? "Upgrade to Premium" : "View Plans"}
+              {isTrialUser ? (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  {trialEnded ? "Upgrade to Continue" : "Upgrade to Premium"}
+                </>
+              ) : (
+                "View Plans"
+              )}
             </Button>
           </Link>
         )}

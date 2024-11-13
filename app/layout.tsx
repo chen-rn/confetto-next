@@ -30,7 +30,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <ClerkProvider>
                 <MetadataUpdater />
                 <UserInitializer />
-                {/* <AuthRedirect /> */}
+                <AuthRedirect />
                 <Toaster />
                 <DynamicSidebar>{children}</DynamicSidebar>
               </ClerkProvider>
