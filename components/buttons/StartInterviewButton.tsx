@@ -19,7 +19,23 @@ export function StartInterviewButton({ className }: StartInterviewButtonProps) {
   const router = useRouter();
   const { isEligible, user, hasTrialStarted, remainingCredits } = useInterviewEligibility();
 
-  if (!user) return null;
+  // Show loading state if user data is not yet available
+  if (!user) {
+    return (
+      <Button
+        disabled
+        size="default"
+        className={cn(
+          "relative group transition-all duration-300 ease-out rounded-xl",
+          "bg-gradient-to-r from-[#635BFF] to-[#5a52f0]",
+          "shadow-lg flex items-center gap-3 px-6",
+          className
+        )}
+      >
+        <span className="font-semibold">Loading...</span>
+      </Button>
+    );
+  }
 
   const isTrialUser = user.subscriptionStatus === "TRIAL";
 

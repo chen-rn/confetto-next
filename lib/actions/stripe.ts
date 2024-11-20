@@ -44,7 +44,7 @@ export async function createCheckoutSession(priceId: string) {
 
   const session = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,
-    mode: "subscription",
+    mode: "payment",
     payment_method_types: ["card"],
     line_items: [
       {
@@ -58,13 +58,6 @@ export async function createCheckoutSession(priceId: string) {
     allow_promotion_codes: true,
     success_url: `${returnUrl}?success=true`,
     cancel_url: `${returnUrl}?canceled=true`,
-    subscription_data: {
-      // Only add trial period for new users, not for trial upgrades
-      ...(user.trialStartedAt === null ? { trial_period_days: 7 } : {}),
-      metadata: {
-        userId,
-      },
-    },
     metadata: {
       userId,
     },

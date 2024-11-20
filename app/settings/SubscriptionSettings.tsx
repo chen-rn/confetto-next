@@ -30,7 +30,7 @@ const subscriptionStatusMap: Record<
   }
 > = {
   NOT_SUBSCRIBED: {
-    label: "No Subscription",
+    label: "No Access",
     color: "bg-slate-100 text-slate-600",
   },
   TRIAL: {
@@ -42,11 +42,11 @@ const subscriptionStatusMap: Record<
     color: "bg-[#635BFF]/10 text-[#635BFF]",
   },
   PAST_DUE: {
-    label: "Past Due",
+    label: "Expired",
     color: "bg-red-100 text-red-600",
   },
   CANCELED: {
-    label: "Canceled",
+    label: "Expired",
     color: "bg-slate-100 text-slate-600",
   },
   EXPIRED: {
@@ -115,10 +115,10 @@ export function SubscriptionSettings() {
             <span className={`px-2.5 py-0.5 rounded-full text-sm font-medium ${status.color}`}>
               {status.label}
             </span>
-            {(isPastDue || trialEnded) && (
+            {(trialEnded) && (
               <span className="text-sm text-red-500 flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4" />
-                {trialEnded ? "Trial ended" : "Action required"}
+                Trial ended
               </span>
             )}
           </div>
@@ -130,7 +130,7 @@ export function SubscriptionSettings() {
             <div className="space-y-2">
               <div className="text-sm text-muted-foreground flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-[#635BFF]" />
-                {isTrialUser ? "Trial Ends" : "Next Billing Date"}
+                {isTrialUser ? "Trial Ends" : "Access Expires"}
               </div>
               <div className="font-medium">{formatDate(subscription.currentPeriodEnd)}</div>
             </div>
@@ -147,7 +147,7 @@ export function SubscriptionSettings() {
               </div>
               {remainingCredits === 0 && (
                 <div className="text-sm text-muted-foreground bg-neutral-50 p-3 rounded-lg">
-                  You've used all your trial interviews. Upgrade to continue practicing!
+                  You've used all your trial interviews. Purchase a plan to continue practicing!
                 </div>
               )}
             </div>
@@ -156,7 +156,7 @@ export function SubscriptionSettings() {
       </CardContent>
 
       <CardFooter>
-        {isActive || isPastDue ? (
+        {isActive ? (
           <Button
             variant="outline"
             className="w-full sm:w-auto hover:bg-[#635BFF]/5"
@@ -169,7 +169,7 @@ export function SubscriptionSettings() {
                 Redirecting...
               </>
             ) : (
-              "Manage Subscription"
+              "View Purchase History"
             )}
           </Button>
         ) : (
@@ -178,7 +178,7 @@ export function SubscriptionSettings() {
               {isTrialUser ? (
                 <>
                   <Sparkles className="mr-2 h-4 w-4" />
-                  {trialEnded ? "Upgrade to Continue" : "Upgrade to Premium"}
+                  {trialEnded ? "Purchase Access" : "Get Full Access"}
                 </>
               ) : (
                 "View Plans"

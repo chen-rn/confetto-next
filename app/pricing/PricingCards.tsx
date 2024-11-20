@@ -77,8 +77,7 @@ export function PricingCards({
 
     return (
       currentPriceId === priceId &&
-      subscriptionStatus !== "CANCELED" &&
-      subscriptionStatus !== "EXPIRED"
+      subscriptionStatus === "ACTIVE"
     );
   }
 
@@ -96,7 +95,7 @@ export function PricingCards({
         if (url) window.location.href = url;
       });
     } catch (error) {
-      console.error("Subscription error:", error);
+      console.error("Purchase error:", error);
     }
   };
 
@@ -122,20 +121,16 @@ export function PricingCards({
 
     if (isCurrentPlan) {
       if (subscriptionStatus === "TRIAL" && interviewCount >= MAX_TRIAL_CREDITS) {
-        return "Upgrade Now";
+        return "Purchase Now";
       }
       return "Current Plan";
     }
 
-    if (currentPriceId === plan.priceId && subscriptionStatus === "CANCELED") {
-      return "Resubscribe";
-    }
-
     if (subscriptionStatus === "TRIAL" && interviewCount >= MAX_TRIAL_CREDITS) {
-      return "Upgrade Now";
+      return "Purchase Now";
     }
 
-    return hasHadTrial ? "Subscribe Now" : "Start Free Trial";
+    return hasHadTrial ? "Purchase Now" : "Start Free Trial";
   }
 
   return (
@@ -171,14 +166,18 @@ export function PricingCards({
                 <div className="mt-3">
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-4xl font-bold text-neutral-900">${plan.price}</span>
-                    <span className="text-neutral-500">/{plan.interval}</span>
+                    <span className="text-neutral-500">
+                      {plan.interval === "month" ? "/month" : 
+                       plan.interval === "quarter" ? "/3 months" : 
+                       "/year"}
+                    </span>
                   </div>
 
                   {/* Savings Badge */}
                   {savings && (
                     <div className="mt-2">
                       <span className="text-sm bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
-                        Save {savings.percentage}%
+                        Save ${savings.amount} ({savings.percentage}% off)
                       </span>
                     </div>
                   )}
@@ -205,7 +204,7 @@ export function PricingCards({
                 {!hasHadTrial && (
                   <p className="mt-3 text-sm text-neutral-500 flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#635BFF]" />
-                    Includes 7-day free trial
+                    Start with a 7-day free trial
                   </p>
                 )}
               </div>

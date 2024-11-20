@@ -136,38 +136,39 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white rounded-3xl border shadow-sm p-8">
+    <div className="max-w-2xl mx-auto bg-white rounded-2xl border shadow-sm p-7">
       {/* Only show progress when not on trial step */}
       {step !== STEPS.TRIAL && <OnboardingProgress currentStep={step} />}
 
       {step === STEPS.TRIAL ? (
-        <div className="flex flex-col items-center justify-center space-y-6 py-8">
+        <div className="flex flex-col items-center justify-center space-y-6 py-6">
           <div className="relative animate-fade-in">
-            <div className="w-20 h-20 rounded-full bg-[#635BFF]/10 flex items-center justify-center">
-              <Rocket className="h-10 w-10 text-[#635BFF] animate-float" />
+            <div className="w-16 h-16 rounded-full bg-[#635BFF]/10 flex items-center justify-center">
+              <Rocket className="h-8 w-8 text-[#635BFF] animate-float" />
             </div>
             <div className="absolute -top-1 -right-1 animate-pulse">
-              <Sparkles className="h-5 w-5 text-[#635BFF]" />
+              <Sparkles className="h-4 w-4 text-[#635BFF]" />
             </div>
           </div>
 
-          <div className="text-center space-y-3 max-w-md">
-            <div className="flex justify-center gap-2">
+          <div className="text-center space-y-5 max-w-md">
+            <div className="flex justify-center gap-2 flex-wrap">
               <Badge
                 variant="secondary"
-                className="bg-[#635BFF]/10 text-[#635BFF] hover:bg-[#635BFF]/20 animate-fade-in"
+                className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 animate-fade-in px-4 py-1.5"
               >
-                <Check className="mr-1 h-3 w-3" /> Profile Complete
+                <SparklesIcon className="mr-1.5 h-3.5 w-3.5" /> 3 Free Practice Questions • No Credit Card
               </Badge>
             </div>
 
-            <h2 className="text-2xl font-bold text-neutral-900">Your Journey Begins Here</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              You're all set to start practicing. Begin your free trial to access everything you
-              need to ace your MMI interview.
-            </p>
+            <div className="space-y-3">
+              <h2 className="text-xl font-bold text-neutral-900 animate-fade-in">Start Practicing Today</h2>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-md mx-auto">
+                Get instant access to 3 MMI practice questions. Join hundreds of medical students who improved their interview skills with Confetto.
+              </p>
+            </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-6 max-w-lg mx-auto text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 max-w-lg mx-auto text-left">
               {[
                 {
                   title: "Practice Interviews",
@@ -206,11 +207,11 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
             </div>
           </div>
 
-          <div className="w-full max-w-sm mt-4">
+          <div className="w-full max-w-sm mt-6">
             <Button
               onClick={handleStartTrial}
               disabled={isTrialLoading}
-              className="bg-[#635BFF] hover:bg-[#635BFF]/90 w-full h-12 text-base rounded-full relative overflow-hidden"
+              className="bg-[#635BFF] hover:bg-[#635BFF]/90 w-full h-12 text-base rounded-full relative overflow-hidden group transition-all duration-200 hover:scale-[1.02]"
             >
               {isTrialLoading ? (
                 <span className="flex items-center gap-2">
@@ -219,13 +220,13 @@ export function OnboardingFlow({ initialData }: OnboardingFlowProps) {
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  Start 7-Day Free Trial
-                  <ArrowRight className="h-4 w-4" />
+                  Get Started Now
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </span>
               )}
             </Button>
-            <p className="text-xs text-center text-muted-foreground mt-3">
-              Join hundreds of successful medical students
+            <p className="text-xs text-center text-muted-foreground mt-4">
+              ✨ Instant access • No credit card needed
             </p>
           </div>
         </div>
