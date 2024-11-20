@@ -210,15 +210,15 @@ export function InterviewRoom({
         <TranscriptionHandler />
         <InterviewHeader questionType={questionType} tags={tags} />
 
-        <div className="flex-1 container mx-auto p-4 bg-transparent">
-          <div className="h-full flex flex-col lg:flex-row gap-4 lg:gap-6">
-            <div className="flex-1 relative">
-              <div className="w-[80%] h-[80%] mx-auto my-auto rounded-2xl overflow-hidden bg-neutral-900 shadow-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <VideoAvatar />
-              </div>
-            </div>
-
-            <div className="lg:w-80 w-full flex flex-col lg:flex-col gap-4 min-h-0">
+        <div className="flex-1 container mx-auto p-4 bg-transparent relative">
+          {/* Full-screen background video avatar */}
+          <div className="absolute inset-0 w-full h-full">
+            <VideoAvatar />
+          </div>
+          
+          {/* Floating controls container */}
+          <div className="relative z-10 h-full flex justify-end">
+            <div className="w-80 flex flex-col gap-4">
               <VideoViewfinder />
               <InterviewControls
                 interviewTimeLeft={interviewTimeLeft}

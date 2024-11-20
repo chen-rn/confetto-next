@@ -54,20 +54,20 @@ export function VideoAvatar() {
 
     if (!talkingVideo || !idleVideo || !initialVideo) return;
 
-    // Handle initial video playback
+    // Handle initial video sequence
     if (!hasPlayedInitial) {
+      initialVideo.style.display = "block";
+      talkingVideo.style.display = "none";
+      idleVideo.style.display = "none";
+
       const playInitial = async () => {
         try {
-          idleVideo.style.opacity = "0";
           await initialVideo.play();
           initialVideo.onended = () => {
-            initialVideo.style.opacity = "0";
-            idleVideo.style.opacity = "1";
+            initialVideo.style.display = "none";
+            idleVideo.style.display = "block";
             idleVideo.play();
-            setTimeout(() => {
-              setHasPlayedInitial(true);
-              initialVideo.style.display = "none";
-            }, 300);
+            setHasPlayedInitial(true);
           };
         } catch (error) {
           console.error("Error playing initial video:", error);
@@ -78,35 +78,17 @@ export function VideoAvatar() {
       return;
     }
 
-    // Regular talking/idle logic
+    // Handle talking/idle states
     if (isSpeaking) {
-      const playTalking = async () => {
-        try {
-          await talkingVideo.play();
-          talkingVideo.style.opacity = "1";
-          idleVideo.style.opacity = "0";
-          setTimeout(() => idleVideo.pause(), 300);
-        } catch (error) {
-          console.error("Error playing talking video:", error);
-        }
-      };
-      playTalking();
+      idleVideo.style.display = "none";
+      talkingVideo.style.display = "block";
+      talkingVideo.play();
     } else {
-      const playIdle = async () => {
-        try {
-          idleVideo.currentTime = 0; // Reset to beginning
-          await idleVideo.play();
-          idleVideo.style.opacity = "1";
-          talkingVideo.style.opacity = "0";
-          setTimeout(() => {
-            talkingVideo.pause();
-            talkingVideo.currentTime = 0;
-          }, 300);
-        } catch (error) {
-          console.error("Error playing idle video:", error);
-        }
-      };
-      playIdle();
+      talkingVideo.style.display = "none";
+      idleVideo.style.display = "block";
+      if (idleVideo.paused) {
+        idleVideo.play();
+      }
     }
   }, [isSpeaking, isDisconnected, hasPlayedInitial, videosLoaded]);
 
@@ -166,9 +148,7 @@ export function VideoAvatar() {
         src="/videos/initial.mp4"
         muted
         playsInline
-        className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-300 ${
-          hasPlayedInitial ? "hidden" : ""
-        }`}
+        className={`w-full h-full object-contain absolute inset-0`}
       />
       <video
         ref={talkingVideoRef}
@@ -176,8 +156,8 @@ export function VideoAvatar() {
         muted
         playsInline
         loop
-        className="w-full h-full object-cover absolute inset-0 transition-opacity duration-300"
-        style={{ opacity: 0 }}
+        className="w-full h-full object-contain absolute inset-0"
+        style={{ display: "none" }}
       />
       <video
         ref={idleVideoRef}
@@ -185,8 +165,8 @@ export function VideoAvatar() {
         muted
         playsInline
         loop
-        className="w-full h-full object-cover absolute inset-0 transition-opacity duration-300"
-        style={{ opacity: 0 }}
+        className="w-full h-full object-contain absolute inset-0"
+        style={{ display: "none" }}
       />
     </div>
   );

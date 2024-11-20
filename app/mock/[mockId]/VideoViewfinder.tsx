@@ -51,7 +51,7 @@ export function VideoViewfinder() {
 
   return (
     <div
-      className={`relative rounded-xl overflow-hidden border-2 w-1/3 lg:w-full bg-neutral-900 shadow-md min-h-[240px] ${
+      className={`relative rounded-xl overflow-hidden border-2 w-full bg-neutral-900 shadow-md aspect-video min-h-[240px] ${
         isUserSpeaking ? "border-green-500" : "border-transparent"
       }`}
     >
