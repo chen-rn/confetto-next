@@ -198,19 +198,19 @@ export function InterviewRoom({
   }
 
   return (
-    <div className="h-screen flex flex-col bg-neutral-100 ">
+    <div className="h-screen flex flex-col bg-neutral-100 w-screen">
       <LiveKitRoom
         audio={true}
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
         data-lk-theme="light"
-        className="flex flex-col h-full"
+        className="flex flex-col h-full w-screen"
       >
         <DataChannelHandler />
         <TranscriptionHandler />
         <InterviewHeader questionType={questionType} tags={tags} />
 
-        <div className="flex-1 container mx-auto p-4 bg-transparent relative">
+        <div className="flex-1 p-4 bg-transparent relative w-screen">
           {/* Full-screen background video avatar */}
           <div className="absolute inset-0 w-full h-full">
             <VideoAvatar />
