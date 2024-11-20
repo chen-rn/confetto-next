@@ -94,10 +94,14 @@ export function VideoAvatar() {
     } else {
       const playIdle = async () => {
         try {
+          idleVideo.currentTime = 0; // Reset to beginning
           await idleVideo.play();
           idleVideo.style.opacity = "1";
           talkingVideo.style.opacity = "0";
-          setTimeout(() => talkingVideo.pause(), 300);
+          setTimeout(() => {
+            talkingVideo.pause();
+            talkingVideo.currentTime = 0;
+          }, 300);
         } catch (error) {
           console.error("Error playing idle video:", error);
         }
