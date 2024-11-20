@@ -20,8 +20,8 @@ export default async function OnboardingPage() {
   });
 
   if (user?.onboardingStatus === "COMPLETED") {
-    if (user.subscriptionStatus === "NOT_SUBSCRIBED") {
-      redirect("/pricing");
+    if (user.subscriptionStatus === "NOT_SUBSCRIBED" || user.subscriptionStatus === "TRIAL") {
+      redirect("/welcome");
     }
     redirect("/");
   }
