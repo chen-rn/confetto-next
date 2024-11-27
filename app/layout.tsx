@@ -10,6 +10,7 @@ import { QueryProvider } from "@/components/providers/QueryProvider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { AuthRedirect } from "@/components/AuthRedirect";
 import { MetadataUpdater } from "@/components/MetadataUpdater";
+import { VideoPreloader } from "@/app/mock/[mockId]/components/VideoPreloader";
 
 export const metadata: Metadata = {
   title: "Confetto - AI Powered MMI Interview Prep",
@@ -31,6 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <MetadataUpdater />
                 <UserInitializer />
                 <AuthRedirect />
+                <VideoPreloader />
                 <Toaster />
                 <DynamicSidebar>{children}</DynamicSidebar>
               </ClerkProvider>

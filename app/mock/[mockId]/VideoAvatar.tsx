@@ -15,7 +15,6 @@ export function VideoAvatar() {
 
   const { state } = useVoiceAssistant();
   const isSpeaking = state === "speaking";
-  const isThinking = state === "thinking";
   const isDisconnected =
     state === "disconnected" || state === "initializing" || state === "connecting";
 
@@ -101,6 +100,7 @@ export function VideoAvatar() {
   }, [isSpeaking]);
 
   // Track if user has spoken at least once
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (isUserSpeaking && !hasSpokenOnce) {
       setHasSpokenOnce(true);
@@ -130,18 +130,16 @@ export function VideoAvatar() {
           </div>
         </div>
       )}
-      {userSilent && hasSpokenOnce && !isSpeaking && !isDisconnected && (
-        <div className="absolute top-4 right-4 z-10">
+      <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+        <div className="bg-black/30 backdrop-blur-sm rounded-full px-3 py-1.5">
+          <span className="text-white text-sm font-medium">Interviewer</span>
+        </div>
+        {userSilent && hasSpokenOnce && !isSpeaking && !isDisconnected && (
           <div className="bg-black/30 backdrop-blur-sm rounded-full p-2 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-white animate-spin" />
             <span className="text-white text-sm">Generating response...</span>
           </div>
-        </div>
-      )}
-      <div className="absolute top-4 left-4 z-10">
-        <div className="bg-black/30 backdrop-blur-sm rounded-full px-3 py-1.5">
-          <span className="text-white text-sm font-medium">Interviewer</span>
-        </div>
+        )}
       </div>
       <video
         ref={initialVideoRef}
