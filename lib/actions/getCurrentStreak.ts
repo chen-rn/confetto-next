@@ -10,7 +10,12 @@ export async function getCurrentStreak() {
   }
 
   const interviews = await prisma.mockInterview.findMany({
-    where: { userId },
+    where: {
+      userId,
+      videoUrl: {
+        not: null,
+      },
+    },
     orderBy: { createdAt: "desc" },
     select: { createdAt: true },
   });

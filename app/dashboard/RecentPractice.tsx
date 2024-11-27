@@ -13,6 +13,9 @@ async function getRecentPractice() {
   return await prisma.mockInterview.findMany({
     where: {
       userId,
+      videoUrl: {
+        not: null,
+      },
       recordingUrl: {
         not: null,
       },

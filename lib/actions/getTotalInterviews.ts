@@ -12,7 +12,7 @@ export async function getTotalInterviews() {
   const total = await prisma.mockInterview.count({
     where: {
       userId,
-      recordingUrl: {
+      videoUrl: {
         not: null,
       },
     },
@@ -21,7 +21,7 @@ export async function getTotalInterviews() {
   const thisWeek = await prisma.mockInterview.count({
     where: {
       userId,
-      recordingUrl: {
+      videoUrl: {
         not: null,
       },
       createdAt: {

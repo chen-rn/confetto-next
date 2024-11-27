@@ -30,6 +30,9 @@ export async function getAverageScore() {
       where: {
         mockInterview: {
           userId,
+          videoUrl: {
+            not: null,
+          },
           createdAt: { gte: currentWeekStart },
         },
       },
@@ -39,6 +42,9 @@ export async function getAverageScore() {
       where: {
         mockInterview: {
           userId,
+          videoUrl: {
+            not: null,
+          },
           createdAt: {
             gte: lastWeekStart,
             lt: currentWeekStart,
