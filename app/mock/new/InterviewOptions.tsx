@@ -60,7 +60,7 @@ export default function InterviewOptions() {
     }
 
     if (!isEligible) {
-      router.push("/dashboard?showSubscription=true");
+      router.push("/pricing");
       return;
     }
 
@@ -86,7 +86,7 @@ export default function InterviewOptions() {
     }
 
     if (!isEligible) {
-      router.push("/dashboard?showSubscription=true");
+      router.push("/pricing");
       return;
     }
 

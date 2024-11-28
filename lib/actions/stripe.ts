@@ -13,46 +13,15 @@ export async function createCheckoutSession(priceId: string) {
     throw new Error("User not found");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  let stripeCustomerId = user.stripeCustomerId;
-
-  if (!stripeCustomerId) {
-    const customer = await stripe.customers.create({
-      metadata: {
-        userId: user.id,
-      },
-    });
-
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        stripeCustomerId: customer.id,
-      },
-    });
-
-    stripeCustomerId = customer.id;
-  }
-
   const returnUrl = absoluteUrl("/dashboard");
 
   const session = await stripe.checkout.sessions.create({
-    customer: stripeCustomerId,
     mode: "payment",
     payment_method_types: ["card"],
     line_items: [
       {
         price: priceId,
         quantity: 1,
-        adjustable_quantity: {
-          enabled: false,
-        },
       },
     ],
     allow_promotion_codes: true,

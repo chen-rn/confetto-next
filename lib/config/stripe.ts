@@ -8,25 +8,25 @@ interface StripePlan {
 
 export const stripePlans: Record<string, StripePlan> = {
   monthly: {
-    name: "Monthly Plan",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY_ID!,
+    name: "1 Month Access",
+    priceId: "price_1QQG5qEymCCZJNo79ypzJUX8",
     interval: "month",
     price: 199,
-    description: "Unlimited mock interviews, billed monthly",
+    description: "Unlimited mock interviews for 1 month",
   },
   quarterly: {
-    name: "Quarterly Plan",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_QUARTERLY_ID!,
+    name: "3 Months Access",
+    priceId: "price_1QQG6GEymCCZJNo7zKQtiHUn",
     interval: "quarter",
     price: 299,
-    description: "Unlimited mock interviews, billed every 3 months",
+    description: "Unlimited mock interviews for 3 months",
   },
   yearly: {
-    name: "Yearly Plan",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_YEARLY_ID!,
+    name: "1 Year Access",
+    priceId: "price_1QQG6eEymCCZJNo7211UDUFj",
     interval: "year",
-    price: 499,
-    description: "Unlimited mock interviews, billed annually",
+    price: 599,
+    description: "Unlimited mock interviews for 1 year",
   },
 } as const;
 

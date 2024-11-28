@@ -40,9 +40,9 @@ export function InterviewResults({
       <div className="relative mx-auto max-w-4xl space-y-6">
         {homeButton}
         <PerformanceAnalysis mockInterviewId={mockInterviewId} />
+        <HeaderCard mockInterviewId={mockInterviewId} />
         <ResponseAnalysis mockInterviewId={mockInterviewId} />
         <AnswerKey mockInterviewId={mockInterviewId} />
-        <HeaderCard mockInterviewId={mockInterviewId} />
         <ReEvaluateButton mockInterviewId={mockInterviewId} />
       </div>
     </div>

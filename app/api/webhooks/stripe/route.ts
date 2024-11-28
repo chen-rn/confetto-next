@@ -6,37 +6,17 @@ import type Stripe from "stripe";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  const userId = subscription.metadata.userId;
+async function handlePaymentSuccess(session: Stripe.Checkout.Session) {
+  const userId = session.metadata?.userId;
   if (!userId) return;
 
   await prisma.user.update({
-    where: { stripeCustomerId: subscription.customer as string },
+    where: { id: userId },
     data: {
-      subscriptionStatus:
-        subscription.status === "trialing" ? "TRIAL" : getSubscriptionStatus(subscription.status),
-      stripePriceId: subscription.items.data[0].price.id,
-      currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-      trialStartedAt: subscription.status === "trialing" ? new Date() : undefined,
+      subscriptionStatus: "ACTIVE",
+      currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
     },
   });
-}
-
-function getSubscriptionStatus(
-  stripeStatus: Stripe.Subscription.Status
-): "ACTIVE" | "PAST_DUE" | "CANCELED" | "TRIAL" {
-  switch (stripeStatus) {
-    case "active":
-      return "ACTIVE";
-    case "past_due":
-      return "PAST_DUE";
-    case "canceled":
-      return "CANCELED";
-    case "trialing":
-      return "TRIAL";
-    default:
-      return "CANCELED";
-  }
 }
 
 export async function POST(request: Request) {
@@ -57,29 +37,11 @@ export async function POST(request: Request) {
 
     // Handle different event types
     switch (event.type) {
-      case "customer.subscription.created":
-      case "customer.subscription.updated":
-      case "customer.subscription.deleted": {
-        const subscription = event.data.object as Stripe.Subscription;
-        await handleSubscriptionUpdated(subscription);
-        break;
-      }
-
-      case "customer.subscription.trial_will_end": {
-        // Handle trial ending soon (3 days before)
-        const trialSubscription = event.data.object as Stripe.Subscription;
-        // You could send an email or update UI to notify user
-        break;
-      }
-
-      case "invoice.payment_failed": {
-        const invoice = event.data.object as Stripe.Invoice;
-        await prisma.user.update({
-          where: { stripeCustomerId: invoice.customer as string },
-          data: {
-            subscriptionStatus: "PAST_DUE",
-          },
-        });
+      case "checkout.session.completed": {
+        const session = event.data.object as Stripe.Checkout.Session;
+        if (session.payment_status === "paid") {
+          await handlePaymentSuccess(session);
+        }
         break;
       }
     }
