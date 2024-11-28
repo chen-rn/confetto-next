@@ -10,15 +10,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
-import { Sparkles, Calendar, CreditCard, Loader2, AlertTriangle } from "lucide-react";
+import { Sparkles, Calendar, CreditCard, AlertTriangle } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getUserSubscription } from "@/lib/actions/subscription";
 import Link from "next/link";
 import { getInterviewCount } from "@/lib/actions/mock-interviews";
-import { createCustomerPortalSession } from "@/lib/actions/stripe";
-import { useState } from "react";
 import type { SubscriptionStatus } from "@prisma/client";
 import type { UserSubscription } from "@/lib/actions/subscription";
 
@@ -57,7 +55,6 @@ const subscriptionStatusMap: Record<
 
 export function SubscriptionSettings() {
   const { user: clerkUser } = useUser();
-  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const { data: subscription, isLoading } = useQuery<UserSubscription | null>({
     queryKey: ["subscription"],
@@ -79,32 +76,19 @@ export function SubscriptionSettings() {
 
   const status = subscriptionStatusMap[subscription.subscriptionStatus];
   const isTrialUser = subscription.subscriptionStatus === "TRIAL";
-  const isPastDue = subscription.subscriptionStatus === "PAST_DUE";
   const isActive = subscription.subscriptionStatus === "ACTIVE";
 
   const remainingCredits = Math.max(0, 3 - interviewCount);
   const trialEnded = isTrialUser && remainingCredits === 0;
-
-  async function handlePortalRedirect() {
-    try {
-      setIsRedirecting(true);
-      const url = await createCustomerPortalSession();
-      window.location.href = url;
-    } catch (error) {
-      console.error("Error redirecting to portal:", error);
-    } finally {
-      setIsRedirecting(false);
-    }
-  }
 
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-[#635BFF]" />
-          Subscription
+          Interview Access
         </CardTitle>
-        <CardDescription>Manage your subscription and billing details</CardDescription>
+        <CardDescription>Manage your interview access and billing details</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-6">
@@ -124,7 +108,7 @@ export function SubscriptionSettings() {
           </div>
         </div>
 
-        {/* Plan Details */}
+        {/* Access Details */}
         <div className="space-y-4">
           {subscription.currentPeriodEnd && (
             <div className="space-y-2">
@@ -147,7 +131,7 @@ export function SubscriptionSettings() {
               </div>
               {remainingCredits === 0 && (
                 <div className="text-sm text-muted-foreground bg-neutral-50 p-3 rounded-lg">
-                  You've used all your trial interviews. Purchase a plan to continue practicing!
+                  You've used all your trial interviews. Purchase access to continue practicing!
                 </div>
               )}
             </div>
@@ -157,21 +141,11 @@ export function SubscriptionSettings() {
 
       <CardFooter>
         {isActive ? (
-          <Button
-            variant="outline"
-            className="w-full sm:w-auto hover:bg-[#635BFF]/5"
-            onClick={handlePortalRedirect}
-            disabled={isRedirecting}
-          >
-            {isRedirecting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Redirecting...
-              </>
-            ) : (
-              "View Purchase History"
-            )}
-          </Button>
+          <Link href="/pricing" className="w-full sm:w-auto" prefetch>
+            <Button variant="outline" className="w-full hover:bg-[#635BFF]/5">
+              Extend Access
+            </Button>
+          </Link>
         ) : (
           <Link href="/pricing" className="w-full sm:w-auto" prefetch>
             <Button className="w-full bg-[#635BFF] hover:bg-[#635BFF]/90">
@@ -195,29 +169,25 @@ function SubscriptionSkeleton() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <div className="space-y-2">
+        <CardTitle>
           <Skeleton className="h-6 w-32" />
+        </CardTitle>
+        <CardDescription>
           <Skeleton className="h-4 w-64" />
-        </div>
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
-          <Skeleton className="h-4 w-20" />
-          <Skeleton className="h-8 w-24" />
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-6 w-24" />
         </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-32" />
-            <Skeleton className="h-6 w-40" />
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-32" />
-            <Skeleton className="h-6 w-40" />
-          </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-6 w-40" />
         </div>
       </CardContent>
       <CardFooter>
-        <Skeleton className="h-10 w-full sm:w-32" />
+        <Skeleton className="h-10 w-32" />
       </CardFooter>
     </Card>
   );
