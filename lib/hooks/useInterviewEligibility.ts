@@ -8,6 +8,8 @@ export function useInterviewEligibility() {
   const { data: user } = useQuery({
     queryKey: ["currentUser"],
     queryFn: () => getCurrentUser(),
+    staleTime: 0, // Consider data stale immediately
+    refetchOnMount: true, // Force refetch when component mounts
   });
 
   const { data: interviewCount = 0 } = useQuery({
