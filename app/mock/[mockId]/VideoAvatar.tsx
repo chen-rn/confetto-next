@@ -3,8 +3,13 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useIsSpeaking, useParticipants, useVoiceAssistant } from "@livekit/components-react";
 import { Loader2, CircleDashed, Sparkles, Hourglass } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function VideoAvatar() {
+interface VideoAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
   const talkingVideoRef = useRef<HTMLVideoElement>(null);
   const idleVideoRef = useRef<HTMLVideoElement>(null);
   const initialVideoRef = useRef<HTMLVideoElement>(null);
@@ -121,7 +126,7 @@ export function VideoAvatar() {
   }, [isUserSpeaking, hasSpokenOnce]);
 
   return (
-    <div className="relative w-full h-full bg-black z-0">
+    <div className={cn("relative w-full h-full bg-black", className)} {...props}>
       {isDisconnected && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-white">
           <div className="flex flex-col items-center gap-2">
@@ -135,36 +140,42 @@ export function VideoAvatar() {
           <span className="text-white text-sm font-medium">Interviewer</span>
         </div>
         {userSilent && hasSpokenOnce && !isSpeaking && !isDisconnected && (
-          <div className="bg-black/30 backdrop-blur-sm rounded-full p-2 flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-white animate-spin" />
-            <span className="text-white text-sm">Generating response...</span>
+          <div className="bg-[#635BFF] text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-md">
+            <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+            <span className="font-medium">Generating response...</span>
           </div>
         )}
       </div>
       <video
         ref={initialVideoRef}
         src="/videos/initial.mp4"
+        className={cn("absolute inset-0 w-full h-full object-contain", {
+          hidden: hasPlayedInitial,
+        })}
         muted
         playsInline
-        className={`w-full h-full object-contain absolute inset-0`}
       />
+
       <video
         ref={talkingVideoRef}
         src="/videos/talking.mp4"
+        className={cn("absolute inset-0 w-full h-full object-contain", {
+          hidden: !isSpeaking || !hasPlayedInitial,
+        })}
         muted
         playsInline
         loop
-        className="w-full h-full object-contain absolute inset-0"
-        style={{ display: "none" }}
       />
+
       <video
         ref={idleVideoRef}
         src="/videos/idle.mp4"
+        className={cn("absolute inset-0 w-full h-full object-contain", {
+          hidden: isSpeaking || !hasPlayedInitial,
+        })}
         muted
         playsInline
         loop
-        className="w-full h-full object-contain absolute inset-0"
-        style={{ display: "none" }}
       />
     </div>
   );

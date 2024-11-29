@@ -16,8 +16,10 @@ import { DevicePermissionsCheck } from "./components/DevicePermissionsCheck";
 import { QuestionPreview } from "./components/QuestionPreview";
 import { InterviewHeader } from "./components/InterviewHeader";
 import { useDevicePermissions } from "@/hooks/useDevicePermissions";
-import { InterviewControls } from "./components/InterviewControls";
 import { TranscriptionHandler } from "./components/TranscriptionHandler";
+import { TranscriptionDisplay } from "./components/TranscriptionDisplay";
+import { Button } from "@/components/ui/button";
+import { Brain } from "lucide-react";
 
 interface InterviewRoomProps {
   token: string;
@@ -43,6 +45,7 @@ export function InterviewRoom({
   const { startRecording, stopRecording } = useRecording(mockId);
   const [showEndModal, setShowEndModal] = useState(false);
   const { permissionsState, setPermissionsState } = useDevicePermissions();
+  const [state, setState] = useState("idle");
 
   // Move timer logic to useEffect
   useEffect(() => {
@@ -198,35 +201,92 @@ export function InterviewRoom({
   }
 
   return (
-    <div className="h-screen flex flex-col bg-neutral-100 w-screen">
+    <div className="h-screen flex bg-neutral-100">
       <LiveKitRoom
         audio={true}
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
         data-lk-theme="light"
-        className="flex flex-col h-full w-screen"
+        className="flex w-full"
       >
         <DataChannelHandler />
         <TranscriptionHandler />
-        <InterviewHeader questionType={questionType} tags={tags} />
 
-        <div className="flex-1 p-4 bg-transparent relative w-screen">
-          {/* Full-screen background video avatar */}
-          <div className="absolute inset-0 w-full h-full">
-            <VideoAvatar />
+        {/* Main content grid */}
+        <div className="flex w-full gap-2 sm:gap-4 p-2 sm:p-4">
+          {/* Left section - Interviewer video and user video overlay */}
+          <div className="w-[65%] lg:w-[70%]">
+            <div className="relative w-full h-full rounded-xl bg-white shadow-sm overflow-hidden">
+              {/* Interviewer video container */}
+              <div className="absolute inset-0">
+                <VideoAvatar className="w-full h-full object-cover" />
+              </div>
+
+              {/* User video overlay */}
+              <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 w-[200px] sm:w-[260px] lg:w-[320px]">
+                <VideoViewfinder className="w-full h-full" />
+              </div>
+            </div>
           </div>
-          
-          {/* Floating controls container */}
-          <div className="relative z-10 h-full flex justify-end">
-            <div className="w-80 flex flex-col gap-4">
-              <VideoViewfinder />
-              <InterviewControls
-                interviewTimeLeft={interviewTimeLeft}
-                question={question}
-                onEndInterview={handleEndInterview}
-                isProcessing={isProcessing}
-                formatTime={formatTime}
-              />
+
+          {/* Right section - Info panel and transcription */}
+          <div className="w-[35%] lg:w-[30%] flex flex-col gap-2 sm:gap-4">
+            {/* Question and Timer Card */}
+            <div className="rounded-xl bg-white shadow-sm shrink-0">
+              {/* Header */}
+              <div className="flex items-center gap-2 p-3 sm:p-4 border-b border-neutral-100">
+                <div className="flex items-center gap-2">
+                  <Brain className="w-4 h-4 text-[#635BFF]" />
+                  <h1 className="text-sm sm:text-base font-medium text-neutral-900">Ethics Interview</h1>
+                </div>
+              </div>
+
+              {/* Timer and Progress */}
+              <div className="px-3 sm:px-4 py-2 sm:py-3">
+                <div className="text-xl sm:text-2xl font-semibold text-[#635BFF] mb-1">
+                  {formatTime(interviewTimeLeft)}
+                </div>
+                <div className="text-xs sm:text-sm text-neutral-500 mb-2">Time Remaining</div>
+                <div className="h-1.5 sm:h-2 bg-neutral-100 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-[#635BFF] transition-all duration-1000"
+                    style={{ 
+                      width: `${((480 - interviewTimeLeft) / 480) * 100}%`,
+                      backgroundColor: interviewTimeLeft < 60 ? '#ef4444' : '#635BFF'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Question */}
+              <div className="px-3 sm:px-4 py-2 sm:py-3">
+                <h2 className="text-xs sm:text-sm font-medium text-neutral-500 mb-2">Current Question</h2>
+                <div className="p-2 sm:p-3 bg-neutral-50 rounded-lg">
+                  <p className="text-xs sm:text-sm text-neutral-900 leading-relaxed">{question}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Transcription Card */}
+            <div className="rounded-xl bg-white shadow-sm flex-1 min-h-0">
+              <TranscriptionDisplay />
+            </div>
+
+            {/* Recording controls */}
+            <div className="flex items-center justify-between gap-2 sm:gap-4 shrink-0">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-neutral-500">
+                <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-red-500 animate-pulse" />
+                <span>Recording in progress</span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-red-600 border-red-200 hover:bg-red-50 text-xs sm:text-sm px-2 sm:px-4"
+                onClick={handleEndInterview}
+                disabled={isProcessing}
+              >
+                End Interview
+              </Button>
             </div>
           </div>
         </div>

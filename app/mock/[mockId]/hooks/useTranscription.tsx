@@ -1,59 +1,104 @@
 "use client";
 
-import { useEffect } from "react";
-import { RoomEvent, TranscriptionSegment, Participant } from "livekit-client";
+import { useState, useEffect } from "react";
+import { RoomEvent, TranscriptionSegment, Participant, TrackPublication } from "livekit-client";
 import { useMaybeRoomContext } from "@livekit/components-react";
 import { useAtom } from "jotai";
 import { transcriptionEntriesAtom, type TranscriptionEntry } from "@/lib/atoms/interview";
 
-const MERGE_THRESHOLD_MS = 1000; // Merge segments within 1 second
+interface Transcription {
+  segment: TranscriptionSegment;
+  participant?: Participant;
+  publication?: TrackPublication;
+}
 
 export function useTranscription() {
   const room = useMaybeRoomContext();
   const [entries, setEntries] = useAtom(transcriptionEntriesAtom);
+  const [rawSegments, setRawSegments] = useState<{
+    [id: string]: Transcription;
+  }>({});
 
+  // Step 1: Collect raw segments
   useEffect(() => {
     if (!room) return;
 
-    const handleTranscription = (
+    const updateRawSegments = (
       segments: TranscriptionSegment[],
-      participant?: Participant
+      participant?: Participant,
+      publication?: TrackPublication
     ) => {
-      setEntries((prevEntries) => {
-        const newEntries = [...prevEntries];
-        
-        segments.forEach((segment) => {
-          const speaker = participant?.isAgent ? "AI Interviewer" : "User";
-          const timestamp = segment.firstReceivedTime ?? Date.now();
-          
-          // Try to merge with the last entry if it's from the same speaker and within threshold
-          const lastEntry = newEntries[newEntries.length - 1];
-          if (
-            lastEntry &&
-            lastEntry.speaker === speaker &&
-            timestamp - lastEntry.timestamp <= MERGE_THRESHOLD_MS
-          ) {
-            lastEntry.text += " " + segment.text;
-            return;
-          }
-          
-          // Otherwise, add as new entry
-          newEntries.push({
-            speaker,
-            text: segment.text,
-            timestamp,
-          });
-        });
-        
-        return newEntries.sort((a, b) => a.timestamp - b.timestamp);
+      setRawSegments((prev) => {
+        const newSegments = { ...prev };
+        for (const segment of segments) {
+          newSegments[segment.id] = { segment, participant, publication };
+        }
+        return newSegments;
       });
     };
 
-    room.on(RoomEvent.TranscriptionReceived, handleTranscription);
+    room.on(RoomEvent.TranscriptionReceived, updateRawSegments);
     return () => {
-      room.off(RoomEvent.TranscriptionReceived, handleTranscription);
+      room.off(RoomEvent.TranscriptionReceived, updateRawSegments);
     };
-  }, [room, setEntries]);
+  }, [room]);
+
+  // Step 2: Process and merge segments into entries
+  useEffect(() => {
+    // Sort segments by time
+    const sorted = Object.values(rawSegments).sort(
+      (a, b) => (a.segment.firstReceivedTime ?? 0) - (b.segment.firstReceivedTime ?? 0)
+    );
+
+    // Merge adjacent segments from the same speaker
+    const mergedSegments = sorted.reduce((acc, current) => {
+      if (acc.length === 0) {
+        return [current];
+      }
+
+      const last = acc[acc.length - 1];
+      const isFromSameSpeaker = last.participant === current.participant;
+      const timeGap =
+        (current.segment.firstReceivedTime ?? 0) - (last.segment.lastReceivedTime ?? 0);
+      const areStatusMessages =
+        last.segment.id.startsWith("status-") || current.segment.id.startsWith("status-");
+
+      if (
+        isFromSameSpeaker &&
+        timeGap <= 1000 && // 1 second threshold
+        !areStatusMessages
+      ) {
+        // Merge with previous segment
+        return [
+          ...acc.slice(0, -1),
+          {
+            ...current,
+            segment: {
+              ...current.segment,
+              text: `${last.segment.text} ${current.segment.text}`,
+              id: current.segment.id,
+              firstReceivedTime: last.segment.firstReceivedTime,
+            },
+          },
+        ];
+      }
+
+      // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+      return [...acc, current];
+    }, [] as Transcription[]);
+
+    // Convert merged segments to entries
+
+    setEntries(
+      mergedSegments
+        .filter(({ segment }) => segment.text.trim() !== "")
+        .map(({ segment, participant }) => ({
+          speaker: participant?.isAgent ? "AI Interviewer" : "User",
+          text: segment.text.trim(),
+          timestamp: segment.firstReceivedTime ?? Date.now(),
+        }))
+    );
+  }, [rawSegments, setEntries]);
 
   return {
     entries,

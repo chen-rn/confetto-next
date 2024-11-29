@@ -10,7 +10,7 @@ import {
   isRecordingAtom,
   isProcessingAtom,
   isUploadingAtom,
-  transcriptionAtom,
+  formattedTranscriptionAtom,
 } from "@/lib/atoms/interview";
 import { useToast } from "@/hooks/use-toast";
 
@@ -18,7 +18,7 @@ export function useRecording(mockId: string) {
   const setIsRecording = useSetAtom(isRecordingAtom);
   const setIsProcessing = useSetAtom(isProcessingAtom);
   const [isUploading, setIsUploading] = useAtom(isUploadingAtom);
-  const [transcription] = useAtom(transcriptionAtom);
+  const formattedTranscription = useAtom(formattedTranscriptionAtom)[0]; // Using index to get value
   const router = useRouter();
   const { toast } = useToast();
 
@@ -141,8 +141,8 @@ export function useRecording(mockId: string) {
           uploadAudioToFirebase(blob, `audio_${mockId}_${Date.now()}.webm`),
         ]);
 
-        // Update the mock interview with both media URLs and transcription
-        await updateMockInterviewMedia(mockId, videoUrl, audioUrl, transcription);
+        // Update the mock interview with both media URLs and formatted transcription
+        await updateMockInterviewMedia(mockId, videoUrl, audioUrl, formattedTranscription);
         await processAudioSubmission(mockId);
 
         setIsUploading(false);
@@ -169,7 +169,7 @@ export function useRecording(mockId: string) {
     setIsUploading,
     isUploading,
     toast,
-    transcription,
+    formattedTranscription,
   ]);
 
   return {

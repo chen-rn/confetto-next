@@ -10,8 +10,13 @@ import {
   countdownTimeAtom,
 } from "@/lib/atoms/interview";
 import { useIsSpeaking, useParticipants } from "@livekit/components-react";
+import { cn } from "@/lib/utils";
 
-export function VideoViewfinder() {
+interface VideoViewfinderProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+export function VideoViewfinder({ className, ...props }: VideoViewfinderProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isRecording] = useAtom(isRecordingAtom);
   const [isProcessing] = useAtom(isProcessingAtom);
@@ -51,34 +56,29 @@ export function VideoViewfinder() {
 
   return (
     <div
-      className={`relative rounded-xl overflow-hidden border-2 w-full bg-neutral-900 shadow-md aspect-video min-h-[240px] ${
-        isUserSpeaking ? "border-green-500" : "border-transparent"
-      }`}
+      className={cn(
+        "relative rounded-xl overflow-hidden border-2 w-full bg-neutral-900 shadow-md aspect-video",
+        isUserSpeaking ? "border-green-500" : "border-transparent",
+        className
+      )}
+      {...props}
     >
-      {videoStream ? (
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="w-full h-full transform scale-x-[-1] object-cover"
-        />
-      ) : (
-        <div className="absolute inset-0 flex items-center justify-center bg-neutral-900">
-          <Video className="h-12 w-12 text-neutral-400" />
+      {!videoStream && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+          <Video className="w-6 h-6 text-white/50" />
         </div>
       )}
-
-      {isRecording && (
-        <div className="absolute top-2 left-2 flex items-center space-x-1 bg-black bg-opacity-50 px-1 rounded">
-          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-          <span className="text-white text-xs">Recording</span>
-        </div>
-      )}
-
-      {isCountingDown && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 text-white text-4xl font-bold">
-          {countdownTime}
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        className="w-full h-full object-cover transform scale-x-[-1]"
+      />
+      {isUserSpeaking && (
+        <div className="absolute bottom-2 left-2 w-2 h-2">
+          <div className="absolute w-full h-full bg-green-400 rounded-full animate-ping" />
+          <div className="absolute w-full h-full bg-green-400 rounded-full" />
         </div>
       )}
     </div>
