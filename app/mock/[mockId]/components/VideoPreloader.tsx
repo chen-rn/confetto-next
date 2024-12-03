@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect } from 'react';
+import { VIDEO_URLS } from "../constants";
 
 export function VideoPreloader() {
   useEffect(() => {
     const videoUrls = [
-      '/videos/initial.mp4',
-      '/videos/talking.mp4',
-      '/videos/idle.mp4'
+      VIDEO_URLS.INITIAL,
+      VIDEO_URLS.TALKING,
+      VIDEO_URLS.IDLE
     ];
 
     videoUrls.forEach(url => {

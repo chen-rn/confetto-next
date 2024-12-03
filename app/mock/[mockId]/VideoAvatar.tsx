@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useIsSpeaking, useParticipants, useVoiceAssistant } from "@livekit/components-react";
 import { Loader2, CircleDashed, Sparkles, Hourglass } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { VIDEO_URLS } from "./constants";
 
 interface VideoAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -148,7 +149,7 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
       </div>
       <video
         ref={initialVideoRef}
-        src="/videos/initial.mp4"
+        src={VIDEO_URLS.INITIAL}
         className={cn("absolute inset-0 w-full h-full object-contain", {
           hidden: hasPlayedInitial,
         })}
@@ -158,7 +159,7 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
 
       <video
         ref={talkingVideoRef}
-        src="/videos/talking.mp4"
+        src={VIDEO_URLS.TALKING}
         className={cn("absolute inset-0 w-full h-full object-contain", {
           hidden: !isSpeaking || !hasPlayedInitial,
         })}
@@ -169,7 +170,7 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
 
       <video
         ref={idleVideoRef}
-        src="/videos/idle.mp4"
+        src={VIDEO_URLS.IDLE}
         className={cn("absolute inset-0 w-full h-full object-contain", {
           hidden: isSpeaking || !hasPlayedInitial,
         })}
