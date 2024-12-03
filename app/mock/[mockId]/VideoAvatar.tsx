@@ -27,7 +27,7 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
   const participants = useParticipants();
   const localParticipant = participants.find((p) => p.isLocal);
   const isUserSpeaking = useIsSpeaking(localParticipant);
-  // Preload videos
+
   useEffect(() => {
     const loadVideos = async () => {
       const videos = [initialVideoRef.current, talkingVideoRef.current, idleVideoRef.current];
@@ -59,18 +59,17 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
 
     if (!talkingVideo || !idleVideo || !initialVideo) return;
 
-    // Handle initial video sequence
     if (!hasPlayedInitial) {
-      initialVideo.style.display = "block";
-      talkingVideo.style.display = "none";
-      idleVideo.style.display = "none";
-
       const playInitial = async () => {
         try {
+          initialVideo.style.opacity = "1";
+          talkingVideo.style.opacity = "0";
+          idleVideo.style.opacity = "0";
+
           await initialVideo.play();
           initialVideo.onended = () => {
-            initialVideo.style.display = "none";
-            idleVideo.style.display = "block";
+            initialVideo.style.opacity = "0";
+            idleVideo.style.opacity = "1";
             idleVideo.play();
             setHasPlayedInitial(true);
           };
@@ -83,21 +82,27 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
       return;
     }
 
-    // Handle talking/idle states
-    if (isSpeaking) {
-      idleVideo.style.display = "none";
-      talkingVideo.style.display = "block";
-      talkingVideo.play();
-    } else {
-      talkingVideo.style.display = "none";
-      idleVideo.style.display = "block";
-      if (idleVideo.paused) {
-        idleVideo.play();
+    const updateVideoStates = async () => {
+      try {
+        if (isSpeaking) {
+          talkingVideo.style.opacity = "1";
+          idleVideo.style.opacity = "0";
+          await talkingVideo.play();
+          idleVideo.pause();
+        } else {
+          talkingVideo.style.opacity = "0";
+          idleVideo.style.opacity = "1";
+          await idleVideo.play();
+          talkingVideo.pause();
+        }
+      } catch (error) {
+        console.error("Error updating video states:", error);
       }
-    }
+    };
+
+    updateVideoStates();
   }, [isSpeaking, isDisconnected, hasPlayedInitial, videosLoaded]);
 
-  // Reset both flags when AI speaks
   useEffect(() => {
     if (isSpeaking) {
       setHasSpokenOnce(false);
@@ -105,7 +110,6 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
     }
   }, [isSpeaking]);
 
-  // Track if user has spoken at least once
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (isUserSpeaking && !hasSpokenOnce) {
@@ -113,7 +117,6 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
     }
   }, [isUserSpeaking]);
 
-  // Modify silence detection to check hasSpokenOnce
   useEffect(() => {
     if (!isUserSpeaking && hasSpokenOnce) {
       const timer = setTimeout(() => {
@@ -150,9 +153,11 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
       <video
         ref={initialVideoRef}
         src={VIDEO_URLS.INITIAL}
-        className={cn("absolute inset-0 w-full h-full object-contain", {
-          hidden: hasPlayedInitial,
-        })}
+        className="absolute inset-0 w-full h-full object-contain  opacity-0"
+        onLoadedMetadata={(e) => {
+          const video = e.target as HTMLVideoElement;
+          video.playbackRate = 1.1;
+        }}
         muted
         playsInline
       />
@@ -160,9 +165,7 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
       <video
         ref={talkingVideoRef}
         src={VIDEO_URLS.TALKING}
-        className={cn("absolute inset-0 w-full h-full object-contain", {
-          hidden: !isSpeaking || !hasPlayedInitial,
-        })}
+        className="absolute inset-0 w-full h-full object-contain  opacity-0"
         muted
         playsInline
         loop
@@ -171,9 +174,7 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
       <video
         ref={idleVideoRef}
         src={VIDEO_URLS.IDLE}
-        className={cn("absolute inset-0 w-full h-full object-contain", {
-          hidden: isSpeaking || !hasPlayedInitial,
-        })}
+        className="absolute inset-0 w-full h-full object-contain opacity-0"
         muted
         playsInline
         loop
