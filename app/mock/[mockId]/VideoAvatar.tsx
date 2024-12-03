@@ -142,7 +142,7 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
         {userSilent && hasSpokenOnce && !isSpeaking && !isDisconnected && (
           <div className="bg-[#635BFF] text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-md">
             <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
-            <span className="font-medium">Generating response...</span>
+            <span className="font-medium">Thinking...</span>
           </div>
         )}
       </div>
