@@ -5,17 +5,46 @@ import { getInterviewCount } from "@/lib/actions/mock-interviews";
 export const MAX_TRIAL_CREDITS = 3;
 
 export function useInterviewEligibility() {
-  const { data: user } = useQuery({
+  const { data: user, isLoading: userLoading, error: userError } = useQuery({
     queryKey: ["currentUser"],
     queryFn: () => getCurrentUser(),
     staleTime: 0, // Consider data stale immediately
     refetchOnMount: true, // Force refetch when component mounts
+    retry: 2, // Retry failed requests twice
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000), // Exponential backoff
   });
 
-  const { data: interviewCount = 0 } = useQuery({
+  const { data: interviewCount = 0, isLoading: countLoading } = useQuery({
     queryKey: ["interviewCount"],
     queryFn: () => getInterviewCount(),
+    enabled: !!user, // Only fetch if user exists
   });
+
+  // Return early if there's an error
+  if (userError) {
+    return {
+      isEligible: false,
+      user: null,
+      hasTrialStarted: false,
+      remainingCredits: 0,
+      subscriptionActive: false,
+      isLoading: false,
+      error: userError,
+    };
+  }
+
+  // Return loading state
+  if (userLoading || countLoading) {
+    return {
+      isEligible: false,
+      user: null,
+      hasTrialStarted: false,
+      remainingCredits: 0,
+      subscriptionActive: false,
+      isLoading: true,
+      error: null,
+    };
+  }
 
   if (!user) {
     return {
@@ -24,6 +53,8 @@ export function useInterviewEligibility() {
       hasTrialStarted: false,
       remainingCredits: 0,
       subscriptionActive: false,
+      isLoading: false,
+      error: null,
     };
   }
 
@@ -46,5 +77,7 @@ export function useInterviewEligibility() {
     hasTrialStarted,
     remainingCredits,
     subscriptionActive,
+    isLoading: false,
+    error: null,
   };
 }

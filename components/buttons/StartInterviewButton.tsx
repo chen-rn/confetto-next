@@ -17,9 +17,52 @@ interface StartInterviewButtonProps {
 export function StartInterviewButton({ className }: StartInterviewButtonProps) {
   const [showDialog, setShowDialog] = useState(false);
   const router = useRouter();
-  const { isEligible, user, hasTrialStarted, remainingCredits } = useInterviewEligibility();
+  const { isEligible, user, hasTrialStarted, remainingCredits, isLoading, error } = useInterviewEligibility();
 
-  // Show loading state if user data is not yet available
+  // Show loading state if data is being fetched
+  if (isLoading) {
+    return (
+      <Button
+        disabled
+        size="default"
+        className={cn(
+          "relative group transition-all duration-300 ease-out rounded-xl",
+          "bg-gradient-to-r from-[#635BFF] to-[#5a52f0]",
+          "shadow-lg flex items-center gap-3 px-6",
+          className
+        )}
+      >
+        <div className="flex items-center gap-2">
+          <span className="font-semibold">Loading</span>
+          <span className="flex gap-1">
+            <span className="animate-bounce">.</span>
+            <span className="animate-bounce" style={{ animationDelay: "0.2s" }}>.</span>
+            <span className="animate-bounce" style={{ animationDelay: "0.4s" }}>.</span>
+          </span>
+        </div>
+      </Button>
+    );
+  }
+
+  // Show error state if there was an error fetching data
+  if (error) {
+    return (
+      <Button
+        disabled
+        size="default"
+        className={cn(
+          "relative group transition-all duration-300 ease-out rounded-xl",
+          "bg-red-500",
+          "shadow-lg flex items-center gap-3 px-6",
+          className
+        )}
+      >
+        <span className="font-semibold">Error loading data</span>
+      </Button>
+    );
+  }
+
+  // Show default state if user data is not yet available
   if (!user) {
     return (
       <Button
@@ -32,7 +75,7 @@ export function StartInterviewButton({ className }: StartInterviewButtonProps) {
           className
         )}
       >
-        <span className="font-semibold">Loading...</span>
+        <span className="font-semibold">Please sign in</span>
       </Button>
     );
   }
