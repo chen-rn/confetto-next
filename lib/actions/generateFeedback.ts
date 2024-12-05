@@ -218,7 +218,7 @@ export async function generateAnalysisPoints({
 
   Each point must:
   - Reference specific transcript quotes
-  - Link to CanMEDS competencies
+  - Link to AAMC competencies
   - Connect to clinical practice
   - Provide concrete improvement steps`;
 
