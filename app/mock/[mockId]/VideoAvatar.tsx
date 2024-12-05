@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useIsSpeaking, useParticipants, useVoiceAssistant } from "@livekit/components-react";
-import { Loader2, CircleDashed, Sparkles, Hourglass } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VIDEO_URLS } from "./constants";
 
@@ -18,6 +18,9 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
   const [videosLoaded, setVideosLoaded] = useState(false);
   const [userSilent, setUserSilent] = useState(false);
   const [hasSpokenOnce, setHasSpokenOnce] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
 
   const { state } = useVoiceAssistant();
   const isSpeaking = state === "speaking";
@@ -34,22 +37,66 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
 
       if (!videos.every(Boolean)) return;
 
-      await Promise.all(
-        videos.map((video) => {
-          if (!video) return Promise.resolve();
-          return new Promise((resolve) => {
-            video.load();
-            video.onloadeddata = resolve;
-          });
-        })
-      );
+      try {
+        await Promise.all(
+          videos.map((video) => {
+            if (!video) return Promise.resolve();
+            video.preload = "auto"; // Ensure preload is set
+            return new Promise((resolve, reject) => {
+              video.load();
+              video.onloadeddata = resolve;
+              video.onerror = reject;
+              // Add timeout to prevent infinite loading
+              setTimeout(reject, 10000);
+            });
+          })
+        );
 
-      setVideosLoaded(true);
+        setVideosLoaded(true);
+        setLoadError(false);
+      } catch (error) {
+        console.error("Error loading videos:", error);
+        setLoadError(true);
+        // Retry logic
+        if (retryCount < MAX_RETRIES) {
+          setTimeout(() => {
+            setRetryCount((prev) => prev + 1);
+            loadVideos();
+          }, 1000 * (retryCount + 1)); // Exponential backoff
+        }
+      }
     };
 
     loadVideos();
-  }, []);
+  }, [retryCount]);
 
+  const playVideoWithRetry = async (video: HTMLVideoElement, fallbackVideo?: HTMLVideoElement) => {
+    let attempts = 0;
+    while (attempts < MAX_RETRIES) {
+      try {
+        await video.play();
+        return true;
+      } catch (error) {
+        console.error(`Error playing video (attempt ${attempts + 1}):`, error);
+        attempts++;
+        if (attempts === MAX_RETRIES && fallbackVideo) {
+          // If main video fails, try fallback
+          try {
+            video.style.opacity = "0";
+            fallbackVideo.style.opacity = "1";
+            await fallbackVideo.play();
+            return true;
+          } catch (fallbackError) {
+            console.error("Error playing fallback video:", fallbackError);
+          }
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
+    return false;
+  };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (isDisconnected || !videosLoaded) return;
 
@@ -66,15 +113,20 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
           talkingVideo.style.opacity = "0";
           idleVideo.style.opacity = "0";
 
-          await initialVideo.play();
-          initialVideo.onended = () => {
-            initialVideo.style.opacity = "0";
-            idleVideo.style.opacity = "1";
-            idleVideo.play();
+          const success = await playVideoWithRetry(initialVideo, idleVideo);
+          if (success) {
+            initialVideo.onended = () => {
+              initialVideo.style.opacity = "0";
+              idleVideo.style.opacity = "1";
+              playVideoWithRetry(idleVideo);
+              setHasPlayedInitial(true);
+            };
+          } else {
+            // If initial video fails completely, skip to idle
             setHasPlayedInitial(true);
-          };
+          }
         } catch (error) {
-          console.error("Error playing initial video:", error);
+          console.error("Error in initial video sequence:", error);
           setHasPlayedInitial(true);
         }
       };
@@ -85,15 +137,19 @@ export function VideoAvatar({ className, ...props }: VideoAvatarProps) {
     const updateVideoStates = async () => {
       try {
         if (isSpeaking) {
-          talkingVideo.style.opacity = "1";
-          idleVideo.style.opacity = "0";
-          await talkingVideo.play();
-          idleVideo.pause();
+          const success = await playVideoWithRetry(talkingVideo, idleVideo);
+          if (success) {
+            talkingVideo.style.opacity = "1";
+            idleVideo.style.opacity = "0";
+            idleVideo.pause();
+          }
         } else {
-          talkingVideo.style.opacity = "0";
-          idleVideo.style.opacity = "1";
-          await idleVideo.play();
-          talkingVideo.pause();
+          const success = await playVideoWithRetry(idleVideo, talkingVideo);
+          if (success) {
+            talkingVideo.style.opacity = "0";
+            idleVideo.style.opacity = "1";
+            talkingVideo.pause();
+          }
         }
       } catch (error) {
         console.error("Error updating video states:", error);
