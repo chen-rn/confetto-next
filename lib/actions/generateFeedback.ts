@@ -1,13 +1,15 @@
 "use server";
 
-import type { ScoringCriteria, ComponentScore, AnalysisPoint, AnalysisType } from "@prisma/client";
+import type { ScoringCriteria, AnalysisPoint, School } from "@prisma/client";
 import { openrouter } from "../openrouter";
 import { z } from "zod";
+import { determineEvaluationFrameworks, getEvaluationPrompt } from "../utils/evaluationFrameworks";
 
 interface CoreFeedbackInput {
   question: string;
   transcript: string;
   criteria: ScoringCriteria[];
+  schools: School[]; // Add schools to determine frameworks
 }
 
 interface CoreFeedbackResult {
@@ -47,6 +49,7 @@ const feedbackInputSchema = z.object({
       description: z.string(),
     })
   ),
+  schools: z.array(z.object({})), // Add validation for schools
 });
 
 async function retryOnError<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
@@ -65,13 +68,14 @@ export async function generateCoreFeedback({
   question,
   transcript,
   criteria,
+  schools,
 }: CoreFeedbackInput): Promise<CoreFeedbackResult> {
   // Add logging
-  console.log("Input:", { question, transcript, criteria });
+  console.log("Input:", { question, transcript, criteria, schools });
 
   // Validate inputs
   try {
-    feedbackInputSchema.parse({ question, transcript, criteria });
+    feedbackInputSchema.parse({ question, transcript, criteria, schools });
   } catch (error) {
     console.error("Validation error:", error);
     return {
@@ -87,20 +91,27 @@ export async function generateCoreFeedback({
     };
   }
 
-  const systemPrompt = `You are an experienced medical school admissions interviewer and physician evaluating MMI responses.
+  const frameworks = determineEvaluationFrameworks(schools);
+  const frameworkPrompt = getEvaluationPrompt(frameworks);
+
+  const systemPrompt = `You are an expert evaluator specializing in ethical reasoning and argumentation.
+
+  Question: "${question}"
   
+  Response to Evaluate: "${transcript}"
+
   Important: 
-  - If the response is empty, invalid, or in the wrong language, return a standardized "invalid response" JSON with 0 scores.
-  - Do not judge or penalize the use of clinical and medical terminology. Focus on evaluating the content, reasoning, and communication of ideas rather than the specific medical terms used.
-  - Response Length Scoring Cap:
-    * Responses under ~150 words (approximately 1 minute) should not score above 60 points overall
-    * Responses under ~75 words (approximately 30 seconds) should not score above 40 points overall
-    * Extremely brief responses under ~30 words should not score above 20 points overall
+  - Evaluate the quality of ethical reasoning, argumentation, and analysis
+  - Focus on the depth of ethical considerations, clarity of logic, and practical implications
+  - Response Length Guidelines:
+    * Responses under ~200 words should not score above 70 points overall (insufficient development)
+    * Responses under ~100 words should not score above 50 points overall (lacks depth)
+    * Extremely brief responses under ~50 words should not score above 30 points (inadequate analysis)
   
   Evaluation Process:
-  1. First, evaluate each component individually
-  2. Then, synthesize overall feedback based on component analysis
-  3. Finally, calculate overall score as weighted average of component scores, applying length-based caps if necessary
+  1. Assess each component individually based on the rubric
+  2. Synthesize overall feedback highlighting key strengths and areas for improvement
+  3. Calculate overall score considering the depth and quality of ethical analysis
 
   Response Format:
   {
@@ -117,25 +128,38 @@ export async function generateCoreFeedback({
   }
 
   For each component score:
-  - Score should be between 0 and the component's total points
-  - Start with specific examples from the response
-  - Compare against best practices
-  - Provide actionable improvements
-  - Link to clinical scenarios
-  - Give 0 points if response is severely inadequate (e.g. completely off-topic, single sentence, or incomprehensible)
+  - Score should reflect the quality of ethical reasoning and analysis
+  - Identify specific examples of strong/weak argumentation
+  - Evaluate the logical structure and flow
+  - Consider the application of ethical principles
+  - Assess practical implications and real-world considerations
+  - Give 0 points if response lacks meaningful ethical analysis
 
-  Scoring Guidelines (relative to total points):
-  - 95-100%: Exceptional (residency-level)
-  - 90-94%: Outstanding
-  - 85-89%: Excellent
-  - 80-84%: Very Good
-  - 75-79%: Good
-  - 70-74%: Satisfactory
-  - 65-69%: Fair
-  - 60-64%: Below Average
-  - 55-59%: Poor
-  - 50-54%: Very Poor
-  - <50%: Unacceptable (consider 0 if critically deficient)`;
+  Scoring Guidelines:
+  95-100%: Exceptional
+    - Sophisticated ethical analysis
+    - Clear, compelling argumentation
+    - Thorough consideration of implications
+    
+  85-94%: Strong
+    - Well-developed ethical reasoning
+    - Logical structure
+    - Good consideration of implications
+    
+  75-84%: Competent
+    - Clear ethical considerations
+    - Generally logical flow
+    - Some practical analysis
+    
+  65-74%: Developing
+    - Basic ethical awareness
+    - Some structure present
+    - Limited practical consideration
+    
+  Below 65%: Needs Improvement
+    - Minimal ethical analysis
+    - Poor structure
+    - Lacks practical considerations`;
 
   return retryOnError(async () => {
     try {
@@ -183,11 +207,16 @@ ${criteria.map((c) => `- ${c.name} (${c.maxPoints} points): ${c.description}`).j
 export async function generateAnalysisPoints({
   question,
   transcript,
+  schools,
 }: {
   question: string;
   transcript: string;
+  schools: School[];
 }): Promise<AnalysisPoint[]> {
-  const systemPrompt = `You are an expert medical school interviewer analyzing MMI responses.
+  const frameworks = determineEvaluationFrameworks(schools);
+  const frameworkPrompt = getEvaluationPrompt(frameworks);
+
+  const systemPrompt = `You are an expert medical school interviewer analyzing MMI responses. ${frameworkPrompt}
 
   Response Format:
   {
@@ -200,26 +229,9 @@ export async function generateAnalysisPoints({
     ]
   }
 
-  Analysis Framework:
-  1. Clinical Reasoning
-     - Logic structure
-     - Evidence usage
-     - Problem-solving approach
-
-  2. Ethics & Professionalism
-     - Principle application
-     - Moral reasoning
-     - Self-awareness
-
-  3. Communication
-     - Clarity
-     - Empathy
-     - Cultural sensitivity
-
   Each point must:
   - Reference specific transcript quotes
-  - Link to AAMC competencies
-  - Connect to clinical practice
+  - Make sure the feedback is specific and actionable
   - Provide concrete improvement steps`;
 
   return retryOnError(async () => {

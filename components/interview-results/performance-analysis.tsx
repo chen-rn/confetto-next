@@ -1,15 +1,8 @@
-import { BarChart2, TrendingUp, MessageCircle, Award, Target } from "lucide-react";
+import { BarChart2, TrendingUp, MessageCircle, Award, Target, ChartBar } from "lucide-react";
 import { CircularProgress } from "./circular-progress";
 import { ComponentSection } from "./component-section";
 import { SectionCard } from "./shared/section-card";
 import { prisma } from "@/lib/prisma";
-
-interface ComponentScore {
-  name: string;
-  score: number;
-  total: number;
-  summary: string;
-}
 
 interface PerformanceAnalysisProps {
   mockInterviewId: string;
@@ -89,7 +82,7 @@ export async function PerformanceAnalysis({ mockInterviewId }: PerformanceAnalys
 
   return (
     <SectionCard
-      title="Your Score"
+      title="Performance Analysis"
       subtitle="Detailed breakdown of your interview performance"
       icon={BarChart2}
       badge={{
@@ -98,45 +91,48 @@ export async function PerformanceAnalysis({ mockInterviewId }: PerformanceAnalys
         variant: getFeedbackVariant(scorePercentage),
       }}
     >
-      <div className="grid gap-10 md:grid-cols-5">
-        {/* Left Column - Score Overview */}
-        <div className="space-y-8 md:col-span-2">
-          <div>
-            <h2 className="text-xl font-semibold text-[#635BFF]">Overall Performance</h2>
-            <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-              <TrendingUp className="h-4 w-4" />
-              Grade {grade} Performance Level
-            </p>
-          </div>
-
-          <div className="flex justify-center py-2">
-            <CircularProgress percentage={scorePercentage} grade={grade} />
-          </div>
-
-          <div className="rounded-xl border border-[#635BFF]/10 bg-gradient-to-br from-[#635BFF]/5 p-5">
-            <div className="mb-3 flex items-center gap-2 font-medium text-[#635BFF]">
-              <MessageCircle className="h-4 w-4" />
-              Key Observations
+      <div className="space-y-10">
+        <div className="grid gap-10 md:grid-cols-5">
+          {/* Left Column - Score Overview */}
+          <div className="space-y-8 md:col-span-2">
+            <div>
+              <h2 className="text-xl font-semibold text-[#635BFF]">Overall Performance</h2>
+              <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                <TrendingUp className="h-4 w-4" />
+                Grade {grade} Performance Level
+              </p>
             </div>
-            <p className="text-sm leading-relaxed text-neutral-600">{summary}</p>
+
+            <div className="flex justify-center py-2">
+              <CircularProgress percentage={scorePercentage} grade={grade} />
+            </div>
+          </div>
+
+          {/* Right Column - Component Breakdown */}
+          <div className="md:col-span-3">
+            <div className="mb-6 flex items-center justify-between border-b pb-4">
+              <h3 className="flex items-center gap-2 font-semibold text-[#635BFF]">
+                <ChartBar className="h-4 w-4" />
+                Break down
+              </h3>
+              <span className="text-xs text-muted-foreground">Click sections to expand</span>
+            </div>
+
+            <div className="space-y-4">
+              {components.map((component) => (
+                <ComponentSection key={component.name} component={component} />
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Right Column - Component Breakdown */}
-        <div className="md:col-span-3">
-          <div className="mb-6 flex items-center justify-between border-b pb-4">
-            <h3 className="flex items-center gap-2 font-semibold text-[#635BFF]">
-              <Target className="h-4 w-4" />
-              Component Analysis
-            </h3>
-            <span className="text-xs text-muted-foreground">Click sections to expand</span>
+        {/* Full-width Key Observations */}
+        <div className="rounded-xl border border-[#635BFF]/10 bg-gradient-to-br from-[#635BFF]/5 p-6">
+          <div className="mb-3 flex items-center gap-2 font-medium text-[#635BFF]">
+            <MessageCircle className="h-4 w-4" />
+            Summary
           </div>
-
-          <div className="space-y-4">
-            {components.map((component) => (
-              <ComponentSection key={component.name} component={component} />
-            ))}
-          </div>
+          <p className="text-sm leading-relaxed text-neutral-600">{summary}</p>
         </div>
       </div>
     </SectionCard>

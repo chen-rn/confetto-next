@@ -5,10 +5,6 @@ import { prisma } from "../prisma";
 import { z } from "zod";
 import { validateAIResponse } from "../utils/ai-validation";
 
-const modelAnswerSchema = z.object({
-  modelAnswer: z.string().min(1),
-});
-
 const keyInsightsSchema = z.object({
   insights: z
     .array(
@@ -86,28 +82,32 @@ Please provide only the answer with natural paragraph breaks, no additional form
 
 async function generateKeyInsights(answerKeyId: string, modelAnswer: string) {
   try {
-    const systemPrompt = `You are an MMI expert who trains medical school candidates. Extract key insights that would help other candidates improve their answers.
+    const systemPrompt = `You are an MMI expert who helps candidates understand the core ethical principles and requirements for specific scenarios.
 
-Identify insights that show:
-- Practical application of ethical reasoning
-- Clear decision-making process
-- Effective communication strategies
-- Professional judgment
-- Consideration of multiple perspectives`;
+Key Requirements:
+1. Identify the 2-3 MOST crucial ethical requirements or principles specific to this scenario
+2. For each insight:
+   - State the core requirement/principle
+   - Explain why it's essential
+   - Give concrete examples
+Focus on helping candidates understand how they should present this during the interview.
+`;
 
-    const userPrompt = `Analyze this model answer and identify 3 specific, actionable insights:
+    const userPrompt = `For this ethical question about doctors striking, identify the 2-3 most crucial requirements that must be met for the action to be ethical.
 
-${modelAnswer}
+Question: ${modelAnswer}
 
-You must respond with valid JSON in this exact format:
+You must respond with valid JSON in this exact format, with NO line breaks in the description:
 {
   "insights": [
     {
-      "title": "Actionable tip",
-      "description": "How to implement this in your own answer"
+      "title": "Core ethical requirement. (3-10 words)",
+      "description": "Why this is essential. (2-3 sentences)"
     }
   ]
-}`;
+}
+
+Important: Keep all descriptions on a single line.`;
 
     const completion = await openrouter.chat.completions.create({
       model: "anthropic/claude-3.5-sonnet:beta",
@@ -138,28 +138,55 @@ You must respond with valid JSON in this exact format:
 
 async function generateAnswerStructure(answerKeyId: string, modelAnswer: string) {
   try {
-    const systemPrompt = `You are an MMI interview coach who has trained thousands of successful medical school candidates. Break down model answers into clear structural components.
+    const systemPrompt = `You are an MMI expert who helps medical school candidates structure their answers effectively.
 
-Your response MUST:
-1. Include 4-5 distinct sections
-2. Each section must have a clear title with timing (e.g. "Opening (30 seconds)")
-3. Each description must be a single clear sentence
-4. Avoid any special formatting or characters
-5. Structure should follow: Opening -> Main Arguments -> Implementation -> Conclusion`;
+Key Requirements:
+1. Create a 4-5 minute answer structure with 4-5 distinct sections
+2. Each section must be 45-90 seconds
+3. Total time should add up to 4-5 minutes
+4. Each section must include specific guidance for content and delivery
 
-    const userPrompt = `Break this model answer into a realistic 4-5 minute structure:
+Structure should follow this pattern:
+1. Opening (45s): Acknowledge question, show understanding, establish credibility
+2. Framework (60s): Present ethical principles, decision criteria, or analytical approach
+3. Application (90s): Apply framework to specific scenario, use examples
+4. Considerations (45s): Address stakeholders, challenges, alternatives
+5. Conclusion (45s): Summarize key points, reaffirm position`;
+
+    const userPrompt = `Analyze this model answer and create a detailed 4-5 minute structure:
 
 ${modelAnswer}
 
-Return a JSON object with this exact format (no additional fields):
+You must respond with valid JSON in this exact format:
 {
   "structure": [
     {
-      "title": "string (section name with duration)",
-      "description": "string (simple description without special characters)"
+      "title": "Opening Statement (45 seconds)",
+      "description": "Acknowledge the ethical tension between [X] and [Y]. Establish credibility through relevant experience. Show understanding of key stakeholders."
+    },
+    {
+      "title": "Ethical Framework (60 seconds)",
+      "description": "Present key principles: [principle 1] and [principle 2]. Explain how these principles apply to the scenario. Introduce decision-making criteria."
+    },
+    {
+      "title": "Practical Application (90 seconds)",
+      "description": "Apply framework to specific scenario. Use concrete examples. Discuss implementation steps and safeguards."
+    },
+    {
+      "title": "Stakeholder Analysis (45 seconds)",
+      "description": "Consider impact on all stakeholders. Address potential challenges and mitigation strategies."
+    },
+    {
+      "title": "Balanced Conclusion (45 seconds)",
+      "description": "Reaffirm position while acknowledging complexity. Summarize key points and practical next steps."
     }
   ]
-}`;
+}
+
+Each section must include:
+1. Clear title with timing in seconds
+2. Description that covers key content, transitions, and approach
+3. Total time should be between 4-5 minutes (285-300 seconds)`;
 
     const completion = await openrouter.chat.completions.create({
       model: "anthropic/claude-3.5-sonnet:beta",
@@ -198,27 +225,45 @@ Return a JSON object with this exact format (no additional fields):
 
 async function generateHighlightedPoints(answerKeyId: string, modelAnswer: string) {
   try {
-    const systemPrompt = `You are a medical school admissions committee member who evaluates MMI responses. Identify crucial moments that demonstrate clinical competency and ethical reasoning.
+    const systemPrompt = `You are an MMI expert who helps candidates identify and understand exemplary elements in model answers.
 
-Focus on moments that show:
-- Complex ethical reasoning
-- Clinical decision-making process
-- Professional behavior/communication
-- Evidence-based thinking
-- Cultural competency
-- Systems-level understanding`;
+Key Requirements:
+1. Each highlighted point must:
+   - Be a specific phrase or sentence from the answer
+   - Connect to a key insight or principle
+   - Include detailed explanation of why it's effective
+   - Provide suggestions for adaptation
 
-    const userPrompt = `Identify 2-3 key moments that demonstrate the main requirements of the question:
+2. Focus on identifying:
+   - Strong ethical reasoning
+   - Personal experience integration
+   - Stakeholder consideration
+   - Practical implementation
+   - Professional communication
+
+3. For each point explain:
+   - Why it's effective
+   - How it demonstrates the principle
+   - How to adapt this approach to other scenarios
+   - Common mistakes to avoid`;
+
+    const userPrompt = `Analyze this model answer and identify 3-4 exemplary phrases or sentences:
 
 ${modelAnswer}
+
+For each highlighted point, provide:
+1. The exact text from the answer
+2. The key insight or principle it demonstrates
+3. Detailed explanation of why it's effective
+4. How to adapt this approach to other scenarios
 
 You must respond with valid JSON in this exact format:
 {
   "points": [
     {
-      "text": "Direct quote from answer",
-      "insight": "Main aspect addressed",
-      "explanation": "How this demonstrates understanding"
+      "text": "Direct quote from the answer",
+      "insight": "Key principle or insight demonstrated",
+      "explanation": "Why this is effective and how to adapt it"
     }
   ]
 }`;

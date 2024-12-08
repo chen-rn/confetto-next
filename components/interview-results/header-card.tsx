@@ -18,7 +18,7 @@ export async function HeaderCard({ mockInterviewId }: HeaderCardProps) {
 
   return (
     <SectionCard
-      title="Your Response"
+      title="Your Recording"
       subtitle="Review your response and transcript"
       icon={PlayCircle}
     >

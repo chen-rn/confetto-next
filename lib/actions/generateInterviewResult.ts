@@ -9,7 +9,7 @@ import { generateAnalysisPoints, generateCoreFeedback } from "./generateFeedback
 async function prepareInterviewData(mockInterviewId: string) {
   console.log("🔍 Preparing interview data and checking required components...");
 
-  const mockInterview = await prisma.mockInterview.findUniqueOrThrow({
+  const mockInterview = await prisma.mockInterview.findUnique({
     where: { id: mockInterviewId },
     include: {
       question: {
@@ -18,11 +18,23 @@ async function prepareInterviewData(mockInterviewId: string) {
           answerKey: true,
         },
       },
+      user: {
+        include: {
+          schools: true,
+        },
+      },
     },
   });
 
-  const { question, recordingTranscription: transcript } = mockInterview;
-  if (!transcript) throw new Error("No transcript found");
+  if (!mockInterview) {
+    throw new Error("Mock interview not found");
+  }
+
+  const { recordingTranscription: transcript, question, user } = mockInterview;
+
+  if (!transcript) {
+    throw new Error("No transcript found");
+  }
 
   // Generate missing data in parallel
   const promises = [];
@@ -51,12 +63,12 @@ async function prepareInterviewData(mockInterviewId: string) {
     },
   });
 
-  return { question: updatedQuestion, transcript };
+  return { question: updatedQuestion, transcript, schools: user.schools };
 }
 
 export async function generateInterviewResult(mockInterviewId: string) {
   try {
-    const { question, transcript } = await prepareInterviewData(mockInterviewId);
+    const { question, transcript, schools } = await prepareInterviewData(mockInterviewId);
 
     console.log("🤖 Starting feedback generation with AI models...");
     // Generate feedback components in parallel
@@ -65,10 +77,12 @@ export async function generateInterviewResult(mockInterviewId: string) {
         question: question.content,
         transcript,
         criteria: question.scoringCriteria,
+        schools,
       }),
       generateAnalysisPoints({
         question: question.content,
         transcript,
+        schools,
       }),
     ]);
 

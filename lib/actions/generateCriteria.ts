@@ -14,8 +14,8 @@ const criteriaSchema = z.object({
         maxScore: z.number().min(10).max(100),
       })
     )
-    .min(4)
-    .max(5)
+    .min(3)
+    .max(3)
     .refine(
       (data) => {
         const total = data.reduce((sum, criterion) => sum + criterion.maxScore, 0);
@@ -36,32 +36,33 @@ export async function generateCriteria(questionId: string) {
         {
           role: "system",
           content: `You are an expert medical school interviewer and evaluator with extensive experience in MMI (Multiple Mini Interview) assessments.
-Your role is to create detailed, objective scoring rubrics that any interviewer can use consistently.`,
+Your role is to create clear, consistent scoring guidelines that help evaluate candidate responses effectively.`,
         },
         {
           role: "user",
-          content: `Generate 4-5 scoring criteria for the following medical school interview question: "${question.content}"
+          content: `Using our standardized scoring criteria, evaluate the following medical school interview question: "${question.content}"
+
+The three core criteria are:
+
+1. Content & Completeness (40 points)
+   - Complete coverage of key aspects
+   - Depth of understanding
+   - Quality of examples and reasoning
+   
+2. Structure & Organization (35 points)
+   - Logical flow and structure
+   - Clear organization of thoughts
+   - Coherent progression
+   
+3. Professional Communication (25 points)
+   - Appropriate language and tone
+   - Clear and confident delivery
+   - Professional demeanor
 
 For each criterion, provide:
-1. name: A concise, descriptive title (3-5 words)
-2. description: A detailed rubric that includes:
-   - Specific behaviors and responses to look for
-   - Clear distinctions between score levels
-   - Examples of good and poor responses
-   - Key phrases or concepts that should be present
-3. maxScore: number representing maximum points possible for this criterion
-
-Important scoring rules:
-- The sum of all maxScore values must equal exactly 100
-- Each criterion should be weighted based on importance (e.g. 40 points for primary skills, 20 for secondary)
-- No criterion should be worth less than 10 points
-
-The criteria should cover different aspects like:
-- Communication and interpersonal skills
-- Ethical reasoning and professionalism  
-- Critical thinking and analysis
-- Teamwork and collaboration
-- Personal insight and reflection
+- Specific behaviors and responses to look for
+- Clear distinctions between score levels (excellent, good, fair, poor)
+- Examples of strong and weak responses
 
 Return as a JSON array with format:
 {

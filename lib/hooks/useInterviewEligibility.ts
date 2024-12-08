@@ -5,72 +5,45 @@ import { getInterviewCount } from "@/lib/actions/mock-interviews";
 export const MAX_TRIAL_CREDITS = 3;
 
 export function useInterviewEligibility() {
-  const { data: user, isLoading: userLoading, error: userError } = useQuery({
+  const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ["currentUser"],
     queryFn: () => getCurrentUser(),
-    staleTime: 60 * 1000, // Cache for 1 minute
-    refetchOnMount: "always", // Always refetch on mount
-    retry: 3, // Retry up to 3 times
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000), // Exponential backoff
+    staleTime: 60 * 1000,
   });
 
   const { data: interviewCount = 0, isLoading: countLoading } = useQuery({
     queryKey: ["interviewCount"],
     queryFn: () => getInterviewCount(),
-    enabled: !!user, // Only fetch if user exists
-    staleTime: 60 * 1000, // Cache for 1 minute
+    enabled: !!user,
+    staleTime: 60 * 1000,
   });
 
-  // Return early if there's an error
-  if (userError) {
-    return {
-      isEligible: false,
-      user: null,
-      hasTrialStarted: false,
-      remainingCredits: 0,
-      subscriptionActive: false,
-      isLoading: false,
-      error: userError,
-    };
-  }
+  const isLoading = userLoading || (!!user && countLoading);
 
-  // Return loading state
-  if (userLoading || countLoading) {
-    return {
-      isEligible: false,
-      user: null,
-      hasTrialStarted: false,
-      remainingCredits: 0,
-      subscriptionActive: false,
-      isLoading: true,
-      error: null,
-    };
-  }
+  const defaultResponse = {
+    isEligible: false,
+    user: null,
+    hasTrialStarted: false,
+    remainingCredits: 0,
+    subscriptionActive: false,
+    isLoading,
+    error: null,
+  };
 
-  if (!user) {
-    return {
-      isEligible: false,
-      user: null,
-      hasTrialStarted: false,
-      remainingCredits: 0,
-      subscriptionActive: false,
-      isLoading: false,
-      error: null,
-    };
+  if (isLoading || !user) {
+    return defaultResponse;
   }
 
   const subscriptionActive = user.subscriptionStatus === "ACTIVE";
   const isInTrial = user.subscriptionStatus === "TRIAL";
+  const hasTrialStarted = user.trialStartedAt !== null;
 
   const isEligible = subscriptionActive || (isInTrial && interviewCount < MAX_TRIAL_CREDITS);
-
   const remainingCredits = isInTrial
     ? Math.max(0, MAX_TRIAL_CREDITS - interviewCount)
     : subscriptionActive
     ? Number.POSITIVE_INFINITY
     : 0;
-
-  const hasTrialStarted = user.trialStartedAt !== null;
 
   return {
     isEligible,
@@ -78,7 +51,7 @@ export function useInterviewEligibility() {
     hasTrialStarted,
     remainingCredits,
     subscriptionActive,
-    isLoading: false,
+    isLoading,
     error: null,
   };
 }

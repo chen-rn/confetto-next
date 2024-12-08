@@ -8,11 +8,10 @@ datasource db {
 }
 
 model User {
-    id             String          @id @default(uuid())
-    email          String?         @unique
-    mockInterviews MockInterview[]
-    schools        School[]
-
+    id                 String              @id @default(uuid())
+    email              String?             @unique
+    mockInterviews     MockInterview[]
+    schools            School[]
     stripeCustomerId   String?            @unique
     subscriptionStatus SubscriptionStatus @default(NOT_SUBSCRIBED)
     stripePriceId      String?

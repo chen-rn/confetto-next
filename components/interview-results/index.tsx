@@ -39,11 +39,11 @@ export function InterviewResults({
     <div className="min-h-screen bg-neutral-100 p-4 md:p-6">
       <div className="relative mx-auto max-w-4xl space-y-6">
         {homeButton}
-        <PerformanceAnalysis mockInterviewId={mockInterviewId} />
         <HeaderCard mockInterviewId={mockInterviewId} />
+        <PerformanceAnalysis mockInterviewId={mockInterviewId} />
         <ResponseAnalysis mockInterviewId={mockInterviewId} />
         <AnswerKey mockInterviewId={mockInterviewId} />
-        <ReEvaluateButton mockInterviewId={mockInterviewId} />
+        {/* <ReEvaluateButton mockInterviewId={mockInterviewId} /> */}
       </div>
     </div>
   );

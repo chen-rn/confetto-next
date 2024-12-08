@@ -2,13 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Video } from "lucide-react";
-import { useAtom } from "jotai";
-import {
-  isRecordingAtom,
-  isProcessingAtom,
-  isCountingDownAtom,
-  countdownTimeAtom,
-} from "@/lib/atoms/interview";
 import { useIsSpeaking, useParticipants } from "@livekit/components-react";
 import { cn } from "@/lib/utils";
 
@@ -18,10 +11,6 @@ interface VideoViewfinderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function VideoViewfinder({ className, ...props }: VideoViewfinderProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isRecording] = useAtom(isRecordingAtom);
-  const [isProcessing] = useAtom(isProcessingAtom);
-  const [isCountingDown] = useAtom(isCountingDownAtom);
-  const [countdownTime] = useAtom(countdownTimeAtom);
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
 
   const participants = useParticipants();

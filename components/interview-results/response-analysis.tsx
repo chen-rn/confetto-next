@@ -36,7 +36,7 @@ export async function ResponseAnalysis({ mockInterviewId }: ResponseAnalysisProp
 
   return (
     <SectionCard
-      title="How to Improve"
+      title="Actionable Feedback"
       subtitle="Detailed feedback on your response"
       icon={MessageSquare}
     >
