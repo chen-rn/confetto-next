@@ -8,9 +8,9 @@ export function useInterviewEligibility() {
   const { data: user, isLoading: userLoading, error: userError } = useQuery({
     queryKey: ["currentUser"],
     queryFn: () => getCurrentUser(),
-    staleTime: 0, // Consider data stale immediately
-    refetchOnMount: true, // Force refetch when component mounts
-    retry: 2, // Retry failed requests twice
+    staleTime: 60 * 1000, // Cache for 1 minute
+    refetchOnMount: "always", // Always refetch on mount
+    retry: 3, // Retry up to 3 times
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000), // Exponential backoff
   });
 
@@ -18,6 +18,7 @@ export function useInterviewEligibility() {
     queryKey: ["interviewCount"],
     queryFn: () => getInterviewCount(),
     enabled: !!user, // Only fetch if user exists
+    staleTime: 60 * 1000, // Cache for 1 minute
   });
 
   // Return early if there's an error

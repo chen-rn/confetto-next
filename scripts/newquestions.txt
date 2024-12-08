@@ -1,0 +1,129 @@
+You are a medical student on a clinical rotation in a rural Indigenous community. You notice that the community lacks access to clean drinking water, which is affecting the health of many residents, including a high incidence of gastrointestinal illnesses. Discuss how you would approach addressing this issue, considering cultural sensitivities and systemic barriers. [Social Issues, Healthcare Policy, Cultural Competency]
+
+A 15-year-old patient comes to you seeking birth control without her parents' knowledge. She mentions that her boyfriend is 21 years old. You are aware that the age of consent laws in Canada have exceptions for close-in-age relationships, but this age gap may be concerning. How do you proceed with providing care while addressing potential legal and ethical issues? [Ethics, Legal Issues, Patient Care]
+
+A fellow medical student confides in you that they have been diagnosed with a mental health condition but are afraid to seek treatment due to stigma and potential impact on their future career. How do you support your colleague? [Mental Health, Professionalism, Empathy]
+
+As a physician in a large Canadian city, you have a patient who is homeless and suffers from chronic opioid addiction. He frequently visits the emergency department for overdoses. Recently, Canada has been considering the decriminalization of small amounts of illicit drugs to combat the opioid crisis. Discuss your perspective on this policy change and how it might impact your patient care [Public Health, Healthcare Policy, Patient Care]
+
+You are an emergency room doctor during a severe wildfire season in British Columbia, and the hospital is receiving a high influx of patients with respiratory issues due to poor air quality. Resources are stretched thin. A patient with chronic obstructive pulmonary disease (COPD) requires a ventilator, but only one is left, and another patient with COVID-19 complications also needs it. How do you decide who gets the ventilator? [Ethics, Patient Care, Resource Allocation]
+
+You are a family doctor, and one of your patients is a recent immigrant who speaks limited English. She is pregnant and has expressed interest in genetic testing for her unborn child to rule out any genetic disorders. However, due to cultural beliefs, she may not fully understand the implications of the results, especially if they suggest termination. How do you ensure she makes an informed decision? [Cultural Competency, Patient Care, Communication]
+
+A pharmaceutical company offers to sponsor your research project but expects to have control over the publication of the results. Discuss the ethical implications and how you would handle this offer. [Research Ethics, Professionalism, Conflict of Interest]
+
+A transgender patient complains that staff at your clinic have been using the wrong pronouns and making insensitive comments. As the attending physician, how do you address this issue to ensure an inclusive environment? [Cultural Competency, Patient Care, Communication]
+
+You witness a fellow resident making derogatory remarks about patients from a particular socioeconomic background. How do you address this unprofessional behavior? [Professionalism, Communication, Ethics]
+
+Why do you want to become a physician? [Personal Growth, Motivation]
+
+How have your experiences shaped your understanding of healthcare? [Personal Growth, Reflection]
+
+Describe a moment that confirmed your desire to pursue medicine. [Personal Growth, Motivation]
+
+How do you handle stress and maintain resilience? [Personal Growth, Self-Care]
+
+Is it ethical for doctors to strike? If so, under what conditions? [Professionalism, Ethics, Healthcare Policy]
+
+A patient with Downs Syndrome became pregnant. The patient does not want an abortion. Her mother and husband want the patient to have an abortion. What should a physician do in this situation? [Ethics, Patient Care, Family Dynamics]
+
+You are a specialist at a local hospital, who just finished a shift and has a tight run to your daughter's high school graduation ceremony. As you headed off to the door, Erica, a patient who knew you well, saw you from the waiting room and grabbed your attention. "Doctor! I have a bad chest pain. Please stay for a bit. I'll feel much better if you were here." Enter the room and talk to Erica [Patient Care, Communication, Empathy]
+
+Due to a shortage of physicians in rural and Northern communities in BC, some policy-makers have suggested that medical programs preferentially admit students who are willing to commit to a 2 or 3 year tenure in rural areas after graduation. Consider the broad implications of this policy for health care and the costs associated. Will this policy be effective? [Healthcare Policy, Workforce Development, Rural Health]
+
+What would you do if you realized you made a medical error that could harm a patient? [Ethics, Patient Safety, Professionalism]
+
+You are part of a team implementing artificial intelligence (AI) tools to assist in patient diagnostics. How do you lead this project? [Leadership, Technology, Patient Care]
+
+A new policy allows nurse practitioners and pharmacists in your province to prescribe certain medications independently. Some of your colleagues feel this undermines the role of physicians. Discuss how you would approach interprofessional collaboration in this evolving healthcare landscape to improve patient outcomes. [Interprofessional Collaboration, Patient Care, Healthcare Policy]
+
+In recent years, there has been an increase in popularity of full contact sports, such as Ultimate Fighting Championship (UFC) and boxing. Should doctors have a role in regulating such sports? [Public Health, Ethics, Sports Medicine]
+
+Should doctors step further into the conversation about adverse health effects of social media? [Public Health, Patient Care, Communication]
+
+Your patient asks you if social media is bad for their child, what do you say? [Patient Care, Communication, Public Health]
+
+You are a current med student. During the week of graduation, you attend a number of parties around the area with your best friend, Jenna. The last party is held at a camp ground. The morning after the party, you receive a call from Jenna. She asks that you come over and talk. Jenna reveals that she left early and drove home despite drinking that night. Enter the room and talk to Jenna. [Ethics, Communication, Professionalism]
+
+Advancements in genetic testing have made it possible to screen embryos for a variety of genetic conditions. Discuss the ethical implications of preimplantation genetic diagnosis (PGD) for non-medical traits such as intelligence or physical appearance. Should there be regulations limiting the use of PGD? [Medical Ethics, Research Ethics, Healthcare Policy]
+
+The legalization of recreational cannabis in Canada has led to increased accessibility. Discuss the potential public health implications of this policy change. How should physicians address cannabis use with their patients, particularly adolescents [Public Health, Patient Care, Healthcare Policy]
+
+Why aren’t monkeys used more than mice in medical research? [Research Ethics, Critical Thinking]
+
+Discuss the ethical considerations of prescribing placebos in clinical practice. Under what circumstances, if any, is it acceptable for a physician to prescribe a placebo without the patient's knowledge? [Medical Ethics, Patient Care, Research Ethics]
+
+Your best friend confesses to you that she hit a person a month ago while driving under the influence. She tells you that she kept driving because she was scared and feels really guilty about this incident. How would you respond? [Ethics, Communication, Professionalism]
+
+You witness two girls hitting a homeless woman and taking items that belong to her. The victim’s nose is bleeding. You approach her after the incident. She tells you that she is fine and that the same girls have done this before. She promises it is no big deal and not to worry about her. What do you do? [Ethics, Communication, Empathy]
+
+Your older sister tells you that she wants to have IVF and have her child implanted into a surrogate mother for $3,000 through a company. Your mother is opposed to this idea, whereas your father supports her decision. Your sister asks for your support. How would you respond to your sister? [Ethics, Family Dynamics, Communication]
+
+Mrs. Miller is found brain dead and is determined to be a perfect candidate for organ transplants. The physician contacts her husband and son but is met with stern objection upon asking for consent. What would you do? [Ethics, Patient Care, Family Dynamics]
+
+Some individuals with schizophrenia find it difficult to obtain employment because of the stigma behind the term, should the scientific community change the term? [Mental Health, Stigma, Communication]
+
+How do family physicians stay relevant in the prevalence of AI and self-diagnostic tools out there? [Healthcare Policy, Technology, Patient Care]
+
+In response to the opioid crisis, some Canadian cities have implemented supervised injection sites. Discuss the ethical and societal considerations of providing such services. Do you believe supervised injection sites are an effective harm reduction strategy? Why or why not? [Public Health, Ethics, Healthcare Policy]
+
+A patient with advanced dementia is hospitalized and requires a decision about a high-risk surgical procedure. The patient has no advance directive, and their family members disagree on whether to proceed with the surgery. How do you facilitate a decision that respects the patient's best interests and family dynamics? [Ethics, Patient Care, Family Dynamics]
+
+If you didn’t get into medical school, what would you do? [Personal Growth, Career Development]
+
+Describe a time you faced a moral conflict. [Personal Growth, Ethics]
+
+How do you think your role as a physician fits in with your role as a member of the community? [Professionalism, Community Engagement]
+
+What does the doctor-patient relationship mean to you? [Patient Care, Communication, Empathy]
+
+What makes a good physician and where do you fit in that category? [Personal Growth, Professionalism]
+
+In an operating room, you’ll find many people: the surgeon, anesthesiologist, nurses, techs, etc. Who is the most important person in this room? [Teamwork, Communication, Patient Care]
+
+If your best friends were asked to describe you, what would they say? [Personal Growth, Self-Awareness]
+
+Think about someone who doesn’t like you. What would they say about you? [Personal Growth, Self-Awareness]
+
+What are you doing now to better yourself? [Personal Growth, Self-Improvement]
+
+A 14 year old patient requests birth control pills from you and asks that you not tell her parents. What would you do? [Ethics, Patient Care, Confidentiality]
+
+Who is someone you admire and why? [Personal Growth, Role Models]
+
+Your medical school roommate is feeling overwhelmed with the amount of material that is being covered. He tells you that he has failed his last block final, the midterm from last week, and is thinking about dropping out. Enter the room and talk to your roommate. [Communication, Empathy, Personal Growth]
+
+You’re grabbing dinner with a friend and you’ve had a hard week and are venting about your supervisor. Suddenly you realize your supervisor is also in the restaurant and has heard everything you said. When you get back to work, you ask your supervisor if you can have a word. Enter the room and talk to your supervisor. [Communication, Professionalism, Conflict Resolution]
+
+Your friend’s dog needs treatment, and they do not have pet insurance or enough money to cover the costs. Your friend comes to you and asks to borrow $5000 for treatment for their dog. What would you say to your friend? [Ethics, Communication, Personal Relationships]
+
+You are doing your rotations during medical school, and you see one of your closest friends in medical school cover up a medical error they made with a patient. What do you do? [Ethics, Professionalism, Patient Safety]
+
+If the Prime Minister/President were to ask your advice on one change that could be applied to the healthcare system that would improve it enormously and have the greatest positive effect, how would you answer? [Healthcare Policy, Leadership, Critical Thinking]
+
+Tell me about your greatest regret. What was it, and what would you do differently? [Personal Growth, Self-Reflection]
+
+Describe the most unusual event in your life. [Personal Growth, Self-Awareness]
+
+What was the most stressful situation you ever faced? How did you handle it? [Personal Growth, Stress Management]
+
+You are a family physician. One of your patients, Mark, did not attend one of his classes and missed an important exam. He told you that his teacher would like a doctor's note explaining his absence from class; otherwise, he will receive zero, and all hell will break loose. He wants you to write a note for him, indicating that he was not feeling well enough to write the exam. Not able to find any physical symptoms, explain how you would deal with this. Enter the room and talk to Mark. [Ethics, Patient Care, Communication]
+
+You are a 3rd year medical student doing hospital rotations. A fellow medical student who is doing rounds with you often shows up to these sessions tired, messy, hungover, or even drunk. One day you found him in the lunchroom unaccompanied, so you decided to talk to him. Please enter the lunchroom [Professionalism, Communication, Ethics]
+
+You are a shift supervisor at McDonalds fast food restaurant. The owner of the franchise has called you over. He is very upset as he has received 3 complaints in the last 30 minutes about the meat in the hamburgers being poorly cooked. There are two people (one male, one female both 15 years old) who have been cooking the meat for the past two hours. The female is the owner‟s daughter. How would you handle the situation? [Leadership, Communication, Conflict Resolution]
+
+In the City of Plymouth in England, the City Council has introduced a maximum speed limit for all vehicles of 30km/h (previous limit was 50km/h) within city limits because this will reduce the number and severity of traffic accidents. The city councillors in Edmonton wish to introduce the same restriction. Would you support such a policy here in Edmonton? [Public Health, Healthcare Policy, Community Engagement]
+
+The daughter of the interviewer is 16 years old. She is adamant that she have a tattoo next week. The interviewer is against letting her daughter have a tattoo and this is causing much friction in the household. What advice would you give the interviewer? [Communication, Family Dynamics, Personal Growth]
+
+You learn from your best friend that she was involved in a hit and run accident one night when she had too much to drink and had hit a person crossing the street. She feels badly about this incident. What do you do if anything? [Ethics, Communication, Professionalism]
+
+Your friend tells you that a piece of expensive electronic equipment he had bought for $3000 just two weeks ago had stopped working. The store where he bought it had a 7-day return policy. Your friend goes to the store, buys a new piece of equipment and then returns the old damaged equipment in its place for a full refund. The store is owned by your uncle who is struggling to keep the business going. How would you deal with the situation? [Ethics, Communication, Personal Relationships]
+
+At the beginning of your last year of undergraduate studies, the Dean of your Faculty has offered to all of you the opportunity to swallow a red pill. If swallowed, this pill would enormously increase your ability to absorb all the educational material being presented to you in all your courses. In fact, this pill would basically guarantee that you would receive an A+ in all your future courses with a significantly reduced workload. Would you take the red pill? [Ethics, Critical Thinking, Personal Growth]
+
+Data has shown that doctors who smoke are less likely to make good role models for patients. Should doctors be allowed to smoke? Do doctors need to be role models? [Professionalism, Ethics, Public Health]
+
+How should healthcare providers respond when a patient refuses treatment for their child based on personal or religious beliefs that may harm the child's well-being? [Ethics, Patient Care, Family Dynamics]
