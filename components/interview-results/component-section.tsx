@@ -15,12 +15,41 @@ interface ComponentSectionProps {
   component: Component;
 }
 
+function getScoreColorClasses(percentage: number): { bg: string; text: string; progressBg: string } {
+  if (percentage > 85) {
+    return {
+      bg: "bg-green-500",
+      text: "text-green-500",
+      progressBg: "bg-green-100"
+    };
+  } else if (percentage >= 70) {
+    return {
+      bg: "bg-yellow-500",
+      text: "text-yellow-500",
+      progressBg: "bg-yellow-100"
+    };
+  } else if (percentage >= 50) {
+    return {
+      bg: "bg-gray-500",
+      text: "text-gray-500",
+      progressBg: "bg-gray-100"
+    };
+  } else {
+    return {
+      bg: "bg-red-500",
+      text: "text-red-500",
+      progressBg: "bg-red-100"
+    };
+  }
+}
+
 export function ComponentSection({ component }: ComponentSectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const percentage = (component.score / component.total) * 100;
+  const colorClasses = getScoreColorClasses(percentage);
 
   return (
-    <div className="rounded-xl border border-neutral-150 bg-white shadow-sm transition-all hover:border-[#635BFF]/20">
+    <div className="rounded-xl border border-neutral-150 bg-white shadow-sm transition-all hover:border-neutral-200">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="flex w-full items-center justify-between gap-4 p-5"
@@ -29,13 +58,13 @@ export function ComponentSection({ component }: ComponentSectionProps) {
           <div className="flex items-center justify-between">
             <span className="font-medium text-neutral-700">{component.name}</span>
             <span className="text-sm text-muted-foreground">
-              {component.score}/{component.total}
+              {component.score}/{component.total} ({Math.round(percentage)}%)
             </span>
           </div>
           <Progress
             value={percentage}
-            className="h-2 bg-[#635BFF]/10"
-            indicatorClassName="bg-gradient-to-r from-[#635BFF] to-[#635BFF]/80"
+            className={cn("h-2", colorClasses.progressBg)}
+            indicatorClassName={colorClasses.bg}
           />
         </div>
         <ChevronDown
