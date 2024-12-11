@@ -93,7 +93,7 @@ Key Requirements:
 Focus on helping candidates understand how they should present this during the interview.
 `;
 
-    const userPrompt = `For this ethical question about doctors striking, identify the 2-3 most crucial requirements that must be met for the action to be ethical.
+    const userPrompt = `Identify the 2-3 most crucial ethical requirements that must be met for the action to be ethical in this scenario.
 
 Question: ${modelAnswer}
 
