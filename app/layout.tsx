@@ -11,6 +11,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { AuthRedirect } from "@/components/AuthRedirect";
 import { MetadataUpdater } from "@/components/MetadataUpdater";
 import { VideoPreloader } from "@/app/mock/[mockId]/components/VideoPreloader";
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: "Confetto - AI Powered MMI Interview Prep",
@@ -23,6 +24,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <Script
+          src="https://cdn.tolt.io/tolt.js"
+          async
+          data-tolt="pk_RFcxFFhaEUgHg6DX4S9tWFfr"
+        />
       </head>
       <body>
         <CSPostHogProvider>

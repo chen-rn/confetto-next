@@ -4,9 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
-import { SubscriptionStatus } from "@prisma/client";
 
-export async function createCheckoutSession(priceId: string) {
+export async function createCheckoutSession(priceId: string, referral: string) {
   const { userId } = auth();
 
   if (!userId) {
@@ -24,11 +23,13 @@ export async function createCheckoutSession(priceId: string) {
         quantity: 1,
       },
     ],
+
     allow_promotion_codes: true,
     success_url: `${returnUrl}?success=true`,
     cancel_url: `${returnUrl}?canceled=true`,
     metadata: {
       userId,
+      tolt_referral: referral,
     },
   });
 

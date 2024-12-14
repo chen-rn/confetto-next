@@ -75,10 +75,7 @@ export function PricingCards({
       return false;
     }
 
-    return (
-      currentPriceId === priceId &&
-      subscriptionStatus === "ACTIVE"
-    );
+    return currentPriceId === priceId && subscriptionStatus === "ACTIVE";
   }
 
   const handleSubscribe = async (priceId: string) => {
@@ -91,7 +88,8 @@ export function PricingCards({
       }
 
       startTransition(async () => {
-        const url = await createCheckoutSession(priceId);
+        const referral = typeof window !== "undefined" ? window.tolt_referral || "" : "";
+        const url = await createCheckoutSession(priceId, referral);
         if (url) window.location.href = url;
       });
     } catch (error) {
@@ -167,9 +165,11 @@ export function PricingCards({
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-4xl font-bold text-neutral-900">${plan.price}</span>
                     <span className="text-neutral-500">
-                      {plan.interval === "month" ? "/month" : 
-                       plan.interval === "quarter" ? "/3 months" : 
-                       "/year"}
+                      {plan.interval === "month"
+                        ? "/month"
+                        : plan.interval === "quarter"
+                        ? "/3 months"
+                        : "/year"}
                     </span>
                   </div>
 
